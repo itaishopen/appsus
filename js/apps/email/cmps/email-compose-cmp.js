@@ -1,20 +1,19 @@
-import { eventBus, EVENT_FEEDBACK } from '../event-bus.js'
+import { eventBus, EVENT_FEEDBACK } from '../../../services/eventbus-service.js'
 import emailServices from '../services/email-service.js'
 
 export default {
-  props: [''],
   template: `
     <section class="email-compose">
       <div class="compose-email-toolbar">
         <router-link to="/email"><i class="fas fa-arrow-circle-left"></i>Back</router-link>
-        <router-link to="/email">
+        <!-- <router-link to="/email">
             <h1><i class="fab fa-mailchimp"></i>&nbsp;Email Chimp</h1>
-        </router-link>
+        </router-link> -->
       </div>
 
       <form class="compose-email-container" @submit.prevent="sendEmail">
         <input type="text" class="compose-email-to" placeholder="To" v-model="email.recipient">
-        <input type="text" class="compose-email-from" placeholder="From" v-model="email.sender">
+        <input type="text" class="compose-email-from" placeholder="From" v-model="email.sender" disabled>
         <input type="text" class="compose-email-subject" placeholder="Subject" v-model="email.subject">
         
         <div class="compose-email-body">
@@ -28,7 +27,7 @@ export default {
     return {
       email: {
         recipient: '',
-        sender: '',
+        sender: 'awesome@devil.com',
         subject: '',
         body: '',
       }
@@ -39,9 +38,9 @@ export default {
       if (!this.email.recipient || !this.email.sender || !this.email.subject || !this.email.body) {
         eventBus.$emit(EVENT_FEEDBACK, {txt: 'Please fill in all the details', link: '' }, 'fail')
         return;
-      }
-      emailServices.saveEmail(this.email)
-        .then(() => {
+      }      
+      emailServices.sendAnEmail(this.email)
+        .then(() => {          
           // todo: display confirmation
           this.$router.push('/email');
         })

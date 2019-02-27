@@ -2,8 +2,8 @@ export default {
     props: ['note'],
     template: `
         <li class="keep-note-txt keep-note">
-            <h3 class="note-header" :contenteditable="editing" @click.stop="">{{header}}</h3>
-            <p class="note-txt" :contenteditable="editing" @click.stop="">
+            <h3 class="note-header" :class="{editable: editing}" :contenteditable="editing" @click.stop="">{{header}}</h3>
+            <p class="note-txt" :class="{editable: editing}" :contenteditable="editing" @click.stop="">
                 {{txt}}
             </p>
             <button @click.stop="editNote">edit</button>

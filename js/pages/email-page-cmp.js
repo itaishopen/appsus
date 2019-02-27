@@ -17,9 +17,9 @@ export default {
                 <email-filter @setFilter="setFilter"></email-filter>
                 <!-- <email-sort @sort="sort"></email-sort> -->
                 <router-link class="compose-email-btn" to="/email/compose"><i class="fas fa-plus"></i></router-link>
-                <email-status :unReadEmailsCount="unreadEmails"></email-status>
+                <email-status v-if="unreadEmails !== 0" :unReadEmailsCount="unreadEmails"></email-status>
             </div>
-            <email-list :emails="emails" @deleteEmail="deleteMail"></email-list>
+            <router-link to='/email'><email-list :emails="emails" @deleteEmail="deleteMail"></email-list></router-link> 
         </section>
     `,
     data() {

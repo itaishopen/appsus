@@ -1,8 +1,11 @@
+import {eventBus} from '../../../services/eventbus-service.js'
+
 export default {
-    props: ['todo'],
+    props: ['todo', 'noteId'],
     template: `
         <li class="todo">
-            <span class="todo-txt" :class="{todoDone: isDone}">{{todoTxt}}</span>
+            <span @click="toggleIsDone" class="todo-txt" :class="{todoDone: isDone}">{{todoTxt}}</span>
+            <button @click="deleteTodo">X</button>
         </li>
     `,
     data() {
@@ -11,7 +14,12 @@ export default {
         }
     },
     methods: {
-        
+       deleteTodo() {           
+           eventBus.$emit('deleteTodo', this.todo.id, this.noteId)
+        },
+        toggleIsDone(){
+            eventBus.$emit('toggleIsDone', this.todo.id, this.noteId)
+        }
     },
     computed: {
         todoTxt() {

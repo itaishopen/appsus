@@ -1,7 +1,17 @@
+* {
+    box-sizing: border-box;
+}
+
+.keep-app {
+    padding: 30px;
+    height: 90vh;
+}
+
 .note-list {
     display: flex;
     flex-flow: column wrap;
-    padding: 30px;
+    align-content: flex-start;
+    height: 100%;
 }
 
 .keep-note {
@@ -11,7 +21,19 @@
     margin: 15px;
 }
 
-.keep-note h3 {
+.keep-note .note-header {
+    width: 100%;
     font-size: 1.3em;
     font-weight: bold;
+}
+
+.note-img {
+    margin: 10px;
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+}
+
+.todoDone {
+    text-decoration: line-through;
 }

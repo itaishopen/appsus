@@ -2,7 +2,9 @@ export default {
     getRandomIntInclusive,
     makeId,
     saveToStorage,
-    loadFromStorage
+    loadFromStorage,
+    saveToStorageSync,
+    loadFromStorageSync
 }
 
 function saveToStorage(key, value) {
@@ -30,4 +32,12 @@ function makeId() {
     }
 
     return txt;
+}
+
+function saveToStorageSync(key, value) {
+    localStorage.setItem(key, JSON.stringify(value));
+}
+ 
+function loadFromStorageSync(key) {
+    return JSON.parse(localStorage.getItem(key));
 }

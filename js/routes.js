@@ -4,6 +4,9 @@ import homePage from './pages/home-page-cmp.js'
 // import bookDetails from './pages/book-details-cmp.js'
 // import reviewAdd from './pages/review-add-cmp.js'
 import keepApp from './apps/keep/pages/miss-keep-cmp.js'
+import mailApp from './pages/email-page-cmp.js'
+import mailCompose from './apps/email/cmps/email-compose-cmp.js'
+import mailDetails from './apps/email/cmps/email-details-cmp.js'
 
 
 export default [
@@ -12,5 +15,9 @@ export default [
     // { path: '/book', component: bookApp },
     // { path: '/book/:bookId', component: bookDetails },
     // { path: '/bookReview/:bookId', component: reviewAdd },
-    { path: '/miss-keep', component: keepApp }
+    { path: '/miss-keep', component: keepApp },
+    { path: '/email', component: mailApp },
+    { path: '/email/compose', component: mailCompose },
+    { path: '/email/details/:emailId', component: mailDetails },
+
 ]

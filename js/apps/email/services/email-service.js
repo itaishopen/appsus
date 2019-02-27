@@ -1,108 +1,149 @@
-import utilService from '../../../services/util-service';
-import { eventBus, EVENT_FEEDBACK } from '../event-bus.js'
+import utilService from '../../../services/util-service.js'
+import { eventBus, EVENT_FEEDBACK } from '../../../services/eventbus-service.js'
 
 export default {
-    getEmails,
+    query,
     onSort,
     getEmailById,
     getEmailIdx,
     getEmailByIdx,
-    writeAnEmail
+    sendAnEmail,
+    deleteAnEmail,
+    getEmails
 }
 
-var gEmails;
-var gFilterEmails;
+var gEmails = [];
 const EMAIL_KEY = 'emailapp'
+var gFilter = 'all'
 var gSort = 'date';
 var isFirstSort = true;
 
+query().then()
 
-loadDefaultEmails()
-
-function loadDefaultEmails() {
-    gEmails = utilService.loadFromStorage(EMAIL_KEY);
-    if (!gEmails || gEmails.length === 0) {
-        gEmails = _createEmails();
-        utilService.saveToStorage(EMAIL_KEY, gEmails);
-    }
-    return Promise.resolve(gEmails)
+function query(filter = 'all') {
+    gFilter = filter;
+    utilService.loadFromStorage(EMAIL_KEY)
+        .then(emails => {
+            if (!emails || emails.length === 0) {
+                emails = createEmails();
+                utilService.saveToStorage(EMAIL_KEY, emails).then();
+            }
+            switch (gFilter) {
+                case 'all':
+                    gEmails = emails
+                    break;
+                case 'read':
+                    gEmails = emails.filter(email => email.isRead);
+                    break;
+                case 'unread':
+                    gEmails = emails.filter(email => !email.isRead);
+                    break;
+            }
+        })
+    return Promise.resolve();
 }
 
-function getEmails(filter = 'all') {
-    switch (filter) {
-        case 'all':
-            gFilterEmails = gEmails;
-            break;
-        case 'read':
-            gFilterEmails = gEmails.filter(email => email.isRead)
-            break;
-        case 'unread':
-            gFilterEmails = gEmails.filter(email => !email.isRead)
-            break;
-    }
-    return Promise.resolve(gFilterEmails)
+function getEmails() {
+    return gEmails
 }
 
 function onSort(sortBy) {
     if (sortBy === gSort) isFirstSort = !isFirstSort;
     gSort = sortBy;
-    gFilterEmails = gFilterEmails.sort(sortEmails)        
-    return Promise.resolve(gFilterEmails);
+    query(gFilter).then();
+    return getEmails().sort(sortEmails)
 }
 
-function sortEmails(a,b) {
+function sortEmails(a, b) {
     var num = -1;
-    if (isFirstSort) num = 1; 
+    if (isFirstSort) num = 1;
     if (a[gSort] - b[gSort] > 0) return 1 * num;
     else if (a[gSort] - b[gSort] < 0) return -1 * num;
     return 0;
 }
 
-function getEmailById(emailId) {
-    return Promise.resolve(gEmails.find(email => email.id === emailId))
-}
 
-function _createEmails() {
-    let emails = JSON.parse(JSON.stringify(jsonData));
-    return emails
+// function createEmails() {
+//     return JSON.parse(JSON.stringify(jsonData));
+// }
+
+function getEmailById(emailId) {
+    return utilService.loadFromStorage(EMAIL_KEY).then(emails => { return emails.find(email => email.id === emailId) })
 }
 
 function getEmailIdx(emailId) {
-    return Promise.resolve(gEmails.findIndex(email => email.id === emailId))
+    return utilService.loadFromStorage(EMAIL_KEY).then(emails => { return emails.findIndex(email => email.id === emailId) })
 }
 
 function getEmailByIdx(emailIdx) {
-    return Promise.resolve(gEmails[emailIdx]);
+    return utilService.loadFromStorage(EMAIL_KEY).then(emails => emails[emailIdx])
 }
 
 function deleteAnEmail(emailId) {
-    let emailIdx = getEmailIdx(emailId);
-    gEmails.splice(emailIdx, 1);
-    utilService.saveToStorage(EMAIL_KEY, gEmails);
+    return utilService.loadFromStorage(EMAIL_KEY)
+        .then(emails => {
+            getEmailIdx(emailId).then(emailIdx => {
+                emails.splice(emailIdx, 1);
+                return utilService.saveToStorage(EMAIL_KEY, emails);
+            });
+        })
 }
 
-function writeAnEmail(email) {
-    try {
-        let email = createAnEmail(email);
-        gEmails.push(email)
-        utilService.saveToStorage(EMAIL_KEY, gEmails)
-        return Promise.resolve(email)
-    } catch (err) {
-        eventBus.$emit(EVENT_FEEDBACK,{txt: err,link: ''},'fail')
-    }
+function sendAnEmail(emailData) {
+    return utilService.loadFromStorage(EMAIL_KEY).then(emails => {
+        if (emailData.id) {
+            let idx = emails.findIndex(email => email.id === emailData.id)
+            emails[idx].isRead = emailData.isRead
+            emails.splice(idx, 1, emailData);
+        } else {
+            let newEmail = createAnEmail(emailData);
+            emails.push(newEmail)
+        }
+        return utilService.saveToStorage(EMAIL_KEY, emails)
+    })
 }
 
 function createAnEmail(email) {
     return {
-        id: utilService.makeId(),
+        id: email.id ? email.id : utilService.makeId(),
         recipient: email.recipient,
         sender: email.sender,
         subject: email.subject,
         body: email.body,
-        isRead: false,
+        isRead: email.isRead ? email.isRead : false,
         sentAt: {
-            timeToShow: moment().format('MMMM Do YYYY, h:mm:ss a'),
+            timeToShow: moment().format('DD MMM YYYY, h:mm:ss'),
             timestamp: Date.now()
         },
     };
+}
+
+
+function createEmails() {
+    return [
+        {
+            id: utilService.makeId(),
+            recipient: 'You',
+            sender: 'Jonas from EmailChimp',
+            subject: 'Welcome to EmailChimp!',
+            body: 'We welcome you to EmailChimp, the new email service by Jonas and Bar. You\'re welcomed to enjoy it and contact your contacts right away!',
+            isRead: false,
+            sentAt: {
+                timeToShow: moment('20170619', 'YYYYMMDD').fromNow(),
+                timestamp: 1497853352,
+            }
+        },
+        {
+            id: utilService.makeId(),
+            recipient: 'You',
+            sender: 'Bar from EmailChimp',
+            subject: 'How to get started with your new Email',
+            body: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Qui nesciunt commodi odit amet tempora? Suscipit aut omnis possimus placeat, ipsa iusto maiores illum animi necessitatibus cupiditate ducimus enim, error impedit.',
+            isRead: true,
+            sentAt: {
+                timeToShow: moment('20170620', 'YYYYMMDD').fromNow(),
+                timestamp: 1497939752,
+            }
+        },
+    ];
 }

@@ -9,49 +9,41 @@ export default {
     getEmailByIdx,
     sendAnEmail,
     deleteAnEmail,
-    getEmails
 }
 
-var gEmails = [];
 const EMAIL_KEY = 'emailapp'
 var gFilter = 'all'
 var gSort = 'date';
 var isFirstSort = true;
 
-query().then()
+// query().then()
 
-function query(filter = 'all') {
+function query(filter = 'all', key = EMAIL_KEY) {
     gFilter = filter;
-    utilService.loadFromStorage(EMAIL_KEY)
+    return utilService.loadFromStorage(key)
         .then(emails => {
             if (!emails || emails.length === 0) {
-                emails = createEmails();
-                utilService.saveToStorage(EMAIL_KEY, emails).then();
+                emails = createEmails(key);
+                utilService.saveToStorage(key, emails).then();
             }
             switch (gFilter) {
                 case 'all':
-                    gEmails = emails
-                    break;
+                    return emails
                 case 'read':
-                    gEmails = emails.filter(email => email.isRead);
-                    break;
+                    return emails.filter(email => email.isRead);
                 case 'unread':
-                    gEmails = emails.filter(email => !email.isRead);
-                    break;
+                    return emails.filter(email => !email.isRead);
+                default: {
+                    return emails.filter(email => email.sender.toLowerCase().includes(gFilter) || email.subject.toLowerCase().includes(gFilter) || email.body.toLowerCase().includes(gFilter));
+                }
             }
         })
-    return Promise.resolve();
-}
-
-function getEmails() {
-    return gEmails
 }
 
 function onSort(sortBy) {
     if (sortBy === gSort) isFirstSort = !isFirstSort;
     gSort = sortBy;
-    query(gFilter).then();
-    return getEmails().sort(sortEmails)
+    return query(gFilter).then(emails => emails.sort(sortEmails));
 }
 
 function sortEmails(a, b) {
@@ -61,11 +53,6 @@ function sortEmails(a, b) {
     else if (a[gSort] - b[gSort] < 0) return -1 * num;
     return 0;
 }
-
-
-// function createEmails() {
-//     return JSON.parse(JSON.stringify(jsonData));
-// }
 
 function getEmailById(emailId) {
     return utilService.loadFromStorage(EMAIL_KEY).then(emails => { return emails.find(email => email.id === emailId) })
@@ -92,14 +79,16 @@ function deleteAnEmail(emailId) {
 function sendAnEmail(emailData) {
     return utilService.loadFromStorage(EMAIL_KEY).then(emails => {
         if (emailData.id) {
-            let idx = emails.findIndex(email => email.id === emailData.id)
-            emails[idx].isRead = emailData.isRead
-            emails.splice(idx, 1, emailData);
+            getEmailIdx(emailData.id).then(emailIdx => {
+                emails[emailIdx].isRead = emailData.isRead;
+                emails.splice(emailIdx, 1, emailData);
+                return utilService.saveToStorage(EMAIL_KEY, emails);
+            }); 
         } else {
             let newEmail = createAnEmail(emailData);
             emails.push(newEmail)
+            return utilService.saveToStorage(EMAIL_KEY, emails)
         }
-        return utilService.saveToStorage(EMAIL_KEY, emails)
     })
 }
 

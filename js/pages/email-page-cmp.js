@@ -2,7 +2,7 @@ import emailServices from '../apps/email/services/email-service.js'
 import emailFilter from '../apps/email/cmps/email-filter-cmp.js'
 import emailList from '../apps/email/cmps/email-list-cmp.js'
 import emailStatus from '../apps/email/cmps/email-status-cmp.js'
-// import emailSearch from './email-search.cmp.js'
+import emailSearch from '../apps/email/cmps/email-search-cmp.js'
 // import emailSort from '../apps/email/cmps/'
 import { eventBus, EVENT_FEEDBACK } from '../services/eventbus-service.js'
 
@@ -10,8 +10,8 @@ export default {
     template: `
         <section class="email-app-container">
             <div class="email-actions-toolbar">
-            <router-link to="/"><i class="fas fa-arrow-circle-left"></i>Back</router-link>
-                <!-- <email-search @searchEmail="searchEmail"></email-search> -->
+                <router-link to="/"><i class="fas fa-arrow-circle-left"></i>Back</router-link>
+                <email-search @searchInEmails="searchInEmails"></email-search>
             </div>
             <div class="filter-sort-container">
                 <email-filter @setFilter="setFilter"></email-filter>
@@ -34,8 +34,8 @@ export default {
     },
     created() {
         emailServices.query()
-            .then(() => {
-                this.emails = emailServices.getEmails();
+            .then(emails => {
+                this.emails = emails;
                 this.unreadEmails = this.checkEmailStatus();
                 eventBus.$emit(EVENT_FEEDBACK, { txt: 'Welcome to your inbox!', link: '' }, 'welcome')
             });
@@ -45,8 +45,8 @@ export default {
         setFilter(filter) {
             this.filter = filter;
             emailServices.query(this.filter)
-                .then(() => {
-                    this.emails = emailServices.getEmails();
+                .then(emails => {
+                    this.emails = emails;
                 });
         },
         checkEmailStatus() {
@@ -54,17 +54,17 @@ export default {
         },
         deleteMail(emailId) {
             emailServices.deleteAnEmail(emailId)
-                .then(emails => {
-                    this.emails = emails;
-                    this.$router.push('/email');
+                .then(() => {
+                    emailServices.query(emails => {
+                        this.emails = emails;
+                        this.unreadEmails = this.checkEmailStatus();
+                    })
                 })
         },
-        // searchEmail(searchParam) {
-        //     emailServices.query(this.filter)
-        //         .then(emails => {
-        //             this.emails = emailServices.searchEmails(emails, searchParam);
-        //         })
-        // },
+        searchInEmails(searchParam) {
+            emailServices.query(searchParam)
+                .then(emails => this.emails = emails)
+        },
         // sort(sortParam) {
         //     emailServices.onSort(sortParam)
         //         .then(emails => {
@@ -77,7 +77,7 @@ export default {
         emailList,
         emailFilter,
         emailStatus,
-        // emailSearch,
+        emailSearch,
         // emailSort,
     }
 }

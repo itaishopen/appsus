@@ -6,7 +6,7 @@ export default {
             <div class="home-header flex align-center">
                 <h1>welcome to miss books in a single page view</h1>
             </div>
-            <img src="img/miss-books.jpg" alt="Home Page">
+            <!-- <img src="img/miss-books.jpg" alt="Home Page"> -->
         </div>
     </section>
     `

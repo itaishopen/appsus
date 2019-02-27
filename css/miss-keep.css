@@ -1,0 +1,17 @@
+.note-list {
+    display: flex;
+    flex-flow: column wrap;
+    padding: 30px;
+}
+
+.keep-note {
+    width: 200px;
+    background-color: yellow;
+    border: 1px solid black;
+    margin: 15px;
+}
+
+.keep-note h3 {
+    font-size: 1.3em;
+    font-weight: bold;
+}

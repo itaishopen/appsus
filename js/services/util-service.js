@@ -1,17 +1,26 @@
-// This Module works with NAMED EXPORTS
-
 export default {
     getRandomIntInclusive,
-    makeId
+    makeId,
+    saveToStorage,
+    loadFromStorage
 }
 
-export function getRandomIntInclusive(min, max) {
+function saveToStorage(key, value) {
+    localStorage.setItem(key, JSON.stringify(value));
+    return Promise.resolve();
+}
+ 
+function loadFromStorage(key) {
+    return Promise.resolve(JSON.parse(localStorage.getItem(key)));
+}
+
+function getRandomIntInclusive(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive 
 }
 
-export function makeId() {
+function makeId() {
     var length = 6;
     var txt = '';
     var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';

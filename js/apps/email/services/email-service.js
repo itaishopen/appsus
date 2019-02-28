@@ -30,25 +30,25 @@ function query(filter = 'inbox', key = EMAIL_KEY) {
             }
             switch (gFilter) {
                 case 'inbox':
-                    return emails.filter(email => !email.isSent && !email.isDel && !email.isDraft);
+                    return emails.filter(email => !email.isSent && !email.isDel && !email.isDraft).sort(sortEmails);
                 case 'read':
-                    return emails.filter(email => email.isRead && !email.isSent && !email.isDel);
+                    return emails.filter(email => email.isRead && !email.isSent && !email.isDel && !email.isDraft).sort(sortEmails);
                 case 'unread':
-                    return emails.filter(email => !email.isRead && !email.isSent && !email.isDel);
+                    return emails.filter(email => !email.isRead && !email.isSent && !email.isDel && !email.isDraft).sort(sortEmails);
                 case 'sent':
-                    return emails.filter(email => email.isSent && !email.isDel);
+                    return emails.filter(email => email.isSent && !email.isDel).sort(sortEmails);
                 case 'draft':
-                    return emails.filter(email => email.isDraft && !email.isDel);
+                    return emails.filter(email => email.isDraft && !email.isDel).sort(sortEmails);
                 case 'trash':
-                    return emails.filter(email => email.isDel);
+                    return emails.filter(email => email.isDel).sort(sortEmails);
                 default: {
-                    return emails.filter(email => email.sender.toLowerCase().includes(gFilter) || email.subject.toLowerCase().includes(gFilter) || email.body.toLowerCase().includes(gFilter));
+                    return emails.filter(email => email.sender.toLowerCase().includes(gFilter) || email.subject.toLowerCase().includes(gFilter) || email.body.toLowerCase().includes(gFilter)).sort(sortEmails);
                 }
             }
         })
 }
 
-function onSort(sortBy) {
+function onSort(sortBy = 'date') {
     if (sortBy === gSort) isFirstSort = !isFirstSort;
     else isFirstSort = true;
     gSort = sortBy;
@@ -60,6 +60,8 @@ function onSort(sortBy) {
 function sortEmails(a, b) {
     var num = -1;
     if (isFirstSort) num = 1;
+    if (gSort === 'date' && isFirstSort) num = -1;
+    if (gSort === 'date' && !isFirstSort) num = 1;
     if (a[gSort] > b[gSort]) return 1 * num;
     else if (a[gSort] < b[gSort]) return -1 * num;
     return 0;

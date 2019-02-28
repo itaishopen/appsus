@@ -130,6 +130,15 @@ button {
     border-bottom-right-radius: 25px;
     border-top-right-radius: 25px;
 }
+.email-sort .tab input[type=radio]:checked~label {
+    background: rgba(128, 128, 128, 0.5);
+    border-radius: 25px;
+}
+
+.delete-all {
+    border: transparent;
+    cursor: pointer;
+}
 
 .email-filter .tab {
     height: 55px;
@@ -160,13 +169,39 @@ button {
 }
 
 .email-preview-container {
-    padding: 20px;
-    text-align: left
+    /* padding: 20px; */
+    height: 86px;
+    text-align: left;
+    align-items: center;
+}
+
+.email-link {
+    height: 100%;
+    align-items: center;
+
+}
+
+.email-preview {
+    height: 100%;
+}
+
+.email-preview-sentAt {
+    /* align-self: center; */
+    font-size: 13px;
+    width: 150px;
+    margin: 10px 15px 0 0; 
+
+}
+
+.email-preview-sender {
+    font-size: 15px;
+    margin-bottom: 15px;
 }
 
 .text-container {
     height: 100%;
-    width: 100%
+    width: 100%;
+    margin-left: 10px;
 }
 .email-preview-container:hover .button-container {
     display: flex;

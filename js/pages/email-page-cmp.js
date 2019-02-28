@@ -21,7 +21,7 @@ export default {
                 <div class="upper-control flex">
                     <button class="compose-email-btn" @click="composeOpen"><i class="fas fa-plus"></i>Compose</button>
                     <email-sort @sort="sort"></email-sort>
-                    <button v-if="filter === 'trash' || filter === 'draft'" class="delete-all" @click="deleteAll"><i class="fas fa-dumpster"></i></button>
+                    <button v-if="filter === 'trash' || filter === 'draft'" class="delete-all" @click="deleteAll"><i class="fas fa-dumpster fa-2x"></i></button>
                 </div>
                 <div class="main-container flex">
                     <email-filter :unreadEmails="unreadEmails" @setFilter="setFilter"></email-filter>
@@ -40,6 +40,7 @@ export default {
             isCompose: false,
             isReply: false,
             emailForReply: {},
+            sortParam: 'date',
         }
     },
     computed: {
@@ -52,7 +53,8 @@ export default {
                 this.unreadEmails = this.checkEmailStatus();
                 eventBus.$emit(EVENT_FEEDBACK, { txt: 'Welcome to your inbox!', link: '' }, 'welcome')
             });
-
+            document.querySelector('title').innerHTML = 'Mr Email';
+            document.getElementById('favicon').href = 'img/favicon5.ico';             
     },
     methods: {
         markAsUnread(emailId) {
@@ -63,6 +65,7 @@ export default {
                         emailServices.query(this.filter)
                             .then(emails => {
                                 this.emails = emails;
+                                this.unreadEmails = this.checkEmailStatus();
                             })
                     })
             })
@@ -75,6 +78,7 @@ export default {
                         emailServices.query(this.filter)
                             .then(emails => {
                                 this.emails = emails;
+                                this.unreadEmails = this.checkEmailStatus();
                             })
                     })
             })
@@ -112,7 +116,8 @@ export default {
                 .then(emails => this.emails = emails)
         },
         sort(sortParam) {
-            emailServices.onSort(sortParam)
+            this.sortParam = sortParam
+            emailServices.onSort(this.sortParam)
                 .then(emails => {
                     this.emails = emails;
                 })

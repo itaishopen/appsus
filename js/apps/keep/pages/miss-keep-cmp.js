@@ -17,8 +17,20 @@ export default {
     },
     template: `
     <section class="keep-app">
-        <ul class="note-list">
-            <component v-for="note in notes" :is="'note-' + note.type" :note="note" :key="note.id" @newTodo="newTodo"></component>
+        <ul class="note-list grid"  data-colcade="columns: .grid-col, items: .grid-item">
+        <div class="grid-col grid-col--1"></div>
+        <div class="grid-col grid-col--2"></div>
+        <div class="grid-col grid-col--3"></div>
+        <div class="grid-col grid-col--4"></div>
+            <component
+                v-for="note in notes"
+                :is="'note-' + note.type"
+                :note="note"
+                :key="note.id"
+                @new-todo="newTodo"
+                @note-txt-changed="noteTxtChanged"
+                class="grid-item">
+            </component>
         </ul>
         <add-note @add="addNote"></add-note>
     </section>
@@ -29,12 +41,8 @@ export default {
         }
     },
     methods: {
-        updateNotes() {
-            keepService.getNotes()
-            .then(notes => this.notes = notes);
-        },
         addNote(noteObj) {
-            let newNote = keepService.createNote(noteObj.type, noteObj.title, noteObj.content)
+            let newNote = keepService.createNote(noteObj.type, noteObj.color, noteObj.title, noteObj.content)
             keepService.addNote(newNote)
                 .then(res => keepService.getNotes())
                 .then(notes => {
@@ -43,11 +51,19 @@ export default {
         },
         newTodo(todoTxt, noteId) {            
             keepService.addTodo(todoTxt, noteId).then(notes => this.notes = notes);
+        },
+        noteTxtChanged(newContent, noteId) {
+            keepService.updateNoteContent(noteId, newContent)
+                .then(notes => this.notes = notes);
         }
     },
     created() {
-        this.updateNotes();
+        keepService.getNotes()
+            .then(notes => {                
+                this.notes = notes}
+                );
         eventBus.$on('deleteTodo', (todoId, noteId) => keepService.deleteTodo(todoId, noteId).then(notes => this.notes = notes))
         eventBus.$on('toggleIsDone', (todoId, noteId) => keepService.toggleIsDone(todoId, noteId).then(notes => this.notes = notes))
+        eventBus.$on('header-changed', (newHeader, noteId) => keepService.updateNoteHeader(noteId, newHeader).then(notes => this.notes = notes))
     }
 }

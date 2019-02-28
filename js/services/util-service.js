@@ -4,7 +4,8 @@ export default {
     saveToStorage,
     loadFromStorage,
     saveToStorageSync,
-    loadFromStorageSync
+    loadFromStorageSync,
+    getBrightness
 }
 
 function saveToStorage(key, value) {
@@ -40,4 +41,13 @@ function saveToStorageSync(key, value) {
  
 function loadFromStorageSync(key) {
     return JSON.parse(localStorage.getItem(key));
+}
+
+function getBrightness(color) {
+    let [r, g, b] = [parseInt(color.substring(1, 3), 16),
+                     parseInt(color.substring(3, 5), 16),
+                     parseInt(color.substring(5, 7), 16)]
+    let brightness = (Math.max(r, g, b) + Math.min(r, g, b)) / 5.1
+    console.log(brightness);
+    return brightness;
 }

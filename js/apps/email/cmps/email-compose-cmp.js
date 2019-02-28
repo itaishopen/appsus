@@ -6,9 +6,6 @@ export default {
     <section class="email-compose">
       <div class="compose-email-toolbar">
         <router-link to="/email"><i class="fas fa-arrow-circle-left"></i>Back</router-link>
-        <!-- <router-link to="/email">
-            <h1><i class="fab fa-mailchimp"></i>&nbsp;Email Chimp</h1>
-        </router-link> -->
       </div>
 
       <form class="compose-email-container" @submit.prevent="sendEmail">
@@ -35,7 +32,7 @@ export default {
   },
   methods: {
     sendEmail() {
-      if (!this.email.recipient || !this.email.sender || !this.email.subject || !this.email.body) {
+      if (!this.email.recipient || !this.email.subject || !this.email.body) {
         eventBus.$emit(EVENT_FEEDBACK, {txt: 'Please fill in all the details', link: '' }, 'fail')
         return;
       }      

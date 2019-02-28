@@ -4,21 +4,44 @@
 
 .keep-app {
     padding: 30px;
-    height: 90vh;
+    /* height: 90vh; */
 }
 
 .note-list {
-    display: flex;
+    /* display: flex;
     flex-flow: column wrap;
     align-content: flex-start;
-    height: 100%;
+    height: 100%; */
 }
 
 .keep-note {
-    width: 200px;
+    /* width: 200px; */
     background-color: yellow;
     border: 1px solid black;
-    margin: 15px;
+    margin: 15px 15px 0 0;
+}
+
+.note-img-preview {
+    max-width: 100px;
+    max-height: 100px;
+}
+
+.grid {
+    display: flex;
+}
+
+.grid-col {
+    flex-grow: 1;
+}
+
+.grid-col--2, .grid-col--3 { display: none }
+
+@media ( min-width: 768px ) {
+  .grid-col--2 { display: block; }
+}
+
+@media ( min-width: 1080px ) {
+  .grid-col--3 { display: block; }
 }
 
 .keep-note .note-header {
@@ -28,16 +51,29 @@
 }
 
 .editable {
-    border: 1px solid lightblue;
+    border: 1px solid rgba(0, 0, 0, 0);
+}
+
+.editable_active {
+    animation: editable infinite 1s;
 }
 
 .note-img {
     margin: 10px;
-    width: 180px;
-    height: 180px;
-    object-fit: cover;
+    max-width: 180px;
 }
 
 .todoDone {
     text-decoration: line-through;
+}
+
+.white_txt {
+    color: rgb(233, 233, 233);
+}
+
+@keyframes editable {
+    0% {border: 1px solid lightblue;}
+    50% {border: 1px solid lightblue;}
+    51% {border: 1px solid rgba(0, 0, 0, 0);}
+    100% {border: 1px solid rgba(0, 0, 0, 0);}
 }

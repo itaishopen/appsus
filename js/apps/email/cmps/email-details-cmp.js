@@ -59,7 +59,7 @@ export default {
       .then(() => {
         this.email = emailData;
           this.isReplying = false;
-          eventBus.$emit(EVENT_FEEDBACK, { txt: 'Your email was sent do you want to view it?', link: `/email/${emailData.id}` }, 'success');
+          // eventBus.$emit(EVENT_FEEDBACK, { txt: 'Your email was sent do you want to view it?', link: `/email/${emailData.id}` }, 'success');
         })
     }
   },

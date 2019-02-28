@@ -9,5 +9,10 @@ export default {
             <!-- <img src="img/miss-books.jpg" alt="Home Page"> -->
         </div>
     </section>
-    `
+    `,
+    created() {
+        document.querySelector('title').innerHTML = 'AppSus';
+            document.getElementById('favicon').href = 'img/hourse-icon.png'; 
+    },
+
 }

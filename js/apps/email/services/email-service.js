@@ -9,7 +9,8 @@ export default {
     getEmailByIdx,
     sendAnEmail,
     deleteAnEmail,
-    restoreAnEmail
+    restoreAnEmail,
+    delAllFolderEmails,
 }
 
 const EMAIL_KEY = 'emailapp'
@@ -29,13 +30,15 @@ function query(filter = 'inbox', key = EMAIL_KEY) {
             }
             switch (gFilter) {
                 case 'inbox':
-                    return emails.filter(email => !email.isSent && !email.isDel);
+                    return emails.filter(email => !email.isSent && !email.isDel && !email.isDraft);
                 case 'read':
                     return emails.filter(email => email.isRead && !email.isSent && !email.isDel);
                 case 'unread':
                     return emails.filter(email => !email.isRead && !email.isSent && !email.isDel);
                 case 'sent':
                     return emails.filter(email => email.isSent && !email.isDel);
+                case 'draft':
+                    return emails.filter(email => email.isDraft && !email.isDel);
                 case 'trash':
                     return emails.filter(email => email.isDel);
                 default: {
@@ -78,7 +81,7 @@ function deleteAnEmail(emailId) {
     return utilService.loadFromStorage(EMAIL_KEY)
         .then(emails => {
             return getEmailIdx(emailId).then(emailIdx => {
-                if(!emails[emailIdx].isDel) {
+                if (!emails[emailIdx].isDel) {
                     emails[emailIdx].isDel = true;
                     utilService.saveToStorage(EMAIL_KEY, emails);
                 } else {
@@ -106,13 +109,14 @@ function sendAnEmail(emailData) {
         if (emailData.id) {
             return getEmailIdx(emailData.id).then(emailIdx => {
                 emails[emailIdx].isRead = emailData.isRead;
-                emails[emailIdx].isSent = true;
+                emails[emailIdx].isSent = emailData.isSent;
+                emails[emailIdx].isDraft = emailData.isDraft;
                 emails.splice(emailIdx, 1, emailData);
                 return utilService.saveToStorage(EMAIL_KEY, emails);
-            }); 
+            });
         } else {
             let newEmail = createAnEmail(emailData);
-            newEmail.isSent = true;
+            newEmail.isSent = emailData.isSent;
             emails.push(newEmail)
             return utilService.saveToStorage(EMAIL_KEY, emails)
         }
@@ -129,12 +133,27 @@ function createAnEmail(email) {
         isRead: email.isRead ? email.isRead : false,
         isSent: email.isSent ? email.isSent : false,
         isDel: email.isDel ? email.isDel : false,
+        isDraft: email.isDraft ? email.isDraft : false,
         sentAt: {
             timeToShow: moment().format('DD MMM YYYY, h:mm:ss a'),
             timestamp: Date.now()
         },
         date: Date.now(),
     };
+}
+
+function delAllFolderEmails(emailsToDel) {
+    return utilService.loadFromStorage(EMAIL_KEY).then(emails => {
+        emailsToDel.forEach(email => {
+            let emailIdx = emails.findIndex(currEmail => email.id === currEmail.id)
+                if (email.isDel) {
+                    emails.splice(emailIdx, 1);
+                } else {
+                    emails[emailIdx].isDel = true;
+                }
+        })        
+        return utilService.saveToStorage(EMAIL_KEY, emails)
+    })
 }
 
 
@@ -149,6 +168,7 @@ function createEmails() {
             isRead: false,
             isSent: false,
             isDel: false,
+            isDraft: false,
             sentAt: {
                 timeToShow: moment('20040401, 12:01 am', 'YYYYMMDD, h:mm a').format('lll'),
                 timestamp: 1080777660,
@@ -164,6 +184,7 @@ function createEmails() {
             isRead: false,
             isSent: false,
             isDel: false,
+            isDraft: false,
             sentAt: {
                 timeToShow: moment('20040401 12:03 am', 'YYYYMMDD, h:mm a').format('lll'),
                 timestamp: 1080777780,
@@ -179,6 +200,7 @@ function createEmails() {
             isRead: false,
             isSent: true,
             isDel: false,
+            isDraft: false,
             sentAt: {
                 timeToShow: moment('20040402 12:03 pm', 'YYYYMMDD, h:mm a').format('lll'),
                 timestamp: 1080907380,
@@ -208,6 +230,7 @@ function createEmails() {
             isRead: false,
             isSent: false,
             isDel: true,
+            isDraft: false,
             sentAt: {
                 timeToShow: moment('20040402 12:03 pm', 'YYYYMMDD, h:mm a').format('lll'),
                 timestamp: 1080907380,

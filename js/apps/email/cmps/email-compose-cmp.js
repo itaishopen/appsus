@@ -3,16 +3,12 @@ import emailServices from '../services/email-service.js'
 
 export default {
   template: `
-    <section class="email-compose">
-      <div class="compose-email-toolbar">
-        <router-link to="/email"><i class="fas fa-arrow-circle-left"></i>Back</router-link>
-      </div>
-
-      <form class="compose-email-container" @submit.prevent="sendEmail">
+    <section class="email-compose flex column">
+      <button class="close-compose" @click="composeClose"><i class="fas fa-times"></i></button>
+      <form class="compose-email-container flex column" @submit.prevent="sendEmail">
         <input type="text" class="compose-email-to" placeholder="To" v-model="email.recipient">
         <input type="text" class="compose-email-from" placeholder="From" v-model="email.sender" disabled>
         <input type="text" class="compose-email-subject" placeholder="Subject" v-model="email.subject">
-        
         <div class="compose-email-body">
             <textarea  cols="43" rows="10" placeholder="Message body" v-model="email.body"></textarea>
         </div>
@@ -35,12 +31,25 @@ export default {
       if (!this.email.recipient || !this.email.subject || !this.email.body) {
         eventBus.$emit(EVENT_FEEDBACK, {txt: 'Please fill in all the details', link: '' }, 'fail')
         return;
-      }      
+      }
+      this.email.isSent = true;      
       emailServices.sendAnEmail(this.email)
         .then(() => {          
           // todo: display confirmation
-          this.$router.push('/email');
+          closeModal();
         })
+    },
+    composeClose() {
+      this.email.isDraft = true
+      emailServices.sendAnEmail(this.email)
+        .then(() => {          
+          // todo: display confirmation
+          closeModal();
+        })
+      
+    },
+    closeModal() {
+      this.$emit('composeClose', this.email)
     }
   },
 }

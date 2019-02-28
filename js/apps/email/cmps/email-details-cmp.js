@@ -18,16 +18,16 @@ export default {
       <div class="details-body-container"><p class="details-body-txt">{{email.body}}</p></div>
 
       <div class="email-actions-container">
-          <button class="email-reply-btn" @click="isReplying = true">Reply</button>
+          <button class="email-reply-btn" @click="isReplying = true"><i class="fas fa-reply"></i></button>
           <router-link to="/email" for="toolbar-delete-btn" ><button class="toolbar-delete-btn fas fa-trash-alt" @click="deleteEmail"></button></router-link>
-          <router-link to="/email" for="toolbar-mark-as-unread-btn"><button class="toolbar-mark-as-unread-btn"  @click="markAsUnread">Mark as unread</button></router-link>
+          <router-link to="/email" for="toolbar-mark-as-unread-btn"><button class="toolbar-mark-as-unread-btn"  @click="markAsUnread"><i class="fas fa-envelope"></i></button></router-link>
       </div>
-      <email-reply v-if="isReplying" :emailForReply="email" @sendEmail="sendEmail" @cancelReply="isReplying = false"></email-reply>
+      <email-reply v-if="isReplying" :emailForReply="email" @sendEmail="sendEmail" @replyClose="sendEmail"></email-reply>
     </section>
     `,
   data() {
     return {
-      email: [],
+      email: {},
       isReplying: false,
     }
   },

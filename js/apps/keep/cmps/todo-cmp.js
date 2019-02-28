@@ -5,7 +5,7 @@ export default {
     template: `
         <li class="todo">
             <span @click="toggleIsDone" class="todo-txt" :class="{todoDone: isDone}">{{todoTxt}}</span>
-            <button @click="deleteTodo">X</button>
+            <button @click="deleteTodo" class="icon-btn delete-todo-btn"><i class="fas fa-times"></i></button>
         </li>
     `,
     data() {
@@ -18,6 +18,8 @@ export default {
            eventBus.$emit('deleteTodo', this.todo.id, this.noteId)
         },
         toggleIsDone(){
+            console.log(this.todo);
+            
             eventBus.$emit('toggleIsDone', this.todo.id, this.noteId)
         }
     },

@@ -48,6 +48,5 @@ function getBrightness(color) {
                      parseInt(color.substring(3, 5), 16),
                      parseInt(color.substring(5, 7), 16)]
     let brightness = (Math.max(r, g, b) + Math.min(r, g, b)) / 5.1
-    console.log(brightness);
     return brightness;
 }

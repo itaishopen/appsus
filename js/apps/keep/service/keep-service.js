@@ -9,13 +9,23 @@ export default {
     updateNoteHeader,
     deleteTodo,
     toggleIsDone,
-    addTodo
+    addTodo,
+    togglePin,
+    updateColor
 }
 
-var dummyNotes = [{ id: utilService.makeId(), type: 'txt', color: '#493750', header: 'Sample Txt Note', content: 'Sample Txt' },
-                  { id: utilService.makeId(), type: 'todos', color: '#047669', header: 'Sample Todos Note', content: [{ id: utilService.makeId(), todoTxt: 'Sample Todo', isDone: false }, { id: utilService.makeId(), todoTxt: 'Sample Todo2', isDone: true }] },
-                  { id: utilService.makeId(), type: 'img', color: '#476904', header: 'Sample Image Note', content: 'https://via.placeholder.com/150' },
-                  { id: utilService.makeId(), type: 'vid', color: '#576492', header: 'Sample Video Note', content: 'https://www.youtube.com/embed/Dc5mMl58nUo' }]
+var dummyNotes = [{ id: utilService.makeId(), type: 'txt', isPinned: false, color: '#493750', header: 'Sample Txt Note', content: 'Sample Txt' },
+                  { id: utilService.makeId(), type: 'todos', isPinned: true, color: '#047669', header: 'Sample Todos Note', content: [{ id: utilService.makeId(), todoTxt: 'Sample Todo', isDone: false }, { id: utilService.makeId(), todoTxt: 'Sample Todo2', isDone: true }] },
+                  { id: utilService.makeId(), type: 'img', isPinned: false, color: '#476904', header: 'Sample Image Note', content: 'https://via.placeholder.com/150' },
+                  { id: utilService.makeId(), type: 'vid', isPinned: false, color: '#576492', header: 'Sample Video Note', content: 'https://www.youtube.com/embed/Dc5mMl58nUo' },
+                  { id: utilService.makeId(), type: 'txt', isPinned: false, color: '#493750', header: 'Sample Txt Note', content: 'Sample Txt' },
+                  { id: utilService.makeId(), type: 'todos', isPinned: true, color: '#047669', header: 'Sample Todos Note', content: [{ id: utilService.makeId(), todoTxt: 'Sample Todo', isDone: false }, { id: utilService.makeId(), todoTxt: 'Sample Todo2', isDone: true }] },
+                  { id: utilService.makeId(), type: 'img', isPinned: false, color: '#476904', header: 'Sample Image Note', content: 'https://via.placeholder.com/150' },
+                  { id: utilService.makeId(), type: 'vid', isPinned: false, color: '#576492', header: 'Sample Video Note', content: 'https://www.youtube.com/embed/Dc5mMl58nUo' },
+                  { id: utilService.makeId(), type: 'txt', isPinned: false, color: '#493750', header: 'Sample Txt Note', content: 'Sample Txt' },
+                  { id: utilService.makeId(), type: 'todos', isPinned: true, color: '#047669', header: 'Sample Todos Note', content: [{ id: utilService.makeId(), todoTxt: 'Sample Todo', isDone: false }, { id: utilService.makeId(), todoTxt: 'Sample Todo2', isDone: true }] },
+                  { id: utilService.makeId(), type: 'img', isPinned: false, color: '#476904', header: 'Sample Image Note', content: 'https://via.placeholder.com/150' },
+                  { id: utilService.makeId(), type: 'vid', isPinned: false, color: '#576492', header: 'Sample Video Note', content: 'https://www.youtube.com/embed/Dc5mMl58nUo' }]
 
 _createNotes();
 
@@ -23,13 +33,13 @@ function createNote(type, color, header, content) {
     if(!header) header = 'New Note'
     switch (type) {
         case 'txt':
-            return { id: utilService.makeId(), color, type: 'txt', header, content };
+            return { id: utilService.makeId(), type: 'txt', isPinned: false, color, header, content };
         case 'todos':
-            return { id: utilService.makeId(), color, type: 'todos', header, content: _createTodos(content) };
+            return { id: utilService.makeId(), type: 'todos', isPinned: false, color, header, content: _createTodos(content) };
         case 'img':
-            return { id: utilService.makeId(), color, type: 'img', header, content };
+            return { id: utilService.makeId(), type: 'img', isPinned: false, color, header, content };
         case 'vid':
-            return { id: utilService.makeId(), color, type: 'vid', header, content };
+            return { id: utilService.makeId(), type: 'vid', isPinned: false, color, header, content };
     }
 }
 
@@ -42,12 +52,18 @@ function addNote(note) {
         .then(notes => {
             notes.push(note);
             _saveNotes(notes)
+            return notes;
         })
 }
 
-function deleteNote(idx) {
+function deleteNote(noteId) {
     return _loadNotes()
-        .then(notes => _saveNotes(notes.splice(idx, 1)))
+        .then(notes => {
+            let noteIdx = notes.findIndex(note => note.id === noteId);
+            notes.splice(noteIdx, 1);
+            _saveNotes(notes);
+            return notes;
+        })
 }
 
 function addTodo(todoTxt, noteId) {
@@ -97,7 +113,29 @@ function updateNoteHeader(noteId, header) {
         .then(notes => {
             let noteIdx = notes.findIndex(note => note.id === noteId);
             notes[noteIdx].header = header;
-            _saveNotes(notes)
+            _saveNotes(notes);
+            return notes;
+        })
+}
+
+function updateColor(noteId, color) {
+    return _loadNotes()
+    .then(notes => {
+        let noteIdx = notes.findIndex(note => note.id === noteId);
+        notes[noteIdx].color = color;
+        _saveNotes(notes);
+        return notes;
+    })
+}
+
+function togglePin(noteId) {
+    return _loadNotes()
+        .then(notes => {
+            let noteIdx = notes.findIndex(note => note.id === noteId);
+            notes[noteIdx].isPinned = !notes[noteIdx].isPinned;
+            // console.log(notes);
+            
+            _saveNotes(notes);
             return notes;
         })
 }
@@ -117,5 +155,7 @@ function _loadNotes() {
 
 function _createTodos(todoList) {
     if (!todoList) return [];
-    return todoList.map(todo => ({ todoId: utilService.makeId(), todoTxt: todo, isDone: false }))
+    todoList = todoList.filter(todo => todo);
+    console.log(todoList);
+    return todoList.map(todo => ({ id: utilService.makeId(), todoTxt: todo, isDone: false }))
 }

@@ -86,6 +86,10 @@ header .wrapper {
     color: beige;
 }
 
+.nav>* {
+    margin-right: 5px;
+}
+
 .nav a {
     color: inherit;
 }

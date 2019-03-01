@@ -19,14 +19,16 @@
     <div id="app">
         <header>
             <div class="wrapper flex align-center space-between">
-                <div class="logo">
-                    <img class="logo-img" src="img/final-horse-circle.png" alt="">
-                    <h1 class="logo-txt flex align-center justify-center">AppSus</h1>
-                </div>
+                <router-link exact to="/">
+                    <div class="logo">
+                        <img class="logo-img" src="img/final-horse-circle.png" alt="">
+                        <h1 class="logo-txt flex align-center justify-center">AppSus</h1>
+                    </div>
+                </router-link>
                 <nav-bar></nav-bar>
             </div>
         </header>
-       <router-view></router-view>
+        <router-view></router-view>
     </div>
     <!-- <script src="lib/masonry.pkgd.min.js"></script> -->
     <script src="lib/axios.min.js"></script>

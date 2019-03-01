@@ -4,7 +4,7 @@ import utilService from '../../../services/util-service.js'
 
 
 export default {
-    props: ['note'],
+    props: ['note', 'idx'],
     components: {
         todo,
         editableHeader

@@ -4,6 +4,7 @@ import noteTodos from '../cmps/note-todos-cmp.js'
 import noteImg from '../cmps/note-img-cmp.js'
 import noteVid from '../cmps/note-vid-cmp.js'
 import addNote from '../cmps/add-note-cmp.js'
+import searchNotes from '../cmps/search-notes-cmp.js'
 import {eventBus} from '../../../services/eventbus-service.js'
 
 
@@ -13,10 +14,12 @@ export default {
         noteTodos,
         noteTxt,
         noteVid,
-        addNote
+        addNote,
+        searchNotes
     },
     template: `
     <section class="keep-app wrapper">
+    <search-notes :notes="notes"></search-notes>
     <add-note @add="addNote"></add-note>
     <h2 class="list-header">Pinned Notes</h2>
         <ul class="note-list">
@@ -25,9 +28,11 @@ export default {
             :gutter="{default: '15px'}"
             >
                 <component
-                    v-for="note in pinnedNotes"
+                    v-for="(note, idx) in pinnedNotes"
+                    :ref="note.id"
                     :is="'note-' + note.type"
                     :note="note"
+                    :idx="idx"
                     :key="note.id"
                     @new-todo="newTodo"
                     @note-txt-changed="noteTxtChanged"
@@ -44,9 +49,11 @@ export default {
             :gutter="{default: '15px'}"
             >
                 <component
-                    v-for="note in unpinnedNotes"
+                    v-for="(note, idx) in unpinnedNotes"
+                    :ref="note.id"
                     :is="'note-' + note.type"
                     :note="note"
+                    :idx="idx"
                     :key="note.id"
                     @new-todo="newTodo"
                     @note-txt-changed="noteTxtChanged"
@@ -92,6 +99,9 @@ export default {
             keepService.updateColor(noteId, color).then(notes => this.notes = notes);
         }
     },
+    mounted() {
+        console.log(this.$refs);
+    },
     created() {
         keepService.getNotes()
             .then(notes => {                
@@ -101,6 +111,14 @@ export default {
         eventBus.$on('toggleIsDone', (todoId, noteId) => keepService.toggleIsDone(todoId, noteId).then(notes => this.notes = notes))
         eventBus.$on('header-changed', (newHeader, noteId) => keepService.updateNoteHeader(noteId, newHeader).then(notes => this.notes = notes))
         eventBus.$on('toggle-pin', noteId => keepService.togglePin(noteId).then(notes => this.notes = notes))
+        eventBus.$on('search-item-clicked', noteId => {
+            let selectedNote = this.$refs[noteId][0].$el
+            selectedNote.scrollIntoView();
+            selectedNote.classList.add('flash')
+            setTimeout(() => selectedNote.classList.remove('flash'), 100)
+        });
+        // eventBus.$on('search-item-clicked', noteId => console.log(this.$refs[noteId][0]));
+        
         document.querySelector('title').innerHTML = 'Miss keep';
         document.getElementById('favicon').href = 'img/miss-keep.png';
         document.querySelector('.logo-img').src = 'img/miss-keep.png';

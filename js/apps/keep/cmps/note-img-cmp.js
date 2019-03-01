@@ -6,9 +6,9 @@ export default {
     components: {
         editableHeader
     },
-    props: ['note'],
+    props: ['note', 'idx'],
     template: `
-        <li class="keep-note-img keep-note" :class="{white_txt: isDark}" :style="{backgroundColor: color}">
+        <li class="keep-note-img keep-note" :class="{white_txt: isDark}" :style="{backgroundColor: color}" @mousedown="startDrag">
             <editable-header :header="note.header" :noteId="note.id"></editable-header>
             <img :src="imgSrc" class="note-img">
             <div class="note-controls">
@@ -33,6 +33,10 @@ export default {
         },
         updateColor() {
             this.$emit('color-changed', this.color, this.note.id)
+        },
+        startDrag() {
+            console.log(this.idx);
+            
         }
     },
     computed: {

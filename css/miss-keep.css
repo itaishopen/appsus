@@ -91,6 +91,7 @@ input::placeholder {
 }
 
 .note-txt {
+    display: inline-block;
     margin-bottom: 15px;
     padding: 7px;
 }
@@ -140,8 +141,8 @@ input::placeholder {
 }
 
 .todo {
-    display: flex;
-    justify-content: space-between;
+    display: inline-block;
+    /* justify-content: space-between; */
 }
 
 .todo-txt {

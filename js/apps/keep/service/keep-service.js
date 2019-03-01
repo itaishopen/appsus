@@ -15,18 +15,16 @@ export default {
     saveNotes
 }
 
-var dummyNotes = [{ id: utilService.makeId(), type: 'txt', isPinned: false, color: '#493750', header: 'Sample Txt Note', content: 'Sample Txt' },
+var dummyNotes = [{ id: utilService.makeId(), type: 'txt', isPinned: false, color: '#493750', header: 'Sample Text Note', content: 'Sample Text' },
                   { id: utilService.makeId(), type: 'todos', isPinned: true, color: '#047669', header: 'Sample Todos Note', content: [{ id: utilService.makeId(), todoTxt: 'Sample Todo', isDone: false }, { id: utilService.makeId(), todoTxt: 'Sample Todo2', isDone: true }] },
-                  { id: utilService.makeId(), type: 'img', isPinned: false, color: '#476904', header: 'Sample Image Note', content: 'https://via.placeholder.com/150' },
-                  { id: utilService.makeId(), type: 'vid', isPinned: false, color: '#576492', header: 'Sample Video Note', content: 'https://www.youtube.com/embed/Dc5mMl58nUo' },
-                  { id: utilService.makeId(), type: 'txt', isPinned: false, color: '#493750', header: 'Sample Txt Note', content: 'Sample Txt' },
-                  { id: utilService.makeId(), type: 'todos', isPinned: true, color: '#047669', header: 'Sample Todos Note', content: [{ id: utilService.makeId(), todoTxt: 'Sample Todo', isDone: false }, { id: utilService.makeId(), todoTxt: 'Sample Todo2', isDone: true }] },
-                  { id: utilService.makeId(), type: 'img', isPinned: false, color: '#476904', header: 'Sample Image Note', content: 'https://via.placeholder.com/150' },
-                  { id: utilService.makeId(), type: 'vid', isPinned: false, color: '#576492', header: 'Sample Video Note', content: 'https://www.youtube.com/embed/Dc5mMl58nUo' },
-                  { id: utilService.makeId(), type: 'txt', isPinned: false, color: '#493750', header: 'Sample Txt Note', content: 'Sample Txt' },
-                  { id: utilService.makeId(), type: 'todos', isPinned: true, color: '#047669', header: 'Sample Todos Note', content: [{ id: utilService.makeId(), todoTxt: 'Sample Todo', isDone: false }, { id: utilService.makeId(), todoTxt: 'Sample Todo2', isDone: true }] },
-                  { id: utilService.makeId(), type: 'img', isPinned: false, color: '#476904', header: 'Sample Image Note', content: 'https://via.placeholder.com/150' },
-                  { id: utilService.makeId(), type: 'vid', isPinned: false, color: '#576492', header: 'Sample Video Note', content: 'https://www.youtube.com/embed/Dc5mMl58nUo' }]
+                  { id: utilService.makeId(), type: 'txt', isPinned: false, color: '#a9f610', header: 'Sample Text Note', content: 'Sample Text' },
+                  { id: utilService.makeId(), type: 'vid', isPinned: false, color: '#576492', header: 'Sample Video Note', content: 'https://www.youtube.com/embed/85zcR1AjtQE' },
+                  { id: utilService.makeId(), type: 'todos', isPinned: true, color: '#9a00b1', header: 'Sample Todos Note', content: [{ id: utilService.makeId(), todoTxt: 'Sample Todo', isDone: false }, { id: utilService.makeId(), todoTxt: 'Sample Todo2', isDone: true }] },
+                  { id: utilService.makeId(), type: 'img', isPinned: false, color: '#476904', header: 'Sample Image Note', content: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Mandelbrot_set_image.png/220px-Mandelbrot_set_image.png' },
+                  { id: utilService.makeId(), type: 'todos', isPinned: true, color: '#090909', header: 'Sample Todos Note', content: [{ id: utilService.makeId(), todoTxt: 'Sample Todo', isDone: false }, { id: utilService.makeId(), todoTxt: 'Sample Todo2', isDone: true }] },
+                  { id: utilService.makeId(), type: 'txt', isPinned: false, color: '#599959', header: 'Sample Text Note', content: 'Sample Text' },
+                  { id: utilService.makeId(), type: 'img', isPinned: false, color: '#f999f9', header: 'Sample Image Note', content: 'https://upload.wikimedia.org/wikipedia/commons/7/73/Pale_Blue_Dot.png' },
+                  { id: utilService.makeId(), type: 'vid', isPinned: false, color: '#98263a', header: 'Sample Video Note', content: 'https://www.youtube.com/embed/xuCn8ux2gbs' }]
 
 _createNotes();
 

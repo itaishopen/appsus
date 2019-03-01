@@ -6,6 +6,7 @@ import noteVid from '../cmps/note-vid-cmp.js'
 import addNote from '../cmps/add-note-cmp.js'
 import searchNotes from '../cmps/search-notes-cmp.js'
 import { eventBus } from '../../../services/eventbus-service.js'
+import utilService from '../../../services/util-service.js';
 
 export default {
     components: {
@@ -72,7 +73,8 @@ export default {
             notePos: null,
             clickPos: null,
             dragIdx: null,
-            nearestNoteId: null
+            nearestNoteId: null,
+            isEditing: false
         }
     },
     computed: {
@@ -105,20 +107,14 @@ export default {
             keepService.updateColor(noteId, color).then(notes => this.notes = notes);
         },
         startDrag(clickedNote, ev) {
+            if (this.isEditing) return;
             this.clickPos = {x: ev.clientX, y: ev.clientY};
-            // console.log(idx, ev);
             this.dragIdx = this.notes.findIndex(note => note.id === clickedNote.id)
-            // console.log(this.notes);
-            // console.log(idx);
             let pathArr = Array.from(ev.path);
-            // console.log(pathArr.find(el => el.classList.contains('keep-note')));
             let elClickedNote = pathArr.find(el => el.classList.contains('keep-note'))
             this.notePos = { x: elClickedNote.offsetLeft, y: elClickedNote.offsetTop }
-            // console.log(notePos);
-            // this.notes.splice(idx, 0, {id: 'placeholder', type: 'placeholder', height: elClickedNote.offsetHeight, isPinned: clickedNote.isPinned})
             elClickedNote.style.visibility = 'hidden';
             let elFrame = this.$refs.frame
-            // console.log(elFrame);
             elFrame.style.width = elClickedNote.offsetWidth + 'px';
             elFrame.style.height = elClickedNote.offsetHeight + 'px';
             elFrame.style.position = 'absolute';
@@ -126,12 +122,8 @@ export default {
             elFrame.style.top = this.notePos.y + 'px';
             elFrame.style.display = 'block';
             elFrame.style.border = '3px dashed blue';
-            // console.log(clickPos);
             document.body.addEventListener('mousemove', this.drag)
             document.body.addEventListener('mouseup', this.stopDrag)
-            // console.log(this.notes);
-            
-            
         },
         drag(ev) {
             ev.preventDefault();
@@ -143,7 +135,7 @@ export default {
                 let currRef = this.$refs[prop][0]
                 if (currRef) notesArray.push(this.$refs[prop][0].$el)
             }
-            notesArray.sort((el1, el2) => this.getDistance(elFrame, el1) - this.getDistance(elFrame, el2))
+            notesArray.sort((el1, el2) => utilService.getDistance(elFrame, el1) - utilService.getDistance(elFrame, el2))
             notesArray = notesArray.map(note => note.dataset.id);
             let currNearestNoteId = notesArray[0]
             if (!this.nearestNoteId) this.nearestNoteId = currNearestNoteId;
@@ -164,19 +156,13 @@ export default {
             this.$refs[this.notes[this.dragIdx].id][0].$el.style.visibility = '';
             this.$refs.frame.style.display = 'none';
             keepService.saveNotes(this.notes);
-        },
-        getDistance(el1, el2) {
-            return Math.sqrt((el1.offsetTop - el2.offsetTop) ** 2 + (el1.offsetLeft - el2.offsetLeft) ** 2)
         }
     },
     mounted() {
     },
     created() {
         keepService.getNotes()
-            .then(notes => {
-                this.notes = notes
-            }
-            );
+            .then(notes => this.notes = notes);
         eventBus.$on('deleteTodo', (todoId, noteId) => keepService.deleteTodo(todoId, noteId).then(notes => this.notes = notes))
         eventBus.$on('toggleIsDone', (todoId, noteId) => keepService.toggleIsDone(todoId, noteId).then(notes => this.notes = notes))
         eventBus.$on('header-changed', (newHeader, noteId) => keepService.updateNoteHeader(noteId, newHeader).then(notes => this.notes = notes))
@@ -187,7 +173,8 @@ export default {
             selectedNote.classList.add('flash')
             setTimeout(() => selectedNote.classList.remove('flash'), 100)
         });
-        // eventBus.$on('search-item-clicked', noteId => console.log(this.$refs[noteId][0]));
+        eventBus.$on('started-editing', () => this.isEditing = true)
+        eventBus.$on('stopped-editing', () => this.isEditing = false)
 
         document.querySelector('title').innerHTML = 'Miss keep';
         document.getElementById('favicon').href = 'img/miss-keep.png';

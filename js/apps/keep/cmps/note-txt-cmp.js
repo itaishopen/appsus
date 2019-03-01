@@ -1,5 +1,7 @@
 import editableHeader from './header-cmp.js'
 import utilService from '../../../services/util-service.js'
+import { eventBus } from '../../../services/eventbus-service.js';
+
 
 export default {
     components: {
@@ -13,11 +15,11 @@ export default {
                 {{txt}}
             </p>
             <div class="note-controls">
-                <button @click.stop="editNote" class="icon-btn"><i class="fas fa-pen"></i></button>
-                <button class="icon-btn" @click="deleteNote"><i class="fas fa-trash-alt"></i></button>
-                <button class="icon-btn" @click=""><i class="fas fa-share"></i></button>
+                <button @click.stop="editNote" @mousedown.stop="" class="icon-btn"><i class="fas fa-pen"></i></button>
+                <button class="icon-btn" @click="deleteNote" @mousedown.stop=""><i class="fas fa-trash-alt"></i></button>
+                <button class="icon-btn" @click="" @mousedown.stop=""><i class="fas fa-share"></i></button>
                 <input type="color" v-model="color" @change="updateColor" style="display: none" ref="colorPicker">
-                <button class="icon-btn" @click="chooseColor"><i class="fas fa-palette"></i></button>
+                <button class="icon-btn" @click="chooseColor" @mousedown.stop=""><i class="fas fa-palette"></i></button>
             </div>
         </li>
     `,
@@ -32,6 +34,7 @@ export default {
         editNote() {
             this.isEditing = true;            
             document.body.addEventListener('mousedown', this.stopEditing)
+            eventBus.$emit('started-editing')
         },
         stopEditing(ev) {
             ev.stopPropagation();
@@ -41,6 +44,7 @@ export default {
                     this.$emit('note-txt-changed', this.txt, this.note.id)
                  }
             document.body.removeEventListener('mousedown', this.stopEditing)
+            eventBus.$emit('stopped-editing')
         },
         deleteNote() {
             this.$emit('delete-note', this.note.id);

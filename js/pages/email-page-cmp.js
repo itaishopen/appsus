@@ -54,7 +54,7 @@ export default {
                 eventBus.$emit(EVENT_FEEDBACK, { txt: 'Welcome to your inbox!', link: '' }, 'welcome')
             });
             document.querySelector('title').innerHTML = 'Mr Email';
-            document.getElementById('favicon').href = 'img/favicon5.ico';             
+            document.getElementById('favicon').href = 'img/mr-email.png';             
     },
     methods: {
         markAsUnread(emailId) {

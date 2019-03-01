@@ -65,5 +65,7 @@ export default {
         eventBus.$on('deleteTodo', (todoId, noteId) => keepService.deleteTodo(todoId, noteId).then(notes => this.notes = notes))
         eventBus.$on('toggleIsDone', (todoId, noteId) => keepService.toggleIsDone(todoId, noteId).then(notes => this.notes = notes))
         eventBus.$on('header-changed', (newHeader, noteId) => keepService.updateNoteHeader(noteId, newHeader).then(notes => this.notes = notes))
+        document.querySelector('title').innerHTML = 'Miss keep';
+        document.getElementById('favicon').href = 'img/miss-keep.png';
     }
 }

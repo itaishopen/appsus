@@ -2,23 +2,170 @@
     box-sizing: border-box;
 }
 
-.keep-app {
-    padding: 30px;
-    /* height: 90vh; */
+.home-page h1 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 3rem;
 }
 
-.note-list {
-    /* display: flex;
-    flex-flow: column wrap;
-    align-content: flex-start;
-    height: 100%; */
+.home-page span {
+    display: inline;
+}
+
+.wrapper {
+    max-width: 1000px;
+    margin: auto;
+}
+
+header {
+    background-color: brown;
+    height: 120px;
+}
+
+header .wrapper {
+    padding: 15px 30px;
+}
+
+.logo {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 20px;
+}
+
+.logo-txt {
+    font-family: permanent-marker;
+    font-size: 3em;
+}
+
+.logo-img {
+    transform: rotateY(180deg);
+    height: 90px;
+    width: 90px;
+    background-image: url('../img/hourse-icon.png');
+    background-size: contain;
+}
+
+.nav {
+    font-size: 2em;
+    color: beige;
+}
+
+.nav a {
+    color: inherit;
+}
+
+.nav a:hover {
+    color: rgb(240, 98, 98);
+}
+
+.flex {
+    display: flex;
+}
+
+.align-center {
+    align-items: center;
+}
+
+.space-between {
+    justify-content: center;
+}
+
+.keep-app {
+    padding: 30px;
+}
+
+.add-note {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto 30px;
+    padding: 10px;
+    max-width: 600px;
+    border: 1px solid rgb(129, 129, 129);
+    border-radius: 10px;
+    box-shadow: 0 0 2px gray, 2px 2px 2px rgb(197, 197, 197)
+}
+
+.add-note input {
+    display: block;
+}
+
+.add-controls {
+    display: grid;
+    grid-template-columns: repeat(6, 30px) 1fr 30px;
+}
+
+.add-controls>:last-child {
+    grid-column: 8;
+}
+
+input {
+    border: none;
+    background-color: inherit;
+    color: inherit;
+    padding: 5px;
+}
+
+input::placeholder {
+    color: inherit;
+    opacity: 0.6;
+}
+
+*:focus {
+    outline: none;
+}
+
+.note-txt {
+    margin-bottom: 15px;
+    padding: 7px;
+}
+
+.list-header {
+    margin-bottom: 20px;
+    font-size: 1.3em;
 }
 
 .keep-note {
-    /* width: 200px; */
-    background-color: yellow;
-    border: 1px solid black;
-    margin: 15px 15px 0 0;
+    border: 1px solid rgb(196, 196, 196);
+    margin-bottom: 15px;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.keep-note .pin-note, .note-header .edit-header, .todo .delete-todo-btn{
+    opacity: 0;
+    pointer-events: none;
+    transition: .3s;
+}
+
+.keep-note:hover .pin-note, .note-header:hover .edit-header, .todo:hover .delete-todo-btn {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.keep-note:hover {
+    box-shadow: 0 0 3px gray;
+}
+
+.icon-btn {
+    background-color: #00000000;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+}
+
+.todo {
+    display: flex;
+    justify-content: space-between;
+}
+
+.todo-txt {
+    padding: 7px;
+    cursor: pointer;
 }
 
 .note-img-preview {
@@ -26,28 +173,22 @@
     max-height: 100px;
 }
 
-.grid {
-    display: flex;
-}
-
-.grid-col {
-    flex-grow: 1;
-}
-
-.grid-col--2, .grid-col--3 { display: none }
-
-@media ( min-width: 768px ) {
-  .grid-col--2 { display: block; }
-}
-
-@media ( min-width: 1080px ) {
-  .grid-col--3 { display: block; }
-}
-
-.keep-note .note-header {
+.note-header {
+    color: inherit;
+    background-color: inherit;
+    display: grid;
+    grid-template-columns: 1fr 30px 30px;
+    padding: 7px;
     width: 100%;
     font-size: 1.3em;
     font-weight: bold;
+    margin-bottom: 10px;
+    line-height: 30px;
+}
+
+.note-header::placeholder {
+    color: inherit;
+    opacity: 0.5;
 }
 
 .editable {
@@ -63,12 +204,41 @@
     max-width: 180px;
 }
 
+.note-controls {
+    height: 30px;
+}
+
 .todoDone {
     text-decoration: line-through;
 }
 
 .white_txt {
     color: rgb(233, 233, 233);
+}
+
+.empty::before {
+    opacity: 0.5;
+}
+
+.empty[data-type="todos"]::before {
+    content: 'Add To-Do';
+}
+
+.empty[data-type="txt"]::before {
+    content: 'Text Note';
+}
+
+.empty[data-type="img"]::before {
+    content: 'Type Image URL Or Upload File';
+}
+
+.empty[data-type="vid"]::before {
+    content: 'Type Video URL';
+}
+
+@font-face {
+    font-family: permanent-marker;
+    src: url('../fonts/Permanent_Marker/PermanentMarker-Regular.ttf')
 }
 
 @keyframes editable {

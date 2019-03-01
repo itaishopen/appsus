@@ -18,15 +18,22 @@
 <body>
     <div id="app">
         <header>
-            <nav-bar></nav-bar>
+            <div class="wrapper flex align-center space-between">
+                <div class="logo">
+                    <div class="logo-img"></div>
+                    <h1 class="logo-txt">AppSus</h1>
+                </div>
+                <nav-bar></nav-bar>
+            </div>
         </header>
        <router-view></router-view>
     </div>
-    <script src="lib/colcade.js"></script>
+    <!-- <script src="lib/masonry.pkgd.min.js"></script> -->
     <script src="lib/axios.min.js"></script>
     <script src="lib/moment.js"></script>
     <script src="lib/vue.js"></script>
     <script src="lib/vue-router.js"></script>
+    <script src="https://unpkg.com/vue-masonry-css"></script>
     <script type="module" src="js/main.js"></script>
 </body>
 

@@ -17,38 +17,6 @@ button {
     height: 100%;
 }
 
-.space-around {
-    justify-content: space-around;
-}
-
-.align-center {
-    align-content: center;
-}
-
-.justify-center {
-    justify-content: center;
-}
-
-.flex {
-    display: flex;
-}
-
-.column {
-    flex-direction: column;
-}
-
-.space-between {
-    justify-content: space-between;
-}
-
-.space-evenly {
-    justify-content: space-evenly;
-}
-
-.flex-start {
-    justify-content: flex-start;
-}
-
 .email-actions-toolbar {
     margin-top: 10px; 
     align-items: center;

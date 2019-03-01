@@ -103,5 +103,6 @@ export default {
         eventBus.$on('toggle-pin', noteId => keepService.togglePin(noteId).then(notes => this.notes = notes))
         document.querySelector('title').innerHTML = 'Miss keep';
         document.getElementById('favicon').href = 'img/miss-keep.png';
+        document.querySelector('.logo-img').src = 'img/miss-keep.png';
     }
 }

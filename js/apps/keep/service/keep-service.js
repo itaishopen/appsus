@@ -11,7 +11,8 @@ export default {
     toggleIsDone,
     addTodo,
     togglePin,
-    updateColor
+    updateColor,
+    saveNotes
 }
 
 var dummyNotes = [{ id: utilService.makeId(), type: 'txt', isPinned: false, color: '#493750', header: 'Sample Txt Note', content: 'Sample Txt' },
@@ -51,7 +52,7 @@ function addNote(note) {
     return _loadNotes()
         .then(notes => {
             notes.push(note);
-            _saveNotes(notes)
+            saveNotes(notes)
             return notes;
         })
 }
@@ -61,7 +62,7 @@ function deleteNote(noteId) {
         .then(notes => {
             let noteIdx = notes.findIndex(note => note.id === noteId);
             notes.splice(noteIdx, 1);
-            _saveNotes(notes);
+            saveNotes(notes);
             return notes;
         })
 }
@@ -71,7 +72,7 @@ function addTodo(todoTxt, noteId) {
         .then(notes => {
             let noteIdx = notes.findIndex(note => note.id === noteId);
             notes[noteIdx].content.push({ id: utilService.makeId(), todoTxt, isDone: false })
-            _saveNotes(notes);
+            saveNotes(notes);
             return notes;
         })
 }
@@ -82,7 +83,7 @@ function deleteTodo(todoId, noteId) {
             let noteIdx = notes.findIndex(note => note.id === noteId);
             let todoIdx = notes[noteIdx].content.findIndex(todo => todo.id === todoId);
             notes[noteIdx].content.splice(todoIdx, 1);
-            _saveNotes(notes);
+            saveNotes(notes);
             return notes;
         })
 }
@@ -93,7 +94,7 @@ function toggleIsDone(todoId, noteId) {
             let noteIdx = notes.findIndex(note => note.id === noteId);
             let todoIdx = notes[noteIdx].content.findIndex(todo => todo.id === todoId);
             notes[noteIdx].content[todoIdx].isDone = !notes[noteIdx].content[todoIdx].isDone;
-            _saveNotes(notes);
+            saveNotes(notes);
             return notes;
         })
 }
@@ -103,7 +104,7 @@ function updateNoteContent(noteId, content) {
         .then(notes => {
             let noteIdx = notes.findIndex(note => note.id === noteId);
             notes[noteIdx].content = content
-            _saveNotes(notes)
+            saveNotes(notes)
             return notes;
         })
 }
@@ -113,7 +114,7 @@ function updateNoteHeader(noteId, header) {
         .then(notes => {
             let noteIdx = notes.findIndex(note => note.id === noteId);
             notes[noteIdx].header = header;
-            _saveNotes(notes);
+            saveNotes(notes);
             return notes;
         })
 }
@@ -123,7 +124,7 @@ function updateColor(noteId, color) {
     .then(notes => {
         let noteIdx = notes.findIndex(note => note.id === noteId);
         notes[noteIdx].color = color;
-        _saveNotes(notes);
+        saveNotes(notes);
         return notes;
     })
 }
@@ -135,7 +136,7 @@ function togglePin(noteId) {
             notes[noteIdx].isPinned = !notes[noteIdx].isPinned;
             // console.log(notes);
             
-            _saveNotes(notes);
+            saveNotes(notes);
             return notes;
         })
 }
@@ -144,7 +145,7 @@ function _createNotes() {
     utilService.saveToStorageSync('notes', utilService.loadFromStorageSync('notes') || dummyNotes)
 }
 
-function _saveNotes(notes) {
+function saveNotes(notes) {
     return utilService.saveToStorage('notes', notes)
         .then(() => console.log('saved notes'))
 }

@@ -5,7 +5,7 @@ export default {
     components: {
         editableHeader
     },
-    props: ['note', 'idx'],
+    props: ['note'],
     template: `
         <li class="keep-note-txt keep-note" :class="{white_txt: isDark}" :style="{backgroundColor: color}">
             <editable-header :header="note.header" :noteId="note.id"></editable-header>

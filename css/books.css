@@ -23,7 +23,7 @@
     justify-content: center;
 }
 
-input {
+.book-app input {
     padding: 5px;
     margin: 3px 5px 3px 5px;
 }
@@ -447,7 +447,7 @@ button {
 .form-header {
     margin: 0 0 10px;
 }
-form input,select,button,textarea {
+.books-app form input, .books-app select, .books-app button, .books-app textarea {
     margin:0 0 10px;
 }
 

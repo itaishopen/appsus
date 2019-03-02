@@ -7,9 +7,9 @@ export default {
     },
     props: ['note'],
     template: `
-        <li class="keep-note-vid keep-note" :class="{white_txt: isDark}" :style="{backgroundColor: color}">
+        <li class="keep-note-vid keep-note" :class="{white_txt: isDark}" :style="{backgroundColor: color}" ref="thisNote">
             <editable-header :header="note.header" :noteId="note.id"></editable-header>
-            <iframe width="200" height="150"
+            <iframe :width="vidWidth" :height="vidWidth*0.75"
                 :src="vidSrc">
             </iframe>
             <div class="note-controls">
@@ -22,7 +22,8 @@ export default {
     `,
     data() {
         return {
-            color: this.note.color
+            color: this.note.color,
+            vidWidth: ''
         }
     },
     methods: {
@@ -47,7 +48,7 @@ export default {
             return this.note.content;
         }
     },
-    created() {
-        
+    mounted() {
+        this.vidWidth = this.$refs.thisNote.offsetWidth - 20
     }
 }

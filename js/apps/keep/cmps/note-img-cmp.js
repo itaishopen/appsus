@@ -46,7 +46,6 @@ export default {
             return this.note.content;
         }
     },
-    created() {
-        
+    mounted() {
     }
 }

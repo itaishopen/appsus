@@ -7,8 +7,8 @@ export default {
                 <label for="inbox" class="flex space-between" @click="menuClick"><span><i class="fas fa-inbox"></i>Inbox</span> <span v-if="unreadEmails !== 0">{{unreadEmails}}</span></label>
             </div>
             <div class="tab flex">
-                <input type="radio" id="starred" value="starred" checked v-model="filter"/>
-                <label for="starred" class="flex" @click="menuClick"><i class="fas fa-star"></i>Starred</label>
+                <input type="radio" id="star" value="star" checked v-model="filter"/>
+                <label for="star" class="flex" @click="menuClick"><i class="fas fa-star"></i>Starred</label>
             </div>
             <div class="tab flex">
                 <input type="radio" id="unread-filter" value="unread-filter" v-model="filter" />
@@ -41,11 +41,15 @@ export default {
         setFilter() {
             this.$emit('setFilter', this.filter)
         },
+        // showEmails() {
+        //     this.$emit('showEmails', this.filter)
+        // },
         menuClick() {
             if (document.body.classList.contains('show')) {
                 document.getElementById("mobile-email-filter-button").classList.toggle("change-filter");
                 document.body.classList.toggle('show');
             }
+            this.$emit('setFilter', this.filter)
         },
     },
     watch: {

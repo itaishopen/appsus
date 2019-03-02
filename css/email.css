@@ -176,6 +176,14 @@ button {
     font-weight: none;
 
 }
+.email-preview-letter label {
+    display: flex;
+    height: 50px;
+    width: 50px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
 
 .email-preview-container {
     /* padding: 20px; */

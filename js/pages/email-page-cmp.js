@@ -58,7 +58,12 @@ export default {
                 eventBus.$emit(EVENT_FEEDBACK, { txt: 'Welcome to your inbox!', link: '' }, 'welcome')
             });
             if (this.note) {
-                this.emailForReply = this.note;
+                this.emailForReply = {
+                    recipient: '',
+                    sender: 'awesome@devil.com',
+                    subject: this.note.header,
+                    body: this.note.content,
+                }
                 this.isReply = true;
             }
                         

@@ -149,6 +149,7 @@ function createAnEmail(email) {
         isSent: email.isSent ? email.isSent : false,
         isDel: email.isDel ? email.isDel : false,
         isDraft: email.isDraft ? email.isDraft : false,
+        isCheck: email.isCheck ? email.isCheck : false,
         sentAt: {
             timeToShow: moment().format('DD MMM YYYY, h:mm:ss a'),
             timestamp: Date.now()
@@ -184,6 +185,7 @@ function createEmails() {
             isSent: false,
             isDel: false,
             isDraft: false,
+            isCheck: false,
             sentAt: {
                 timeToShow: moment('20040401, 12:01 am', 'YYYYMMDD, h:mm a').format('lll'),
                 timestamp: 1080777660,
@@ -200,6 +202,7 @@ function createEmails() {
             isSent: false,
             isDel: false,
             isDraft: false,
+            isCheck: false,
             sentAt: {
                 timeToShow: moment('20040401 12:03 am', 'YYYYMMDD, h:mm a').format('lll'),
                 timestamp: 1080777780,
@@ -216,6 +219,7 @@ function createEmails() {
             isSent: true,
             isDel: false,
             isDraft: false,
+            isCheck: false,
             sentAt: {
                 timeToShow: moment('20040402 12:03 pm', 'YYYYMMDD, h:mm a').format('lll'),
                 timestamp: 1080907380,
@@ -246,6 +250,7 @@ function createEmails() {
             isSent: false,
             isDel: true,
             isDraft: false,
+            isCheck: false,
             sentAt: {
                 timeToShow: moment('20040402 12:03 pm', 'YYYYMMDD, h:mm a').format('lll'),
                 timestamp: 1080907380,

@@ -18,7 +18,7 @@ export default {
                 <button class="icon-btn" @click="selected = 'img'"><i class="fas fa-image"></i></button>
                 <button class="icon-btn" @click="selected = 'vid'"><i class="fab fa-youtube"></i></button>
                 <button class="icon-btn" @click="chooseColor"><i class="fas fa-palette"></i></button>
-                <button class="icon-btn" @click="chooseFile" v-if="selected === 'img'"><i class="fas fa-file-upload"></i></button>
+                <button class="icon-btn" @click="chooseFile" v-show="selected === 'img'"><i class="fas fa-file-upload"></i></button>
                 <button class="icon-btn" @click="addNote"><i class="fas fa-check"></i></button>
             </div>
             <!-- <select name="type" v-model="selected">

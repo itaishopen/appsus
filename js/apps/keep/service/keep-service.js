@@ -13,22 +13,19 @@ export default {
     addTodo,
     togglePin,
     updateColor,
-    sendEmail,
-    // router
+    saveNotes
 }
 
-var dummyNotes = [{ id: utilService.makeId(), type: 'txt', isPinned: false, color: '#493750', header: 'Sample Txt Note', content: 'Sample Txt' },
+var dummyNotes = [{ id: utilService.makeId(), type: 'txt', isPinned: false, color: '#493750', header: 'Sample Text Note', content: 'Sample Text' },
                   { id: utilService.makeId(), type: 'todos', isPinned: true, color: '#047669', header: 'Sample Todos Note', content: [{ id: utilService.makeId(), todoTxt: 'Sample Todo', isDone: false }, { id: utilService.makeId(), todoTxt: 'Sample Todo2', isDone: true }] },
-                  { id: utilService.makeId(), type: 'img', isPinned: false, color: '#476904', header: 'Sample Image Note', content: 'https://via.placeholder.com/150' },
-                  { id: utilService.makeId(), type: 'vid', isPinned: false, color: '#576492', header: 'Sample Video Note', content: 'https://www.youtube.com/embed/Dc5mMl58nUo' },
-                  { id: utilService.makeId(), type: 'txt', isPinned: false, color: '#493750', header: 'Sample Txt Note', content: 'Sample Txt' },
-                  { id: utilService.makeId(), type: 'todos', isPinned: true, color: '#047669', header: 'Sample Todos Note', content: [{ id: utilService.makeId(), todoTxt: 'Sample Todo', isDone: false }, { id: utilService.makeId(), todoTxt: 'Sample Todo2', isDone: true }] },
-                  { id: utilService.makeId(), type: 'img', isPinned: false, color: '#476904', header: 'Sample Image Note', content: 'https://via.placeholder.com/150' },
-                  { id: utilService.makeId(), type: 'vid', isPinned: false, color: '#576492', header: 'Sample Video Note', content: 'https://www.youtube.com/embed/Dc5mMl58nUo' },
-                  { id: utilService.makeId(), type: 'txt', isPinned: false, color: '#493750', header: 'Sample Txt Note', content: 'Sample Txt' },
-                  { id: utilService.makeId(), type: 'todos', isPinned: true, color: '#047669', header: 'Sample Todos Note', content: [{ id: utilService.makeId(), todoTxt: 'Sample Todo', isDone: false }, { id: utilService.makeId(), todoTxt: 'Sample Todo2', isDone: true }] },
-                  { id: utilService.makeId(), type: 'img', isPinned: false, color: '#476904', header: 'Sample Image Note', content: 'https://via.placeholder.com/150' },
-                  { id: utilService.makeId(), type: 'vid', isPinned: false, color: '#576492', header: 'Sample Video Note', content: 'https://www.youtube.com/embed/Dc5mMl58nUo' }]
+                  { id: utilService.makeId(), type: 'txt', isPinned: false, color: '#a9f610', header: 'Sample Text Note', content: 'Sample Text' },
+                  { id: utilService.makeId(), type: 'vid', isPinned: false, color: '#576492', header: 'Sample Video Note', content: 'https://www.youtube.com/embed/85zcR1AjtQE' },
+                  { id: utilService.makeId(), type: 'todos', isPinned: true, color: '#9a00b1', header: 'Sample Todos Note', content: [{ id: utilService.makeId(), todoTxt: 'Sample Todo', isDone: false }, { id: utilService.makeId(), todoTxt: 'Sample Todo2', isDone: true }] },
+                  { id: utilService.makeId(), type: 'img', isPinned: false, color: '#476904', header: 'Sample Image Note', content: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Mandelbrot_set_image.png/220px-Mandelbrot_set_image.png' },
+                  { id: utilService.makeId(), type: 'todos', isPinned: true, color: '#090909', header: 'Sample Todos Note', content: [{ id: utilService.makeId(), todoTxt: 'Sample Todo', isDone: false }, { id: utilService.makeId(), todoTxt: 'Sample Todo2', isDone: true }] },
+                  { id: utilService.makeId(), type: 'txt', isPinned: false, color: '#599959', header: 'Sample Text Note', content: 'Sample Text' },
+                  { id: utilService.makeId(), type: 'img', isPinned: false, color: '#f999f9', header: 'Sample Image Note', content: 'https://upload.wikimedia.org/wikipedia/commons/7/73/Pale_Blue_Dot.png' },
+                  { id: utilService.makeId(), type: 'vid', isPinned: false, color: '#98263a', header: 'Sample Video Note', content: 'https://www.youtube.com/embed/xuCn8ux2gbs' }]
 
 _createNotes();
 
@@ -54,7 +51,7 @@ function addNote(note) {
     return _loadNotes()
         .then(notes => {
             notes.push(note);
-            _saveNotes(notes)
+            saveNotes(notes)
             return notes;
         })
 }
@@ -64,7 +61,7 @@ function deleteNote(noteId) {
         .then(notes => {
             let noteIdx = notes.findIndex(note => note.id === noteId);
             notes.splice(noteIdx, 1);
-            _saveNotes(notes);
+            saveNotes(notes);
             return notes;
         })
 }
@@ -74,7 +71,7 @@ function addTodo(todoTxt, noteId) {
         .then(notes => {
             let noteIdx = notes.findIndex(note => note.id === noteId);
             notes[noteIdx].content.push({ id: utilService.makeId(), todoTxt, isDone: false })
-            _saveNotes(notes);
+            saveNotes(notes);
             return notes;
         })
 }
@@ -85,7 +82,7 @@ function deleteTodo(todoId, noteId) {
             let noteIdx = notes.findIndex(note => note.id === noteId);
             let todoIdx = notes[noteIdx].content.findIndex(todo => todo.id === todoId);
             notes[noteIdx].content.splice(todoIdx, 1);
-            _saveNotes(notes);
+            saveNotes(notes);
             return notes;
         })
 }
@@ -96,7 +93,7 @@ function toggleIsDone(todoId, noteId) {
             let noteIdx = notes.findIndex(note => note.id === noteId);
             let todoIdx = notes[noteIdx].content.findIndex(todo => todo.id === todoId);
             notes[noteIdx].content[todoIdx].isDone = !notes[noteIdx].content[todoIdx].isDone;
-            _saveNotes(notes);
+            saveNotes(notes);
             return notes;
         })
 }
@@ -106,7 +103,7 @@ function updateNoteContent(noteId, content) {
         .then(notes => {
             let noteIdx = notes.findIndex(note => note.id === noteId);
             notes[noteIdx].content = content
-            _saveNotes(notes)
+            saveNotes(notes)
             return notes;
         })
 }
@@ -116,7 +113,7 @@ function updateNoteHeader(noteId, header) {
         .then(notes => {
             let noteIdx = notes.findIndex(note => note.id === noteId);
             notes[noteIdx].header = header;
-            _saveNotes(notes);
+            saveNotes(notes);
             return notes;
         })
 }
@@ -126,7 +123,7 @@ function updateColor(noteId, color) {
     .then(notes => {
         let noteIdx = notes.findIndex(note => note.id === noteId);
         notes[noteIdx].color = color;
-        _saveNotes(notes);
+        saveNotes(notes);
         return notes;
     })
 }
@@ -153,7 +150,7 @@ function togglePin(noteId) {
             notes[noteIdx].isPinned = !notes[noteIdx].isPinned;
             // console.log(notes);
             
-            _saveNotes(notes);
+            saveNotes(notes);
             return notes;
         })
 }
@@ -162,7 +159,7 @@ function _createNotes() {
     utilService.saveToStorageSync('notes', utilService.loadFromStorageSync('notes') || dummyNotes)
 }
 
-function _saveNotes(notes) {
+function saveNotes(notes) {
     return utilService.saveToStorage('notes', notes)
         .then(() => console.log('saved notes'))
 }

@@ -5,7 +5,8 @@ export default {
     loadFromStorage,
     saveToStorageSync,
     loadFromStorageSync,
-    getBrightness
+    getBrightness,
+    getDistance
 }
 
 function saveToStorage(key, value) {
@@ -49,4 +50,8 @@ function getBrightness(color) {
                      parseInt(color.substring(5, 7), 16)]
     let brightness = (Math.max(r, g, b) + Math.min(r, g, b)) / 5.1
     return brightness;
+}
+
+function getDistance(el1, el2) {
+    return Math.sqrt((el1.offsetTop - el2.offsetTop) ** 2 + (el1.offsetLeft - el2.offsetLeft) ** 2)
 }

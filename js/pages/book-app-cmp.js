@@ -1,16 +1,16 @@
-import bookService from '../services/books-service.js';
-import bookList from '../cmps/book-list-cmp.js';
-import bookFilter from '../cmps/book-filter-cmp.js';
-import bookAdd from'../cmps/book-add-cmp.js'
+import bookService from '../apps/books/services/books-service.js';
+import bookList from '../apps/books/cmps/book-list-cmp.js';
+import bookFilter from '../apps/books/cmps/book-filter-cmp.js';
+import bookAdd from'../apps/books/cmps/book-add-cmp.js'
 
 
 export default {
     template: `
     <section class="book-app">
-        <header>
+        <div class="books-header">
             <h1>Miss books</h1>
             <img  src="img/Open-Book.png" alt="">
-        </header>
+        </div>
         <book-filter v-if="!selectedBook" @filtered="setFilter"></book-filter>     
         <book-add @renderBooks="renderList"></book-add>
         <book-list :books="booksToShow" @selectBook="onSelectBook"></book-list>  
@@ -24,7 +24,7 @@ export default {
         }
     },
     created() {
-		this.books = bookService.getBooks();
+		bookService.init().then(books => this.books = books);
 	},
     methods: {
         onSelectBook(book) {

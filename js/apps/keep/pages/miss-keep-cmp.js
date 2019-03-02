@@ -4,6 +4,7 @@ import noteTodos from '../cmps/note-todos-cmp.js'
 import noteImg from '../cmps/note-img-cmp.js'
 import noteVid from '../cmps/note-vid-cmp.js'
 import addNote from '../cmps/add-note-cmp.js'
+import emailPage from '../../../pages/email-page-cmp.js'
 import {eventBus} from '../../../services/eventbus-service.js'
 
 
@@ -13,7 +14,8 @@ export default {
         noteTodos,
         noteTxt,
         noteVid,
-        addNote
+        addNote,
+        emailPage
     },
     template: `
     <section class="keep-app wrapper">
@@ -51,7 +53,8 @@ export default {
                     @new-todo="newTodo"
                     @note-txt-changed="noteTxtChanged"
                     @delete-note="deleteNote"
-                    @color-changed="updateColor">
+                    @color-changed="updateColor"
+                    @sendAsEmail='emailNote'>
                 </component>
             </masonry>
         </ul>
@@ -90,6 +93,9 @@ export default {
         },
         updateColor(color, noteId) {
             keepService.updateColor(noteId, color).then(notes => this.notes = notes);
+        },
+        emailNote(noteId) {
+            keepService.sendEmail(noteId)
         }
     },
     created() {
@@ -101,8 +107,13 @@ export default {
         eventBus.$on('toggleIsDone', (todoId, noteId) => keepService.toggleIsDone(todoId, noteId).then(notes => this.notes = notes))
         eventBus.$on('header-changed', (newHeader, noteId) => keepService.updateNoteHeader(noteId, newHeader).then(notes => this.notes = notes))
         eventBus.$on('toggle-pin', noteId => keepService.togglePin(noteId).then(notes => this.notes = notes))
+    },
+    mounted: function() {
         document.querySelector('title').innerHTML = 'Miss keep';
         document.getElementById('favicon').href = 'img/miss-keep.png';
         document.querySelector('.logo-img').src = 'img/miss-keep.png';
+        if (document.body.classList.contains('open')) {
+            document.body.classList.toggle('open');
+        }
     }
 }

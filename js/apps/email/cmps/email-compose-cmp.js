@@ -36,7 +36,7 @@ export default {
       emailServices.sendAnEmail(this.email)
         .then(() => {          
           // todo: display confirmation
-          closeModal();
+          this.closeModal();
         })
     },
     composeClose() {
@@ -44,7 +44,7 @@ export default {
       emailServices.sendAnEmail(this.email)
         .then(() => {          
           // todo: display confirmation
-          closeModal();
+          this.closeModal();
         })
       
     },

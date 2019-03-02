@@ -11,6 +11,7 @@ export default {
     deleteAnEmail,
     restoreAnEmail,
     delAllFolderEmails,
+    onSearch,
 }
 
 const EMAIL_KEY = 'emailapp'
@@ -20,20 +21,20 @@ var isFirstSort = true;
 
 // query().then()
 
-function query(filter = 'inbox', key = EMAIL_KEY) {
-    gFilter = filter;
-    return utilService.loadFromStorage(key)
+function query(filter = 'inbox') {
+    if (filter !== 'all') gFilter = filter;
+    return utilService.loadFromStorage(EMAIL_KEY)
         .then(emails => {
             if (!emails || emails.length === 0) {
-                emails = createEmails(key);
-                utilService.saveToStorage(key, emails).then();
+                emails = createEmails(EMAIL_KEY);
+                utilService.saveToStorage(EMAIL_KEY, emails).then();
             }
-            switch (gFilter) {
+            switch (filter) {
                 case 'inbox':
                     return emails.filter(email => !email.isSent && !email.isDel && !email.isDraft).sort(sortEmails);
-                case 'read':
+                case 'read-filter':
                     return emails.filter(email => email.isRead && !email.isSent && !email.isDel && !email.isDraft).sort(sortEmails);
-                case 'unread':
+                case 'unread-filter':
                     return emails.filter(email => !email.isRead && !email.isSent && !email.isDel && !email.isDraft).sort(sortEmails);
                 case 'sent':
                     return emails.filter(email => email.isSent && !email.isDel).sort(sortEmails);
@@ -41,20 +42,32 @@ function query(filter = 'inbox', key = EMAIL_KEY) {
                     return emails.filter(email => email.isDraft && !email.isDel).sort(sortEmails);
                 case 'trash':
                     return emails.filter(email => email.isDel).sort(sortEmails);
-                default: {
-                    return emails.filter(email => email.sender.toLowerCase().includes(gFilter) || email.subject.toLowerCase().includes(gFilter) || email.body.toLowerCase().includes(gFilter)).sort(sortEmails);
-                }
+                default: 
+                    return emails;
             }
         })
 }
 
+function onSearch(searchParam, searchLoc = gFilter) {
+    return query(searchLoc).then(emails => {
+        return emails.filter(email => email.sender.toLowerCase().includes(searchParam) || email.subject.toLowerCase().includes(searchParam) || email.body.toLowerCase().includes(searchParam)).sort(sortEmails);
+    })
+}
+
 function onSort(sortBy = 'date') {
-    if (sortBy === gSort) isFirstSort = !isFirstSort;
-    else isFirstSort = true;
-    gSort = sortBy;
-    return query(gFilter).then(emails => {
-        return emails.sort(sortEmails)
-    });
+    if (sortBy === 'read' || sortBy === 'unread') {
+        return query(gFilter).then(emails => {
+            let readEmails = emails.filter(email => email.isRead).sort(sortEmails);
+            let unreadEmails = emails.filter(email => !email.isRead).sort(sortEmails);
+            if (sortBy === 'read') return readEmails.concat(unreadEmails);
+            else return unreadEmails.concat(readEmails);
+        })
+    } else {
+        if (sortBy === gSort) isFirstSort = !isFirstSort;
+        else isFirstSort = true;
+        gSort = sortBy;
+        return query(gFilter).then(emails => emails);
+    }
 }
 
 function sortEmails(a, b) {
@@ -148,12 +161,12 @@ function delAllFolderEmails(emailsToDel) {
     return utilService.loadFromStorage(EMAIL_KEY).then(emails => {
         emailsToDel.forEach(email => {
             let emailIdx = emails.findIndex(currEmail => email.id === currEmail.id)
-                if (email.isDel) {
-                    emails.splice(emailIdx, 1);
-                } else {
-                    emails[emailIdx].isDel = true;
-                }
-        })        
+            if (email.isDel) {
+                emails.splice(emailIdx, 1);
+            } else {
+                emails[emailIdx].isDel = true;
+            }
+        })
         return utilService.saveToStorage(EMAIL_KEY, emails)
     })
 }

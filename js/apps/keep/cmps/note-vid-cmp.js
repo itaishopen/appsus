@@ -17,6 +17,7 @@ export default {
                 <button class="icon-btn" @click=""><i class="fas fa-share"></i></button>
                 <input type="color" v-model="color" @change="updateColor" style="display: none" ref="colorPicker">
                 <button class="icon-btn" @click="chooseColor"><i class="fas fa-palette"></i></button>
+                <button class="icon-btn" @click="sendAsEmail"><i class="fas fa-paper-plane"></i></button>
             </div>
         </li>
     `,
@@ -34,6 +35,9 @@ export default {
         },
         updateColor() {
             this.$emit('color-changed', this.color, this.note.id)
+        },
+        sendAsEmail() {
+            this.$emit('sendAsEmail', this.note.id);
         }
     },
     computed: {

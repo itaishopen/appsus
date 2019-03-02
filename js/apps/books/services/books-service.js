@@ -1,5 +1,5 @@
 import jsonData from './books-storage.js';
-import utilService from './util-service.js'
+import utilService from '../../../services/util-service.js'
 
 export default {
     init,
@@ -15,18 +15,23 @@ export default {
     getBookIdx,
     getBookByIdx,
 }
-var gBooks;
+var gBooks = [];
 var gFilter = {byName: '', fromPrice:'', toPrice:Infinity}
 const BOOKS_KEY = 'books'
 
-init()
+init().then(books => gBooks = books)
 
 function init() {
-    gBooks = utilService.loadFromStorage(BOOKS_KEY);    
-    if (!gBooks || gBooks.length === 0) {
-        gBooks = _createBooks();
-        utilService.saveToStorage(BOOKS_KEY, gBooks)
-    }
+    return utilService.loadFromStorage(BOOKS_KEY).then(books => {
+        if (!books || books.length === 0) {
+            books = _createBooks();
+            console.log(books);
+            utilService.saveToStorage(BOOKS_KEY, books)
+            return books
+        } else {
+            return books;
+        }
+    });    
 }
 
 function getBooks(filter = gFilter) {
@@ -59,7 +64,7 @@ function getBookByIdx(bookIdx) {
 function writeAReview(bookId, review) {
     let reviews = getReviews(bookId)
     reviews.push(review)
-    utilService.saveToStorage(BOOKS_KEY, gBooks)
+    utilService.saveToStorage(BOOKS_KEY, gBooks).then()
 }
 
 function getReviews(bookId) {
@@ -70,7 +75,7 @@ function deleteAReview(bookId, reviewId) {
     let reviews = getReviews(bookId);
     let reviewIdx = reviews.findIndex(review => review.id === reviewId)
     reviews.splice(reviewIdx, 1)
-    utilService.saveToStorage(BOOKS_KEY, gBooks)
+    utilService.saveToStorage(BOOKS_KEY, gBooks).then()
 }
 
 function iconCurrency(bookId) {
@@ -109,7 +114,7 @@ function addBook(googleBook) {
     try{
         let book = createABook(googleBook);
         gBooks.push(book)
-        utilService.saveToStorage(BOOKS_KEY, gBooks)
+        utilService.saveToStorage(BOOKS_KEY, gBooks).then()
         return Promise.resolve(book)
     } catch(error){
         console.log(error)

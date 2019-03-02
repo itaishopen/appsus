@@ -1,14 +1,14 @@
 import bookService from '../services/books-service.js'
 import reviewsList from '../cmps/review/review-list-cmp.js'
 import starRating from '../cmps/review/star-rating-cmp.js'
-import utilService from '../services/util-service.js'
-import { eventBus, EVENT_FEEDBACK } from '../event-bus.js'
+import utilService from '../../../services/util-service.js'
+import { eventBus, EVENT_FEEDBACK } from '../../../services/eventbus-service.js'
 
 
 export default {
     template: `
     <section v-if="book" class="review-book">
-        <button  class="back-btn fas fa-arrow-circle-left" @click="back"></button>
+        <button  class="back-btn fas fa-arrow-circle-left btn" @click="back"></button>
         <div class="flex space-around">
             <form class="flex column align-center" @submit.prevent="onSave">
                 <h1 class="form-header">Book review</h1>
@@ -22,7 +22,7 @@ export default {
                 <input v-model="bookReview.dateRead"  type="date"/>
                 <h3>comments:</h3>
                 <textarea  v-model="bookReview.comments" placeholder="enter a comment"></textarea>
-                <button type="submit" :disabled="!isValid">Save</button>
+                <button type="submit" :disabled="!isValid" class="submit-btn btn">Save</button>
             </form>
             <reviews-list :reviews="listOfReviews" v-if="listOfReviews" @deleteReview="onDeleteReview"
             :bookSelectedId="this.book.id"></reviews-list> 

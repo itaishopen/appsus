@@ -21,7 +21,7 @@ export default {
                 <div  class="book-details-main flex column align-center">
                     <p class="book-desc"><span>description: </span>{{shortDesc}}</p>
                     <long-text v-if="showDesc" :str="this.book.description" :len=100></long-text>
-                    <button class="more-btn" v-if="book.description.length > 100" v-on:click="continueRead">{{readMore}}
+                    <button class="more-btn btn" v-if="book.description.length > 100" v-on:click="continueRead">{{readMore}}
                     </button>
                     <p><span>page Count: </span>{{book.pageCount}} pages {{pageCountTxt}}</p>
                     <p><span>categories: </span>{{book.categories.toString()}}</p>
@@ -31,7 +31,7 @@ export default {
                         <p> <span v-if="!book.listPrice.isOnSale"><img class="new-icon" src="img/new.png"></span><img class="sale-icon" v-else src="img/sale.png"></p>
                     </div>
                 </div>
-                <button  v-on:click="reviewBook"><i class="fas fa-pen"></i>Add review</button>
+                <button  v-on:click="reviewBook" class="add-review-btn btn"><i class="fas fa-pen"></i>Add review</button>
             </div>
         </div>
         <router-link v-if="isNextBook" class="next-btn" :to="goBook(1)">Next Book</router-link>

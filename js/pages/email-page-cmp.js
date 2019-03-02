@@ -10,16 +10,20 @@ import { eventBus, EVENT_FEEDBACK } from '../services/eventbus-service.js'
 import utilService from '../services/util-service.js';
 
 export default {
+    props: ['note'],
     template: `
         <section class="email-app-container flex column">
-            <div class="email-actions-toolbar flex space-between">
-                <router-link class="flex space-evenly" to="/"><i class="fas fa-arrow-circle-left"></i>Back</router-link>
+            <div class="email-actions-toolbar flex align-center justify-center">
+                <div id="mobile-email-filter-button" class="mobile-email-filter-button" @click="toggleMenu">
+                    <div class="bar1"></div>
+                    <div class="bar2"></div>
+                    <div class="bar3"></div>
+                </div>
                 <email-search @searchInEmails="searchInEmails"></email-search>
-            </div>
-            
+            </div>  
             <div class="filter-sort-container flex column">
+                <button class="compose-email-btn" @click="composeOpen"><i class="fas fa-plus gradient-color"></i><span class="compose-email-txt">Compose</span></button>
                 <div class="upper-control flex">
-                    <button class="compose-email-btn" @click="composeOpen"><i class="fas fa-plus"></i>Compose</button>
                     <email-sort @sort="sort"></email-sort>
                     <button v-if="filter === 'trash' || filter === 'draft'" class="delete-all" @click="deleteAll"><i class="fas fa-dumpster fa-2x"></i></button>
                 </div>
@@ -53,9 +57,22 @@ export default {
                 this.unreadEmails = this.checkEmailStatus();
                 eventBus.$emit(EVENT_FEEDBACK, { txt: 'Welcome to your inbox!', link: '' }, 'welcome')
             });
-            document.querySelector('title').innerHTML = 'Mr Email';
-            document.getElementById('favicon').href = 'img/mr-email.png';
-            document.querySelector('.logo-img').src = 'img/mr-email.png';             
+            if (this.note) {
+                this.emailForReply = this.note;
+                this.isReply = true;
+            }
+                        
+    },
+    mounted: function() {
+        document.querySelector('title').innerHTML = 'Mr Email';
+        document.getElementById('favicon').href = 'img/mr-email.png';
+        document.querySelector('.logo-img').src = 'img/mr-email.png';
+        if (document.body.classList.contains('show')) {
+            document.body.classList.toggle('show');
+        }
+        if (document.body.classList.contains('open')) {
+            document.body.classList.toggle('open');
+        }
     },
     methods: {
         markAsUnread(emailId) {
@@ -112,9 +129,14 @@ export default {
                     })
                 })
         },
-        searchInEmails(searchParam) {
-            emailServices.query(searchParam)
+        searchInEmails(searchParam, searchLoc) {
+            if (searchLoc) {
+                emailServices.onSearch(searchParam, 'all')
                 .then(emails => this.emails = emails)
+            } else {
+                emailServices.onSearch(searchParam)
+                .then(emails => this.emails = emails)
+            }
         },
         sort(sortParam) {
             this.sortParam = sortParam
@@ -132,6 +154,7 @@ export default {
         replyToEmail(emailId) {
             emailServices.getEmailById(emailId)
                 .then(email => {
+                    email.subject = 'Re: ' + email.subject;
                     this.emailForReply = email;
                     this.isReply = true;
                 })
@@ -149,7 +172,21 @@ export default {
                 emailServices.query(this.filter)
                     .then(emails => this.emails = emails)
             })
+        },
+        toggleMenu() {
+            document.getElementById("mobile-email-filter-button").classList.toggle("change-filter");
+            document.body.classList.toggle('show');
         }
+        // noteToEmail(note) {
+        //     this.$router.push('/email');
+        //     this.emailForReply = {
+        //         recipient: '',
+        //         sender: 'awesome@devil.com',
+        //         subject: note.title,
+        //         body: note.content,
+        //     }
+        //     this.isReply = true;
+        // }
     },
     components: {
         emailList,

@@ -1,4 +1,5 @@
 import utilService from '../../../services/util-service.js';
+// import router from '../../../routes.js'
 
 export default {
     getNotes,
@@ -11,7 +12,9 @@ export default {
     toggleIsDone,
     addTodo,
     togglePin,
-    updateColor
+    updateColor,
+    sendEmail,
+    // router
 }
 
 var dummyNotes = [{ id: utilService.makeId(), type: 'txt', isPinned: false, color: '#493750', header: 'Sample Txt Note', content: 'Sample Txt' },
@@ -125,6 +128,21 @@ function updateColor(noteId, color) {
         notes[noteIdx].color = color;
         _saveNotes(notes);
         return notes;
+    })
+}
+
+function sendEmail(noteId) {
+    return _loadNotes()
+    .then(notes => {
+        let noteIdx = notes.findIndex(note => note.id === noteId);
+        let email = {
+            recipient: '',
+            sender: 'awesome@devil.com',
+            subject: notes[noteIdx].header,
+            body: notes[noteIdx].content,
+        }
+        console.log(email);
+        
     })
 }
 

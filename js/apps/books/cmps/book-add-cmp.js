@@ -1,5 +1,5 @@
 import bookService from '../services/books-service.js'
-import { eventBus, EVENT_FEEDBACK } from '../event-bus.js'
+import { eventBus, EVENT_FEEDBACK } from '../../../services/eventbus-service.js'
 
 
 export default {
@@ -13,7 +13,7 @@ export default {
             <li v-for="book in booksList" @click="addBook(book)">
                 <div class="flex space-between align-center">
                 <p>{{book.volumeInfo.title}} by <span v-if="book.volumeInfo.authors">{{book.volumeInfo.authors.toString()}}</span></p>
-                <button class="fas fa-plus-circle"></button>
+                <button class="fas fa-plus-circle close-btn btn"></button>
                 </div>
             </li>
         </ul>

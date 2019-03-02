@@ -1,11 +1,11 @@
-import { eventBus, EVENT_FEEDBACK } from '../event-bus.js'
+import { eventBus, EVENT_FEEDBACK } from '../../../services/eventbus-service.js'
 
 export default {
     template:`
     <section v-if="showMsg" class="user-msg flex justify-center align-center">
         <div :class="msgType" >
             <div class="flex">
-                <button :style="{color:btnColor}"  @click="closeMsg" class="fas fa-times-circle"></button>
+                <button :style="{color:btnColor}"  @click="closeMsg" class="fas fa-times-circle close-btn btn"></button>
                 <i :class="iconClass"></i>
                 <div>
                     <p>{{msg.txt}}</p>

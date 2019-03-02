@@ -1,13 +1,3 @@
-@import url('https://fonts.googleapis.com/css?family=Lobster+Two');
-* {
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Lobster Two', cursive;
-    overflow-x: hidden;
-    background: linear-gradient(to right, #eea2a2 0%, #bbc1bf 19%, #57c6e1 42%, #b49fda 79%, #7ac5d8 100%);
-}
 
 .flex {
     display: flex;
@@ -31,65 +21,6 @@ body {
 
 .justify-center {
     justify-content: center;
-}
-
-.nav {
-    position: relative;
-    padding: 20px;
-    font-size: 1.4em;
-    z-index: 2;
-}
-
-.nav a {
-    color: white;
-    padding: 15px;
-    background-color: #34d641;
-    text-decoration: none;
-    box-shadow: 2px 2px 3px 0px black;
-}
-
-.nav > .router-link-exact-active {
-    color: black;
-    font-weight: bold;
-}
-
-.nav a:hover {
-    box-shadow: 4px 4px 6px 0px black;
-}
-
-.home-page {
-    color: rgb(91, 203, 236);
-}
-
-.home-page img {
-    position: absolute;
-    height: 100vh;
-    top: 0;
-    align-self: center
-}
-
-.home-header {
-    position: relative;
-    justify-content: center;
-    padding: 0 5px;
-    z-index: 1;
-    top: calc(40vh - 3em - 10px);
-}
-
-.home-header h1 {
-    text-transform: uppercase;
-    font-size: 3em;
-    word-wrap: break-word;
-    margin: 10px 0;
-    font-weight: bold;
-    text-align: center;
-    -webkit-text-stroke: 1px rgb(0, 0, 0);
-}
-
-@media (max-width:1300px) {
-    .home-page img {
-        width: auto;
-    }
 }
 
 input {
@@ -123,14 +54,14 @@ button {
     position: relative;
 }
 
-header {
+.books-header {
     display: flex;
     flex-direction: column;
     align-items: center;
     height: 150px;
 }
 
-header>img {
+.books-header>img {
     position: absolute;
     height: 150px;
     width: 400px;
@@ -138,7 +69,7 @@ header>img {
     left: calc(50vw - 200px);
 }
 
-header h1 {
+.books-header h1 {
     position: absolute;
     text-transform: uppercase;
     text-align: center;
@@ -222,7 +153,7 @@ header h1 {
     background: #34d641;
 }
 
-button {
+.btn {
     border: none;
     background-color: #34d641;
     color: #fddb95;
@@ -230,12 +161,12 @@ button {
     transition: all 0.3s;
 }
 
-button:disabled {
+.btn:disabled {
     opacity: 0.5;
     cursor: auto;
 }
 
-button:hover:enabled {
+.btn:hover:enabled {
     color: #06b6ad;
     background-color: #fddb95;
 }
@@ -431,7 +362,7 @@ button:hover:enabled {
 }
 
 @media (max-width:650px) {
-    header {
+    .books-header {
         min-height: 100px;
     }
     .book-filter {
@@ -460,13 +391,13 @@ button:hover:enabled {
     .book-details-header {
         width: 100%;
     }
-    header {
+    .books-header {
         height: 100px;
     }
-    header h1 {
+    .books-header h1 {
         font-size: 3em;
     }
-    header>img {
+    .books-header>img {
         height: 100px;
         width: 200px;
         left: calc(50vw - 100px);
@@ -474,7 +405,7 @@ button:hover:enabled {
 }
 
 @media (max-width:242px) {
-    header h1 {
+    .books-header h1 {
         font-size: 3em;
     }
 }

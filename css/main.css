@@ -77,7 +77,6 @@ header .wrapper {
     display: flex;
     height: 120px;
     width: 120px;
-    /* background-image: url('../img/large-horse-icon.png'); */
     background-size: contain;
 }
 
@@ -97,6 +96,7 @@ header .wrapper {
 .mobile-menu-button {
     display: none;
 }
+
 
 @media (max-width: 750px) {
     .line {
@@ -130,7 +130,9 @@ header .wrapper {
         cursor: pointer;
     }
     
-    .bar1, .bar2, .bar3 {
+    .mobile-menu-button .bar1,
+    .mobile-menu-button .bar2,
+    .mobile-menu-button .bar3 {
         width: 35px;
         height: 5px;
         background-color: white;

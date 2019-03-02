@@ -5,7 +5,7 @@ export default {
             <form class="reply-container flex column" @submit.prevent="sendEmail">
                 <button class="cancel-reply-btn" type="button" @click="replyClose"><i class="fas fa-times"></i></button>
                 <input type="text" class="reply-email-from" placeholder="To" v-model="email.recipient" disabled>
-                <input type="text" class="reply-email-to" placeholder="From" v-model="email.sender" disabled>
+                <input type="text" class="reply-email-to" placeholder="From" v-model="email.sender">
                 <input type="text" class="reply-email-subject" placeholder="Subject" v-model="email.subject">
             
                 <div class="reply-email-body">
@@ -20,7 +20,7 @@ export default {
             email: {
                 recipient: this.emailForReply.sender,
                 sender: this.emailForReply.recipient,
-                subject: 'Re:' + this.emailForReply.subject,
+                subject: this.emailForReply.subject,
                 body: this.emailForReply.body,
                 isDraft: false,
               }

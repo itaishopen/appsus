@@ -14,17 +14,33 @@ export default {
                 <input type="radio" id="sender" value="sender" v-model="sortBy" @click="setSortBy('sender')"/>
                 <label for="sender">Sender</label>
             </div>
+            <div class="tab flex">
+                <input type="button" id="read" value="name" v-model="name" @click="setSortBy(name)">
+            </div>
         </form>
     `,
     data() {
         return {
             sortBy: 'date',
+            isRead: false,
         }
     },
     methods: {
         setSortBy(val) {
+            if (val === 'unread') {
+                this.isRead = true;
+            } else if (val === 'read') {
+                this.isRead = false;
+            }
             this.sortBy = val
             this.$emit('sort', this.sortBy)
-        }
+        },
+        
+
+    },
+    computed: {
+        name() {
+            return this.isRead ? 'read' : 'unread'
+        },
     }
 }

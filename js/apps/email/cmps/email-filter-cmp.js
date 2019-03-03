@@ -1,7 +1,7 @@
 export default {
     props: ['unreadEmails'],
     template:`
-    <form class="email-filter flex column space-between" @submit.prevent="setFilter">
+    <form class="email-filter flex column" @submit.prevent="setFilter">
             <div class="tab flex">
                 <input type="radio" id="inbox" value="inbox" checked v-model="filter"/>
                 <label for="inbox" class="flex space-between" @click="menuClick"><span><i class="fas fa-inbox"></i>Inbox</span> <span v-if="unreadEmails !== 0">{{unreadEmails}}</span></label>

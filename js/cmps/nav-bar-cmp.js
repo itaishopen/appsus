@@ -7,23 +7,37 @@ export default {
             <div class="bar3"></div>
         </div>
         <div class="nav flex">
-            <router-link exact to="/"><span @click="menuClick">Home</span></router-link> <span class="line">|</span>
-            <router-link exact to="/miss-keep"><span @click="menuClick">Miss Keep</span></router-link> <span class="line">|</span>
-            <router-link exact to="/email"><span @click="menuClick">Mr Email</span></router-link><span class="line">|</span>
-            <router-link exact to="/book"><span @click="menuClick">Books Gallery</span></router-link>  
+            <router-link exact to="/">Home</router-link> <span class="line">|</span></span>
+            
+                <router-link exact to="/miss-keep"><span class="nav-link-btn">Miss Keep</span></router-link> <span class="line">|</span>
+            
+           
+                <router-link exact to="/email"><span class="nav-link-btn">Mr Email</span></router-link><span class="line">|</span>
+           
+           
+                <router-link exact to="/book"><span class="nav-link-btn">Books Gallery</span></router-link>
+         
         </div>
     </section>
     `,
     methods: {
         toggleMenu() {
+            if (document.body.classList.contains('show')) {
+                document.getElementById("mobile-email-filter-button").classList.toggle("change-filter");
+                document.body.classList.toggle('show');
+            }
             document.getElementById("mobile-menu-button").classList.toggle("change");
             document.body.classList.toggle('open');
         },
-        menuClick() {
-            if (document.body.classList.contains('open')) {
-                document.getElementById("mobile-menu-button").classList.toggle("change");
-                document.body.classList.toggle('open');
-            }
-        },
+        // menuClick() {
+        //     if (document.body.classList.contains('open')) {
+        //         document.querySelector(".mobile-menu-button").classList.toggle("change");
+        //         document.body.classList.toggle('open');
+        //     }
+        //     if (document.body.classList.contains('show')) {
+        //         document.getElementById("mobile-email-filter-button").classList.toggle("change-filter");
+        //         document.body.classList.toggle('show');
+        //     }
+        // },
     }
 }

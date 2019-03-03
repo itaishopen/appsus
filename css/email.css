@@ -18,11 +18,11 @@ button {
 }
 
 .email-actions-toolbar {
-    margin-top: 10px; 
+    margin-top: 10px;
     align-items: center;
 }
 
-.email-actions-toolbar a{
+.email-actions-toolbar a {
     width: 80px;
     font-size: 15px;
     padding: 8px;
@@ -30,7 +30,7 @@ button {
     border: 1px solid black;
     border-radius: 25px;
     box-shadow: 1px 1px 2px 0 black;
-    margin-left: 5px;    
+    margin-left: 5px;
 }
 
 .search-tab input[type=search] {
@@ -48,11 +48,10 @@ button {
 .search-checkbox {
     align-items: center;
     height: 26px;
-
 }
-.search-checkbox label{
+
+.search-checkbox label {
     cursor: pointer;
-    
 }
 
 .search-checkbox input[type="checkbox"] {
@@ -76,14 +75,14 @@ button {
     width: 150px;
     text-align: center;
     box-shadow: 1px 1px 2px 0 black;
-    margin-left: 5px;   
+    margin-left: 5px;
 }
 
 .gradient-color {
     margin-right: 5px;
     background: linear-gradient(-225deg, #231557 0%, #44107A 29%, #FF1361 67%, #FFF800 100%);
     -webkit-background-clip: text;
-	-webkit-text-fill-color: transparent;
+    -webkit-text-fill-color: transparent;
 }
 
 .filter-sort-container {
@@ -146,13 +145,13 @@ button {
     margin: 0;
     align-items: center;
     width: 100%;
-    
-} 
+}
 
 .unread {
     font-weight: bold;
 }
-.first-letter, .email-preview-sentAt{
+
+.first-letter, .email-preview-sentAt {
     font-weight: normal;
 }
 
@@ -174,8 +173,8 @@ button {
     border-radius: 50%;
     margin-left: 10px;
     font-weight: none;
-
 }
+
 .email-preview-letter label {
     display: flex;
     height: 50px;
@@ -201,8 +200,7 @@ button {
     /* align-self: center; */
     font-size: 13px;
     width: 150px;
-    margin: 10px 15px 0 0; 
-
+    margin: 10px 15px 0 0;
 }
 
 .email-preview-sender {
@@ -215,6 +213,7 @@ button {
     width: 100%;
     margin-left: 70px;
 }
+
 .email-preview-container:hover .button-container {
     display: flex;
 }
@@ -237,7 +236,6 @@ button {
     z-index: 1;
 }
 
-
 .tab label {
     transition: all .3s;
     background: transparent;
@@ -255,46 +253,63 @@ button {
 }
 
 @media (max-width: 750px) {
+    .email-search {
+        padding: 10px;
+        z-index: 3;
+    }
+    .email-actions-toolbar {
+        position: sticky;
+        top: 0;
+        z-index: 3;
+        background-color: white;
+        padding-top: 10px;
+    }
+    .upper-control {
+        position: sticky;
+        top: 60px;
+        background-color: white;
+        z-index: 3;
+    }
     .mobile-email-filter-button {
         display: block;
-        position: fixed;
+        position: sticky;
         left: 20px;
         cursor: pointer;
+        z-index: 5;
         /* transform: translate(210px, 0); 
         transition: transform .8s; */
     }
-
+    .email-preview-container:hover .button-container {
+        display: none;
+    }
+    .email-preview-container:hover .email-preview-sentAt {
+        display: flex;
+    }
     body.show .mobile-email-filter-button {
         left: 10px;
         transform: translate(200px, 0);
         transition: transform .8s;
     }
-    
-    .mobile-email-filter-button .bar1,
-    .mobile-email-filter-button .bar2,
-    .mobile-email-filter-button .bar3 {
+    .mobile-email-filter-button .bar1, .mobile-email-filter-button .bar2, .mobile-email-filter-button .bar3 {
         width: 20px;
         height: 3px;
         background-color: black;
         margin: 4px 0;
         transition: 0.4s;
     }
-    
     .change-filter .bar1 {
         transform: rotate(-45deg) translate(-2px, 1px);
     }
-    
     .change-filter .bar2 {
         opacity: 0;
     }
-    
     .change-filter .bar3 {
         transform: rotate(45deg) translate(-9px, -8px);
     }
-    
     .email-filter {
         z-index: 50;
         position: fixed;
+        justify-content: initial;
         left: 0;
         top: 70px;
         background-color: rgb(255, 255, 255);
@@ -303,16 +318,18 @@ button {
         transform: translate(-100%, 0);
         transition: transform .8s;
     }
-    
     .email-filter a {
         padding: 30px;
+    }
+
+    body.show {
+        overflow-y: hidden;
     }
 
     body.show .email-filter {
         transform: translate(0, 0);
     }
-    
-    .compose-email-btn  {
+    .compose-email-btn {
         position: fixed;
         z-index: 30;
         bottom: 10px;
@@ -325,7 +342,6 @@ button {
         width: 50px;
         height: 50px;
         background-color: white;
-    
     }
     .compose-email-txt {
         display: none;

@@ -12,6 +12,11 @@ export default {
     restoreAnEmail,
     delAllFolderEmails,
     onSearch,
+    backBtnAll,
+    restoreAllCheckedEmail,
+    changeReadUnreadAll,
+    unCheckAll,
+    starAll,
 }
 
 const EMAIL_KEY = 'emailapp'
@@ -44,7 +49,7 @@ function query(filter = 'inbox') {
                     return emails.filter(email => email.isDraft && !email.isDel).sort(sortEmails);
                 case 'trash':
                     return emails.filter(email => email.isDel).sort(sortEmails);
-                default: 
+                default:
                     return emails;
             }
         })
@@ -94,6 +99,14 @@ function getEmailByIdx(emailIdx) {
     return utilService.loadFromStorage(EMAIL_KEY).then(emails => emails[emailIdx])
 }
 
+function backBtnAll(changeEmails) {
+    changeEmails.forEach(email => {
+        email.isCheck = false;
+        sendAnEmail(email)
+    })
+    return Promise.resolve()
+}
+
 function deleteAnEmail(emailId) {
     return utilService.loadFromStorage(EMAIL_KEY)
         .then(emails => {
@@ -121,21 +134,69 @@ function restoreAnEmail(emailId) {
         })
 }
 
+function restoreAllCheckedEmail(emailsToRestore) {
+    return utilService.loadFromStorage(EMAIL_KEY).then(emails => {
+        emailsToRestore.forEach(email => {
+            let emailIdx = emails.findIndex(currEmail => email.id === currEmail.id)
+            
+                    emails[emailIdx].isCheck = false;
+                    emails[emailIdx].isDel = false;
+        })
+        return utilService.saveToStorage(EMAIL_KEY, emails)
+    })
+}
+
+function changeReadUnreadAll(emailsToChange, changeTo) {
+    return utilService.loadFromStorage(EMAIL_KEY).then(emails => {
+        emailsToChange.forEach(email => {
+            let emailIdx = emails.findIndex(currEmail => email.id === currEmail.id)
+            
+                    emails[emailIdx].isCheck = false;
+                    if (changeTo === 'read') emails[emailIdx].isRead = true;
+                    else emails[emailIdx].isRead = false;
+        })
+        return utilService.saveToStorage(EMAIL_KEY, emails)
+    })
+}
+function unCheckAll(emailsToUnCheck) {
+    return utilService.loadFromStorage(EMAIL_KEY).then(emails => {
+        emailsToUnCheck.forEach(email => {
+            let emailIdx = emails.findIndex(currEmail => email.id === currEmail.id)
+                    emails[emailIdx].isCheck = false;
+        })
+        return utilService.saveToStorage(EMAIL_KEY, emails)
+    })
+}
+function starAll(emailsToStar, action) {
+    return utilService.loadFromStorage(EMAIL_KEY).then(emails => {
+        emailsToStar.forEach(email => {
+            let emailIdx = emails.findIndex(currEmail => email.id === currEmail.id)
+                    emails[emailIdx].isCheck = false;
+                    if (action) emails[emailIdx].isStar = true;
+                    else emails[emailIdx].isStar = false;
+
+        })
+        return utilService.saveToStorage(EMAIL_KEY, emails)
+    })
+}
+
 function sendAnEmail(emailData) {
     return utilService.loadFromStorage(EMAIL_KEY).then(emails => {
         if (emailData.id) {
             return getEmailIdx(emailData.id).then(emailIdx => {
-                emails[emailIdx].isRead = emailData.isRead;
-                emails[emailIdx].isSent = emailData.isSent;
-                emails[emailIdx].isDraft = emailData.isDraft;
                 emails.splice(emailIdx, 1, emailData);
-                return utilService.saveToStorage(EMAIL_KEY, emails);
+                console.log(emails);
+                utilService.saveToStorage(EMAIL_KEY, emails).then(() => {
+                    utilService.loadFromStorage(EMAIL_KEY).then(emails => console.log(emails));
+                });
+                return Promise.resolve()
             });
         } else {
             let newEmail = createAnEmail(emailData);
             newEmail.isSent = emailData.isSent;
             emails.push(newEmail)
-            return utilService.saveToStorage(EMAIL_KEY, emails)
+            utilService.saveToStorage(EMAIL_KEY, emails).then()
+            return Promise.resolve()
         }
     })
 }
@@ -164,10 +225,11 @@ function delAllFolderEmails(emailsToDel) {
     return utilService.loadFromStorage(EMAIL_KEY).then(emails => {
         emailsToDel.forEach(email => {
             let emailIdx = emails.findIndex(currEmail => email.id === currEmail.id)
-            if(email.isCheck) {    
+            if (email.isCheck) {
                 if (email.isDel) {
                     emails.splice(emailIdx, 1);
                 } else {
+                    emails[emailIdx].isCheck = false;
                     emails[emailIdx].isDel = true;
                 }
             }

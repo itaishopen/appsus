@@ -24,16 +24,9 @@ export default {
     methods: {
         openEmail(emailId) {
             this.$emit('openEmail', emailId);
-          },
-        starEmail(emailId) {
-            console.log(emailId)
-            this.$emit('starEmail', emailId);
         },
         deleteEmail(emailId) {
             this.$emit('deleteEmail', emailId);
-        },
-        emailCheck(email) {
-            this.$emit('emailCheck', email);
         },
         restoreEmail(emailId) {
             this.$emit('restoreEmail', emailId);
@@ -42,16 +35,21 @@ export default {
             this.$emit('replyToEmail', emailId);
         },
         sendDraft(emailId) {
-            console.log(emailId)
             this.$emit('sendDraft', emailId);
         },
+        starEmail(emailId) {
+            this.$emit('changeEmail', emailId, 'star');
+        },
+        emailCheck(emailId) {
+            this.$emit('changeEmail', emailId, 'check');
+        },
         markAsUnread(emailId) {
-            this.$emit('markAsUnread', emailId);
+            this.$emit('changeEmail', emailId, 'unread');
         },
         markAsRead(emailId) {
-            this.$emit('markAsRead', emailId);
+            this.$emit('changeEmail', emailId, 'read');
         },
-        
+
     },
     components: {
         emailPreview,

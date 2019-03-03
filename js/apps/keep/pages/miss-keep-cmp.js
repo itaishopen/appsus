@@ -179,6 +179,7 @@ export default {
         document.querySelector('.logo-img').src = 'img/miss-keep.png';
         if (document.body.classList.contains('open')) {
             document.body.classList.toggle('open');
+            document.querySelector(".mobile-menu-button").classList.toggle("change");
         }
     }
 }

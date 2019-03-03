@@ -2,10 +2,10 @@ export default {
   props: ['email'],
   template: `
       <div class="email-preview flex space-between">
-        <div class="email-preview-letter flex align-center justify-center" :style="{ background: starColor }">
+        <div class="email-preview-letter flex align-center justify-center" :style="{ background: starColor }" >
             <input type="checkbox" id="letter-checkbox" class="email-preview-letter-checkbox">
-            <label for="letter-checkbox" @click="emailCheck">
-                <span v-if="!email.isCheck" class="first-letter">{{email.sender.charAt(0).toUpperCase()}}</span>
+            <label for="letter-checkbox" @click="emailCheck(email.id)">
+                <span v-if="!email.isCheck" class="first-letter">{{firstLetter}}</span>
                 <span v-if="email.isCheck" class="first-letter"><i class="fas fa-check"></i></span>
             </label>
         </div>
@@ -20,24 +20,25 @@ export default {
   `,
   data() {
     return {
-      // selected: this.email.isCheck,
       color: '#00ffff',
-      currEmail: this.email,
+      currEmail: {},
     }
   },
   methods: { 
     openEmail(emailId) {
-      console.log(emailId)
       this.$emit('openEmail', emailId);
     },
-    emailCheck() {
-      this.currEmail.isCheck = !this.currEmail.isCheck
-      this.$emit('emailCheck', this.currEmail);
+    emailCheck(emailId) {
+      this.$emit('emailCheck', emailId);
     }
   },
   computed: {
     starColor() {
          return "#"+((1<<24)*Math.random()|0).toString(16);
     },
+    firstLetter() {      
+      if (this.email.sender) return this.email.sender.charAt(0).toUpperCase();
+      return '?'
+    }
 },
 }

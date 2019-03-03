@@ -7,6 +7,7 @@ import emailSort from '../apps/email/cmps/email-sort-cmp.js'
 import emailCompose from '../apps/email/cmps/email-compose-cmp.js'
 import emailReply from '../apps/email/cmps/email-reply-cmp.js'
 import emailDetails from '../apps/email/cmps/email-details-cmp.js'
+import emailActions from '../apps/email/cmps/multipul-emails-check-btn-cmp.js'
 import keepService from '../apps/keep/service/keep-service.js'
 import { eventBus, EVENT_FEEDBACK } from '../services/eventbus-service.js'
 
@@ -25,11 +26,11 @@ export default {
                 <div class="upper-control flex">
                 <button class="compose-email-btn" @click="composeOpen"><i class="fas fa-plus gradient-color"></i><span class="compose-email-txt">Compose</span></button>
                     <email-sort v-if="checkedEmailsNum === 0" @sort="sort"></email-sort>
-                    
+                    <email-actions v-if="checkedEmailsNum > 0" :checkedEmails="checkedEmails" @renderEmails="backBtn"></email-actions>
                 </div>
                 <div class="main-container flex">
                     <email-filter :unreadEmails="unreadEmails" @setFilter="setFilter"></email-filter>
-                    <email-list v-if="!isReply && !isCompose && !isShow" :emails="emails" @deleteEmail="deleteMail" @restoreEmail="restoreEmail" @replyToEmail="replyToEmail" @markAsUnread="markAsUnread" @markAsRead="markAsRead" @emailCheck="emailCheck" @starEmail="starEmail" @sendDraft="sendDraft" @openEmail="openEmail"></email-list>
+                    <email-list v-if="!isReply && !isCompose && !isShow" :emails="emails" @deleteEmail="deleteMail" @restoreEmail="restoreEmail" @replyToEmail="replyToEmail" @changeEmail="changeEmail" @sendDraft="sendDraft" @openEmail="openEmail"></email-list>
                     <email-details v-if="isShow" :email="emailToShow" @backBtn="backBtn"></email-details>
                     <email-reply v-if="isReply && !isCompose && !isShow" @replyClose="replyClose" @sendEmail="replyClose" :emailForReply="emailForReply"></email-reply>
                     <email-compose v-if="isCompose && !isReply && !isShow" @composeClose="composeClose"></email-compose>
@@ -80,14 +81,15 @@ export default {
             })
             
         }
-        console.log(this.$route.params.noteId);
         document.querySelector('title').innerHTML = 'Mr Email';
         document.getElementById('favicon').href = 'img/mr-email.png';
         document.querySelector('.logo-img').src = 'img/mr-email.png';
         if (document.body.classList.contains('show')) {
+            document.getElementById("mobile-email-filter-button").classList.toggle("change-filter");
             document.body.classList.toggle('show');
         }
         if (document.body.classList.contains('open')) {
+            document.querySelector(".mobile-menu-button").classList.toggle("change");
             document.body.classList.toggle('open');
         }
     },
@@ -95,6 +97,8 @@ export default {
         backBtn() {
             emailServices.query(this.filter)
                 .then(emails => {
+                    console.log(emails);
+                    
                     this.isShow = false;
                     this.emails = emails;
                     this.unreadEmails = this.checkEmailStatus();
@@ -102,21 +106,27 @@ export default {
                     this.checkedEmailsNum = this.checkedEmails.length;
                 })
         },
+        // renderEmails() {
+        //     emailServices.query(this.filter)
+        //         .then(emails => {
+        //             this.isShow = false;
+        //             this.emails = emails;
+        //             this.unreadEmails = this.checkEmailStatus();
+        //             this.checkedEmails = [];
+        //             this.checkedEmailsNum = 0;
+        //         })
+        // },
         openEmail(emailId) {
             emailServices.getEmailById(emailId).then(email => {
-                this.emailToShow = email;
-                this.isShow = true;
-                this.isCompose = false;
-                this.isReply = false;
-            })
-        },
-        starEmail(emailId) {
-            emailServices.getEmailById(emailId).then(email => {
-                email.isStar = !email.isStar
+                email.isRead = true;
                 emailServices.sendAnEmail(email)
                     .then(() => {
                         emailServices.query(this.filter)
                             .then(emails => {
+                                this.emailToShow = email;
+                                this.isShow = true;
+                                this.isCompose = false;
+                                this.isReply = false;
                                 this.emails = emails;
                                 this.unreadEmails = this.checkEmailStatus();
                                 this.checkedEmails = this.emails.filter(email => email.isCheck);
@@ -125,36 +135,22 @@ export default {
                     })
             })
         },
-        emailCheck(email) {
-            emailServices.sendAnEmail(email)
-                .then(() => {
-                    emailServices.query(this.filter)
-                        .then(emails => {
-                            this.emails = emails;
-                            this.checkedEmails = this.emails.filter(email => email.isCheck);
-                            this.checkedEmailsNum = this.checkedEmails.length;
-                            this.unreadEmails = this.checkEmailStatus();
-                        })
-                })
-        },
-        markAsUnread(emailId) {
+        changeEmail(emailId, change) {
             emailServices.getEmailById(emailId).then(email => {
-                email.isRead = false
-                emailServices.sendAnEmail(email)
-                    .then(() => {
-                        emailServices.query(this.filter)
-                            .then(emails => {
-                                this.emails = emails;
-                                this.unreadEmails = this.checkEmailStatus();
-                                this.checkedEmails = this.emails.filter(email => email.isCheck);
-                                this.checkedEmailsNum = this.checkedEmails.length;
-                            })
-                    })
-            })
-        },
-        markAsRead(emailId) {
-            emailServices.getEmailById(emailId).then(email => {
-                email.isRead = true
+                switch (change) {
+                    case 'star':
+                        email.isStar = !email.isStar;
+                        break;
+                    case 'check':
+                        email.isCheck = !email.isCheck;
+                        break;
+                    case 'unread':
+                        email.isRead = false;
+                        break;
+                    case 'read':
+                        email.isRead = true;
+                        break;
+                }
                 emailServices.sendAnEmail(email)
                     .then(() => {
                         emailServices.query(this.filter)
@@ -262,19 +258,13 @@ export default {
             })
         },
         toggleMenu() {
+            if (document.body.classList.contains('open')) {
+                document.getElementById("mobile-menu-button").classList.toggle("change");
+                document.body.classList.toggle('open');
+            }
             document.getElementById("mobile-email-filter-button").classList.toggle("change-filter");
             document.body.classList.toggle('show');
         }
-        // noteToEmail(note) {
-        //     this.$router.push('/email');
-        //     this.emailForReply = {
-        //         recipient: '',
-        //         sender: 'awesome@devil.com',
-        //         subject: note.title,
-        //         body: note.content,
-        //     }
-        //     this.isReply = true;
-        // }
     },
     components: {
         emailList,
@@ -284,6 +274,7 @@ export default {
         emailSort,
         emailCompose,
         emailReply,
-        emailDetails
+        emailDetails,
+        emailActions,
     }
 }

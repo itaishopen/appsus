@@ -33,7 +33,7 @@ export default {
                     <email-list v-if="!isReply && !isCompose && !isShow" :emails="emails" @deleteEmail="deleteMail" @restoreEmail="restoreEmail" @replyToEmail="replyToEmail" @changeEmail="changeEmail" @sendDraft="sendDraft" @openEmail="openEmail"></email-list>
                     <email-details v-if="isShow" :email="emailToShow" @backBtn="backBtn"></email-details>
                     <email-reply v-if="isReply && !isCompose && !isShow" @replyClose="replyClose" @sendEmail="replyClose" :emailForReply="emailForReply"></email-reply>
-                    <email-compose v-if="isCompose && !isReply && !isShow" @composeClose="composeClose"></email-compose>
+                    <email-compose v-if="isCompose && !isReply && !isShow" @composeClose="composeClose" @backBtn="backBtn"></email-compose>
                 </div>
             </div>
         </section>
@@ -58,6 +58,7 @@ export default {
 
     },
     created() {
+        if (!emailServices.checkLoggedUser()) return this.$router.push('/')
         emailServices.query(this.filter)
             .then(emails => {
                 this.emails = emails;
@@ -79,7 +80,7 @@ export default {
                 this.isReply = true;
                 console.log(this.emailForReply, note);
             })
-            
+
         }
         document.querySelector('title').innerHTML = 'Mr Email';
         document.getElementById('favicon').href = 'img/mr-email.png';
@@ -97,8 +98,6 @@ export default {
         backBtn() {
             emailServices.query(this.filter)
                 .then(emails => {
-                    console.log(emails);
-                    
                     this.isShow = false;
                     this.emails = emails;
                     this.unreadEmails = this.checkEmailStatus();
@@ -106,16 +105,6 @@ export default {
                     this.checkedEmailsNum = this.checkedEmails.length;
                 })
         },
-        // renderEmails() {
-        //     emailServices.query(this.filter)
-        //         .then(emails => {
-        //             this.isShow = false;
-        //             this.emails = emails;
-        //             this.unreadEmails = this.checkEmailStatus();
-        //             this.checkedEmails = [];
-        //             this.checkedEmailsNum = 0;
-        //         })
-        // },
         openEmail(emailId) {
             emailServices.getEmailById(emailId).then(email => {
                 email.isRead = true;
@@ -167,6 +156,7 @@ export default {
             this.filter = filter;
             this.isCompose = false;
             this.isReply = false;
+            this.isShow = false;
             emailServices.query(this.filter)
                 .then(emails => {
                     this.emails = emails;

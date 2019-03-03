@@ -17,9 +17,11 @@ export default {
     changeReadUnreadAll,
     unCheckAll,
     starAll,
+    checkLoggedUser,
 }
 
 const EMAIL_KEY = 'emailapp'
+const USER_KEY = 'loggedUser'
 var gFilter = 'inbox'
 var gSort = 'date';
 var isFirstSort = true;
@@ -30,27 +32,30 @@ function query(filter = 'inbox') {
     if (filter !== 'all') gFilter = filter;
     return utilService.loadFromStorage(EMAIL_KEY)
         .then(emails => {
-            if (!emails || emails.length === 0) {
-                emails = createEmails(EMAIL_KEY);
+            let loggedUser = checkLoggedUser();
+            if (!loggedUser) return Promise.resolve();
+            if (!emails || emails.length === 0 || !emails[loggedUser.userName]) {
+                if (!emails || emails.length === 0) emails = { [loggedUser.userName]: createEmails(EMAIL_KEY) };
+                if (!emails[loggedUser.userName]) emails[loggedUser.userName] = createEmails(EMAIL_KEY);
                 utilService.saveToStorage(EMAIL_KEY, emails).then();
             }
             switch (filter) {
                 case 'inbox':
-                    return emails.filter(email => !email.isSent && !email.isDel && !email.isDraft).sort(sortEmails);
+                    return emails[loggedUser.userName].filter(email => !email.isSent && !email.isDel && !email.isDraft).sort(sortEmails);
                 case 'star':
-                    return emails.filter(email => email.isStar).sort(sortEmails);
+                    return emails[loggedUser.userName].filter(email => email.isStar).sort(sortEmails);
                 case 'read-filter':
-                    return emails.filter(email => email.isRead && !email.isSent && !email.isDel && !email.isDraft).sort(sortEmails);
+                    return emails[loggedUser.userName].filter(email => email.isRead && !email.isSent && !email.isDel && !email.isDraft).sort(sortEmails);
                 case 'unread-filter':
-                    return emails.filter(email => !email.isRead && !email.isSent && !email.isDel && !email.isDraft).sort(sortEmails);
+                    return emails[loggedUser.userName].filter(email => !email.isRead && !email.isSent && !email.isDel && !email.isDraft).sort(sortEmails);
                 case 'sent':
-                    return emails.filter(email => email.isSent && !email.isDel).sort(sortEmails);
+                    return emails[loggedUser.userName].filter(email => email.isSent && !email.isDel).sort(sortEmails);
                 case 'draft':
-                    return emails.filter(email => email.isDraft && !email.isDel).sort(sortEmails);
+                    return emails[loggedUser.userName].filter(email => email.isDraft && !email.isDel).sort(sortEmails);
                 case 'trash':
-                    return emails.filter(email => email.isDel).sort(sortEmails);
+                    return emails[loggedUser.userName].filter(email => email.isDel).sort(sortEmails);
                 default:
-                    return emails;
+                    return emails[loggedUser.userName];
             }
         })
 }
@@ -88,15 +93,27 @@ function sortEmails(a, b) {
 }
 
 function getEmailById(emailId) {
-    return utilService.loadFromStorage(EMAIL_KEY).then(emails => { return emails.find(email => email.id === emailId) })
+    return utilService.loadFromStorage(EMAIL_KEY).then(emails => {
+        let loggedUser = checkLoggedUser();
+        if (!loggedUser) return Promise.resolve();
+        return emails[loggedUser.userName].find(email => email.id === emailId)
+    })
 }
 
 function getEmailIdx(emailId) {
-    return utilService.loadFromStorage(EMAIL_KEY).then(emails => { return emails.findIndex(email => email.id === emailId) })
+    return utilService.loadFromStorage(EMAIL_KEY).then(emails => {
+        let loggedUser = checkLoggedUser();
+        if (!loggedUser) return Promise.resolve();
+        return emails[loggedUser.userName].findIndex(email => email.id === emailId)
+    })
 }
 
 function getEmailByIdx(emailIdx) {
-    return utilService.loadFromStorage(EMAIL_KEY).then(emails => emails[emailIdx])
+    return utilService.loadFromStorage(EMAIL_KEY).then(emails => {
+        let loggedUser = checkLoggedUser();
+        if (!loggedUser) return Promise.resolve();
+        return emails[loggedUser.userName][emailIdx]
+    })
 }
 
 function backBtnAll(changeEmails) {
@@ -110,12 +127,14 @@ function backBtnAll(changeEmails) {
 function deleteAnEmail(emailId) {
     return utilService.loadFromStorage(EMAIL_KEY)
         .then(emails => {
+            let loggedUser = checkLoggedUser();
+            if (!loggedUser) return Promise.resolve();
             return getEmailIdx(emailId).then(emailIdx => {
-                if (!emails[emailIdx].isDel) {
-                    emails[emailIdx].isDel = true;
+                if (!emails[loggedUser.userName][emailIdx].isDel) {
+                    emails[loggedUser.userName][emailIdx].isDel = true;
                     utilService.saveToStorage(EMAIL_KEY, emails);
                 } else {
-                    emails.splice(emailIdx, 1);
+                    emails[loggedUser.userName].splice(emailIdx, 1);
                     utilService.saveToStorage(EMAIL_KEY, emails);
                 }
                 return Promise.resolve();
@@ -126,8 +145,10 @@ function deleteAnEmail(emailId) {
 function restoreAnEmail(emailId) {
     return utilService.loadFromStorage(EMAIL_KEY)
         .then(emails => {
+            let loggedUser = checkLoggedUser();
+            if (!loggedUser) return Promise.resolve();
             return getEmailIdx(emailId).then(emailIdx => {
-                emails[emailIdx].isDel = false;
+                emails[loggedUser.userName][emailIdx].isDel = false;
                 utilService.saveToStorage(EMAIL_KEY, emails);
                 return Promise.resolve();
             });
@@ -135,45 +156,52 @@ function restoreAnEmail(emailId) {
 }
 
 function restoreAllCheckedEmail(emailsToRestore) {
+    let loggedUser = checkLoggedUser();
+    if (!loggedUser) return Promise.resolve();
     return utilService.loadFromStorage(EMAIL_KEY).then(emails => {
         emailsToRestore.forEach(email => {
-            let emailIdx = emails.findIndex(currEmail => email.id === currEmail.id)
-            
-                    emails[emailIdx].isCheck = false;
-                    emails[emailIdx].isDel = false;
+            let emailIdx = emails[loggedUser.userName].findIndex(currEmail => email.id === currEmail.id)
+            emails[loggedUser.userName][emailIdx].isCheck = false;
+            emails[loggedUser.userName][emailIdx].isDel = false;
         })
         return utilService.saveToStorage(EMAIL_KEY, emails)
     })
 }
 
 function changeReadUnreadAll(emailsToChange, changeTo) {
+    let loggedUser = checkLoggedUser();
+    if (!loggedUser) return Promise.resolve();
     return utilService.loadFromStorage(EMAIL_KEY).then(emails => {
         emailsToChange.forEach(email => {
-            let emailIdx = emails.findIndex(currEmail => email.id === currEmail.id)
-            
-                    emails[emailIdx].isCheck = false;
-                    if (changeTo === 'read') emails[emailIdx].isRead = true;
-                    else emails[emailIdx].isRead = false;
+            let emailIdx = emails[loggedUser.userName].findIndex(currEmail => email.id === currEmail.id)
+
+            emails[loggedUser.userName][emailIdx].isCheck = false;
+            if (changeTo === 'read') emails[loggedUser.userName][emailIdx].isRead = true;
+            else emails[loggedUser.userName][emailIdx].isRead = false;
         })
         return utilService.saveToStorage(EMAIL_KEY, emails)
     })
 }
 function unCheckAll(emailsToUnCheck) {
+    let loggedUser = checkLoggedUser();
+    if (!loggedUser) return Promise.resolve();
     return utilService.loadFromStorage(EMAIL_KEY).then(emails => {
         emailsToUnCheck.forEach(email => {
-            let emailIdx = emails.findIndex(currEmail => email.id === currEmail.id)
-                    emails[emailIdx].isCheck = false;
+            let emailIdx = emails[loggedUser.userName].findIndex(currEmail => email.id === currEmail.id)
+            emails[loggedUser.userName][emailIdx].isCheck = false;
         })
         return utilService.saveToStorage(EMAIL_KEY, emails)
     })
 }
 function starAll(emailsToStar, action) {
+    let loggedUser = checkLoggedUser();
+    if (!loggedUser) return Promise.resolve();
     return utilService.loadFromStorage(EMAIL_KEY).then(emails => {
         emailsToStar.forEach(email => {
-            let emailIdx = emails.findIndex(currEmail => email.id === currEmail.id)
-                    emails[emailIdx].isCheck = false;
-                    if (action) emails[emailIdx].isStar = true;
-                    else emails[emailIdx].isStar = false;
+            let emailIdx = emails[loggedUser.userName].findIndex(currEmail => email.id === currEmail.id)
+            emails[loggedUser.userName][emailIdx].isCheck = false;
+            if (action) emails[loggedUser.userName][emailIdx].isStar = true;
+            else emails[loggedUser.userName][emailIdx].isStar = false;
 
         })
         return utilService.saveToStorage(EMAIL_KEY, emails)
@@ -181,20 +209,28 @@ function starAll(emailsToStar, action) {
 }
 
 function sendAnEmail(emailData) {
+    let loggedUser = checkLoggedUser();
+    if (!loggedUser) return Promise.resolve();
     return utilService.loadFromStorage(EMAIL_KEY).then(emails => {
         if (emailData.id) {
             return getEmailIdx(emailData.id).then(emailIdx => {
-                emails.splice(emailIdx, 1, emailData);
-                console.log(emails);
-                utilService.saveToStorage(EMAIL_KEY, emails).then(() => {
-                    utilService.loadFromStorage(EMAIL_KEY).then(emails => console.log(emails));
-                });
+                emails[loggedUser.userName].splice(emailIdx, 1, emailData);
+                utilService.saveToStorage(EMAIL_KEY, emails).then();
                 return Promise.resolve()
             });
         } else {
             let newEmail = createAnEmail(emailData);
-            newEmail.isSent = emailData.isSent;
-            emails.push(newEmail)
+            // newEmail.isSent = emailData.isSent;
+            emails[loggedUser.userName].push(newEmail)
+            let senderMail = createAnEmail(emailData)
+            console.log(senderMail);
+            let recipientUserName = senderMail.recipient.split('@')[0]
+            // let mailSender = senderMail.sender
+            // let mailRecipient = senderMail.recipient
+            // senderMail.sender = mailRecipient;
+            // senderMail.recipient = mailSender
+            senderMail.isSent = false;
+            if(emails[recipientUserName]) emails[recipientUserName].push(senderMail);
             utilService.saveToStorage(EMAIL_KEY, emails).then()
             return Promise.resolve()
         }
@@ -222,15 +258,17 @@ function createAnEmail(email) {
 }
 
 function delAllFolderEmails(emailsToDel) {
+    let loggedUser = checkLoggedUser();
+    if (!loggedUser) return Promise.resolve();
     return utilService.loadFromStorage(EMAIL_KEY).then(emails => {
         emailsToDel.forEach(email => {
-            let emailIdx = emails.findIndex(currEmail => email.id === currEmail.id)
+            let emailIdx = emails[loggedUser.userName].findIndex(currEmail => email.id === currEmail.id)
             if (email.isCheck) {
                 if (email.isDel) {
-                    emails.splice(emailIdx, 1);
+                    emails[loggedUser.userName].splice(emailIdx, 1);
                 } else {
-                    emails[emailIdx].isCheck = false;
-                    emails[emailIdx].isDel = true;
+                    emails[loggedUser.userName][emailIdx].isCheck = false;
+                    emails[loggedUser.userName][emailIdx].isDel = true;
                 }
             }
         })
@@ -238,12 +276,18 @@ function delAllFolderEmails(emailsToDel) {
     })
 }
 
+function checkLoggedUser() {
+    return utilService.loadFromSessionStorage(USER_KEY)
+}
+
 
 function createEmails() {
+    let loggedUser = checkLoggedUser();
+    if (!loggedUser) return Promise.resolve();
     return [
         {
             id: utilService.makeId(),
-            recipient: 'awesome@devil.com',
+            recipient: `${loggedUser}@devil.com`,
             sender: 'yanai@devil.com',
             subject: 'Welcome to devil mail!',
             body: 'We welcome you to devil mail, the new email service by Yanai and Itai. we welcome you with open hands and hope you will spread the word to your friends and family, don\'t forget to use our other apps, best regards Yanai Avnet',
@@ -261,7 +305,7 @@ function createEmails() {
         },
         {
             id: utilService.makeId(),
-            recipient: 'awesome@devil.com',
+            recipient: `${loggedUser}@devil.com`,
             sender: 'itai@devil.com',
             subject: 'How to get started with your new Email',
             body: 'We want to welcome you again to our new service, if you have any questions you\'re welcome to reply to this email and I will be more then happy to help you out. hope you enjoy our new devil mail, best regards Itai Shopen',
@@ -280,7 +324,7 @@ function createEmails() {
         {
             id: utilService.makeId(),
             recipient: 'sheron@gmail.com',
-            sender: 'awesome@devil.com',
+            sender: `${loggedUser}@devil.com`,
             subject: 'Best email service ever!!!!',
             body: 'You must try this new email service it\'s the best',
             isRead: false,
@@ -297,7 +341,7 @@ function createEmails() {
         },
         {
             id: utilService.makeId(),
-            recipient: 'awesome@devil.com',
+            recipient: `${loggedUser}@devil.com`,
             sender: 'AlyusiIslassis@NigerianPrince.com',
             subject: 'Your help is needed!!!',
             body: `Dear Sir:

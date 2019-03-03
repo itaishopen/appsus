@@ -5,25 +5,25 @@ export default {
     template: `
     <div class="email-actions-btns flex space-between" @submit.prevent="setSortBy">            
             <div class="action-btn flex">
-                <button class="multipal-delete fas fa-arrow-left fa-lg" @click="backAll"> {{checkedEmails.length}}</button>
+                <button class="action-multipal flex space-around multipal-delete" @click="backAll"><i class="fas fa-arrow-left fa-lg"></i><span class="checked-emails-length">{{checkedEmails.length}}</span></button>
             </div>
             <div class="action-btn flex">
-                <button class="multipal-delete fas fa-trash-alt fa-lg" @click="deleteAll"></button>
+                <button class="action-multipal multipal-delete fas fa-trash-alt fa-lg" @click="deleteAll"></button>
             </div>
             <div class="action-btn flex">
-                <button class="multipal-restore fas fa-trash-restore-alt fa-lg" @click="restoreAll"></button>
+                <button class="action-multipal multipal-restore fas fa-trash-restore-alt fa-lg" @click="restoreAll"></button>
             </div>
             <div class="action-btn flex">
-                <button class="multipal-mark-as-read fas fa-envelope-open fa-lg" @click="markAsReadAll"></button>
+                <button class="action-multipal multipal-mark-as-read fas fa-envelope-open fa-lg" @click="markAsReadAll"></button>
             </div>
             <div class="action-btn flex">
-                <button class="multipal-mark-as-unread fas fa-envelope fa-lg" @click="markAsUnreadAll"></button>
+                <button class="action-multipal multipal-mark-as-unread fas fa-envelope fa-lg" @click="markAsUnreadAll"></button>
             </div>     
             <div class="action-btn flex">
-                <button v-if="unStarNum > 0" class="multipal-stars fas fa-star fa-lg" @click="starAll"></button>
+                <button v-if="unStarNum > 0" class="action-multipal multipal-stars fas fa-star fa-lg" @click="starAll"></button>
             </div>     
             <div class="action-btn flex">
-                <button v-if="starNum > 0" class="multipal-stars far fa-star fa-lg" @click="unStarAll"></button>
+                <button v-if="starNum > 0" class="action-multipal multipal-stars far fa-star fa-lg" @click="unStarAll"></button>
             </div>     
         </div>
     `,

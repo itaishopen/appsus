@@ -11,7 +11,8 @@ export default {
         </div>
         <div  class="email-link flex" @click="openEmail(email.id)">
           <div class="text-container flex column justify-center">
-              <div class="email-preview-sender">{{email.sender}}</div>
+              <div v-if="!email.isSent" class="email-preview-sender">{{email.sender}}</div>
+              <div v-if="email.isSent" class="email-preview-sender">{{email.recipient}}</div>
               <div class="email-preview-subject">{{email.subject}}</div>
           </div>
           <div class="email-preview-sentAt">{{email.sentAt.timeToShow}}</div>
@@ -36,8 +37,11 @@ export default {
     starColor() {
          return "#"+((1<<24)*Math.random()|0).toString(16);
     },
-    firstLetter() {      
-      if (this.email.sender) return this.email.sender.charAt(0).toUpperCase();
+    firstLetter() {
+      if (this.email.sender) {
+        if (!this.email.isSent) return this.email.sender.charAt(0).toUpperCase();
+        return this.email.recipient.charAt(0).toUpperCase();
+      }
       return '?'
     }
 },

@@ -98,6 +98,8 @@ export default {
         backBtn() {
             emailServices.query(this.filter)
                 .then(emails => {
+                    this.isCompose = false;
+                    this.isReply = false;
                     this.isShow = false;
                     this.emails = emails;
                     this.unreadEmails = this.checkEmailStatus();

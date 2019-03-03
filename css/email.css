@@ -157,7 +157,7 @@ button {
 }
 
 .email-filter .tab input[type=radio]:checked~label {
-    background: rgba(128, 128, 128, 0.5);
+    background: rgba(128, 128, 128, 0.7);
     border-bottom-right-radius: 25px;
     border-top-right-radius: 25px;
 }

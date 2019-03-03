@@ -6,6 +6,10 @@
     padding: 30px;
 }
 
+.keep-app a {
+    color: inherit;
+}
+
 .search-notes {
     position: relative;
     max-width: 600px;

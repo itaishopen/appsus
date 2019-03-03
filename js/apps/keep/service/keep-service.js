@@ -171,6 +171,6 @@ function _loadNotes() {
 function _createTodos(todoList) {
     if (!todoList) return [];
     todoList = todoList.filter(todo => todo);
-    console.log(todoList);
+    // console.log(todoList);
     return todoList.map(todo => ({ id: utilService.makeId(), todoTxt: todo, isDone: false }))
 }

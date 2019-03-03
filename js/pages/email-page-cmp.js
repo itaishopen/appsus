@@ -69,7 +69,7 @@ export default {
         let noteId = this.$route.params.noteId
         if (noteId) {
             keepService.getNotes().then(notes => {
-                let note = notes.filter(note => note.id === noteId)
+                let note = notes.filter(note => note.id === noteId)[0]
                 this.emailForReply = {
                     recipient: '',
                     sender: 'awesome@devil.com',
@@ -77,10 +77,10 @@ export default {
                     body: note.content,
                 }
                 this.isReply = true;
+                console.log(this.emailForReply, note);
             })
+            
         }
-    },
-    mounted: function () {
         document.querySelector('title').innerHTML = 'Mr Email';
         document.getElementById('favicon').href = 'img/mr-email.png';
         document.querySelector('.logo-img').src = 'img/mr-email.png';

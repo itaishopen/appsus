@@ -110,11 +110,10 @@ input::placeholder {
     margin-bottom: 15px;
     border-radius: 5px;
     padding: 10px;
-    transition: background-color 1.2s
+    transition: background-color .3s
 }
 
 .keep-note.flash {
-    transition: none;
     background-color: gold !important;
 }
 

@@ -140,22 +140,6 @@ function updateColor(noteId, color) {
     })
 }
 
-// function sendEmail(noteId) {
-//     return _loadNotes()
-//     .then(notes => {
-//         notes = notes[utilService.loadFromSessionStorage('loggedUser').userName]
-//         let noteIdx = notes.findIndex(note => note.id === noteId);
-//         let email = {
-//             recipient: '',
-//             sender: 'awesome@devil.com',
-//             subject: notes[noteIdx].header,
-//             body: notes[noteIdx].content,
-//         }
-//         console.log(email);
-        
-//     })
-// }
-
 function togglePin(noteId) {
     return _loadNotes()
         .then(notes => {
@@ -197,7 +181,6 @@ function _loadNotes() {
 function _createTodos(todoList) {
     if (!todoList) return [];
     todoList = todoList.filter(todo => todo);
-    // console.log(todoList);
     return todoList.map(todo => ({ id: utilService.makeId(), todoTxt: todo, isDone: false }))
 }
 

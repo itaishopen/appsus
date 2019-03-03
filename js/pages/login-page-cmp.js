@@ -26,7 +26,14 @@ export default {
             userService.login(this.userName, this.password)
                 .then(res => {
                     console.log(res);
-                    if (res === 'Logged Succesfully') this.$router.push('/');
+                    if (res === 'Logged Succesfully') {
+                        userService.getUserPreferences(this.userName)
+                            .then(preferences => {
+                                document.body.style.backgroundImage = `url(${preferences.backgroundSrc})`
+                            })
+                        
+                        this.$router.push('/');
+                    }
                     eventBus.$emit('userChanged');
                 })
         }

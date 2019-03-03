@@ -4,12 +4,15 @@ export default {
     login,
     logOut,
     signIn,
-    checkLoggedUser
+    getUserPreferences,
+    setUserPreferences,
+    checkLoggedUser,
+    createPreferences
 }
 
 var dummyUsers = [
-    {userName: 'Yanai_Avnet', password: 'Yanai1', preferences: null},
-    {userName: 'Itai_Shopen', password: 'Itai1', preferences: null}
+    {userName: 'yanai_avnet', password: 'Yanai1', preferences: {fullName: 'Yanai Avnet'}},
+    {userName: 'itai_shopen', password: 'Itai1', preferences: {fullName: 'Itai Shopen'}}
 ]
 
 _createUsers();
@@ -19,10 +22,11 @@ function _createUsers() {
     if (!savedUsers) utilService.saveToStorageSync('users', dummyUsers) 
 }
 
-function login(userName, password) {    
+function login(userName, password) {
+    userName = userName.toLowerCase();
     return utilService.loadFromStorage('users')
         .then(users => {
-            let user = users.find(user => user.userName === userName);            
+            let user = users.find(user => user.userName.toLowerCase() === userName);            
             if (!user) return 'noUser';
             if (user.password !== password) return 'wrongPassword';
             utilService.saveToSessionStorage('loggedUser', user);
@@ -34,11 +38,11 @@ function logOut() {
     utilService.saveToSessionStorage('loggedUser', null);
 }
 
-function signIn(userName, password) {
+function signIn(userName, password, fullName) {
     return utilService.loadFromStorage('users')
         .then(users => {
             if (users.some(user => user.userName === userName)) return 'User Name Unavailabe';
-            let user = {userName, password, preferences: null};
+            let user = {userName, password, preferences: {fullName}};
             users.push(user);
             utilService.saveToSessionStorage('loggedUser', user);
             return _saveUsers(users)
@@ -53,4 +57,29 @@ function checkLoggedUser() {
 function _saveUsers(users) {
     return utilService.saveToStorage('users', users)
         .then(() => console.log('saved users'));
+}
+
+function _loadUsers() {
+    return utilService.loadFromStorage('users')
+        .then(users => users)
+}
+
+function getUserPreferences(userName) {
+    return _loadUsers()
+        .then(users => {
+            return users.find(user => user.userName === userName).preferences;
+        })
+}
+
+function createPreferences(fullName, avatarSrc, backgroundSrc) {
+    return { fullName, avatarSrc, backgroundSrc }
+}
+
+function setUserPreferences(userName, preferences) {
+    return _loadUsers()
+        .then(users => {
+            let userIdx = users.findIndex(user => user.userName === userName);
+            users[userIdx].preferences = preferences;
+            _saveUsers(users)
+        })
 }

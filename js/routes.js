@@ -15,12 +15,8 @@ export default [
     // { path: '/book/:bookId', component: bookDetails },
     // { path: '/bookReview/:bookId', component: reviewAdd },
     { path: '/miss-keep', component: keepApp },
-    { 
-        path: '/email',
-        name: 'email', 
-        component: mailApp,
-        params: true
-     },
+    { path: '/email/:noteId?', name: 'email', component: mailApp },
+    // { path: '/email', component: mailApp, props: (route) => ({ query: route.query.q }) },
     { path: '/email/details/:emailId', component: mailDetails },
     { path: '/book', component: bookApp },
     { path: '/book/:bookId', component: bookDetails },

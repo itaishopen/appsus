@@ -61,6 +61,10 @@ export default {
                 this.unreadEmails = this.checkEmailStatus();
                 eventBus.$emit(EVENT_FEEDBACK, { txt: 'Welcome to your inbox!', link: '' }, 'welcome')
             });
+        
+
+    },
+    mounted: function () {
         if (this.note) {
             this.emailForReply = {
                 recipient: '',
@@ -68,11 +72,10 @@ export default {
                 subject: this.note.header,
                 body: this.note.content,
             }
+            
             this.isReply = true;
         }
-
-    },
-    mounted: function () {
+        console.log(this.$route.params.noteId);
         document.querySelector('title').innerHTML = 'Mr Email';
         document.getElementById('favicon').href = 'img/mr-email.png';
         document.querySelector('.logo-img').src = 'img/mr-email.png';

@@ -15,7 +15,7 @@ export default {
             <span>
                 <label for="background">Background:</label>
                 <input type="text" name="background" v-model="backgroundSrc" style="display: none">
-                <button @click="backgroundSelected('')">X</button>
+                <button @click="backgroundSelected('')"><i class="fas fa-times"></i></button>
             </span>
             <background-picker @background-selected="backgroundSelected"></background-picker>
             <button type="submit">Submit</button>
@@ -35,8 +35,6 @@ export default {
             console.log(backgroundSrc);
             document.body.style.backgroundImage = `url(${backgroundSrc})`
             document.body.style.backgroundSize = `cover`
-            document.body.style.height = `100vh`
-            document.body.style.overflow = `hidden`
             this.backgroundSrc = backgroundSrc;
         },
         submitPreferences() {

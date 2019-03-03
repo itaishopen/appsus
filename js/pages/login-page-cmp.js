@@ -27,9 +27,12 @@ export default {
                 .then(res => {
                     console.log(res);
                     if (res === 'Logged Succesfully') {
+                        console.log(this.userName);
                         userService.getUserPreferences(this.userName)
                             .then(preferences => {
-                                document.body.style.backgroundImage = `url(${preferences.backgroundSrc})`
+                                let backgroundSrc = preferences.backgroundSrc
+                                console.log(backgroundSrc);
+                                if (backgroundSrc) document.body.style.backgroundImage = 'url(' + backgroundSrc + ')'
                             })
                         
                         this.$router.push('/');

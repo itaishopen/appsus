@@ -11,8 +11,8 @@ export default {
 }
 
 var dummyUsers = [
-    {userName: 'yanai_avnet', password: 'Yanai1', preferences: {fullName: 'Yanai Avnet'}},
-    {userName: 'itai_shopen', password: 'Itai1', preferences: {fullName: 'Itai Shopen'}}
+    {userName: 'yanai_avnet', password: 'Yanai1', preferences: {fullName: 'Yanai Avnet', avatarSrc: 'https://api.adorable.io/avatars/285/yanai_avnet.png'}},
+    {userName: 'itai_shopen', password: 'Itai1', preferences: {fullName: 'Itai Shopen', avatarSrc: 'https://api.adorable.io/avatars/285/itai_shopen.png'}}
 ]
 
 _createUsers();
@@ -42,7 +42,7 @@ function signIn(userName, password, fullName) {
     return utilService.loadFromStorage('users')
         .then(users => {
             if (users.some(user => user.userName === userName)) return 'User Name Unavailabe';
-            let user = {userName, password, preferences: {fullName}};
+            let user = {userName, password, preferences: {fullName, avatarSrc: `https://api.adorable.io/avatars/285/${userName}.png`}};
             users.push(user);
             utilService.saveToSessionStorage('loggedUser', user);
             return _saveUsers(users)
@@ -67,6 +67,9 @@ function _loadUsers() {
 function getUserPreferences(userName) {
     return _loadUsers()
         .then(users => {
+            userName = userName.toLowerCase();
+            console.log(users.find(user => user.userName.toLowerCase() === userName));
+            
             return users.find(user => user.userName === userName).preferences;
         })
 }

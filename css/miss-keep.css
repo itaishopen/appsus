@@ -47,6 +47,8 @@
     display: flex;
     align-items: center;
     background-color: #f5f5f5;
+    border: 1px solid rgb(129, 129, 129);
+    box-shadow: 0 0 2px gray, 1px 1px 2px rgb(197, 197, 197)
 }
 
 .search-input>* {
@@ -60,9 +62,9 @@
     margin: 0 auto 30px;
     padding: 10px;
     max-width: 600px;
-    border: 1px solid rgb(129, 129, 129);
     border-radius: 10px;
-    box-shadow: 0 0 2px gray, 2px 2px 2px rgb(197, 197, 197)
+    border: 1px solid rgb(129, 129, 129);
+    box-shadow: 0 0 2px gray, 1px 1px 2px rgb(197, 197, 197)
 }
 
 .add-note input {
@@ -103,6 +105,11 @@ input::placeholder {
 .list-header {
     margin-bottom: 20px;
     font-size: 1.3em;
+    background-color: rgba(185, 185, 185, 0.747);
+    border-radius: 5px;
+    border: 1px solid gray;
+    display: inline-block;
+    padding: 5px;
 }
 
 .keep-note {
@@ -115,6 +122,7 @@ input::placeholder {
 
 .keep-note.flash {
     background-color: gold !important;
+    outline: 3px solid blue;
 }
 
 @media (min-width: 1025px) {

@@ -19,6 +19,7 @@ export default {
             :loggedUser="loggedUser"
             @logOut="logOut"
             @login="login"
+            @closeMenu="toggleMenu"
             ></user-menu>
     </section>
     `,

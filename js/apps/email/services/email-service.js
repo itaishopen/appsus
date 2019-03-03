@@ -32,6 +32,8 @@ function query(filter = 'inbox') {
             switch (filter) {
                 case 'inbox':
                     return emails.filter(email => !email.isSent && !email.isDel && !email.isDraft).sort(sortEmails);
+                case 'star':
+                    return emails.filter(email => email.isStar).sort(sortEmails);
                 case 'read-filter':
                     return emails.filter(email => email.isRead && !email.isSent && !email.isDel && !email.isDraft).sort(sortEmails);
                 case 'unread-filter':
@@ -162,10 +164,12 @@ function delAllFolderEmails(emailsToDel) {
     return utilService.loadFromStorage(EMAIL_KEY).then(emails => {
         emailsToDel.forEach(email => {
             let emailIdx = emails.findIndex(currEmail => email.id === currEmail.id)
-            if (email.isDel) {
-                emails.splice(emailIdx, 1);
-            } else {
-                emails[emailIdx].isDel = true;
+            if(email.isCheck) {    
+                if (email.isDel) {
+                    emails.splice(emailIdx, 1);
+                } else {
+                    emails[emailIdx].isDel = true;
+                }
             }
         })
         return utilService.saveToStorage(EMAIL_KEY, emails)
@@ -186,6 +190,7 @@ function createEmails() {
             isDel: false,
             isDraft: false,
             isCheck: false,
+            isStar: false,
             sentAt: {
                 timeToShow: moment('20040401, 12:01 am', 'YYYYMMDD, h:mm a').format('lll'),
                 timestamp: 1080777660,
@@ -203,6 +208,7 @@ function createEmails() {
             isDel: false,
             isDraft: false,
             isCheck: false,
+            isStar: false,
             sentAt: {
                 timeToShow: moment('20040401 12:03 am', 'YYYYMMDD, h:mm a').format('lll'),
                 timestamp: 1080777780,
@@ -220,6 +226,7 @@ function createEmails() {
             isDel: false,
             isDraft: false,
             isCheck: false,
+            isStar: false,
             sentAt: {
                 timeToShow: moment('20040402 12:03 pm', 'YYYYMMDD, h:mm a').format('lll'),
                 timestamp: 1080907380,
@@ -251,6 +258,7 @@ function createEmails() {
             isDel: true,
             isDraft: false,
             isCheck: false,
+            isStar: true,
             sentAt: {
                 timeToShow: moment('20040402 12:03 pm', 'YYYYMMDD, h:mm a').format('lll'),
                 timestamp: 1080907380,

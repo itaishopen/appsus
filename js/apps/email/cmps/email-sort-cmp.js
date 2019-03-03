@@ -15,7 +15,7 @@ export default {
                 <label for="sender">Sender</label>
             </div>
             <div class="tab flex">
-                <input type="button" id="read" value="name" v-model="name" @click="setSortBy(name)">
+                <button type="button" id="read" value="name" @click="setSortBy(name)">{{name}}</button>
             </div>
         </form>
     `,

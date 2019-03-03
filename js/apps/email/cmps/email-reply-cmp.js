@@ -1,16 +1,20 @@
+import emailServices from '../services/email-service.js'
+
 export default {
     props: ['emailForReply'],
     template: `
         <section class="email-reply flex column">
-            <form class="reply-container flex column" @submit.prevent="sendEmail">
-                <button class="cancel-reply-btn" type="button" @click="replyClose"><i class="fas fa-times"></i></button>
-                <input type="text" class="reply-email-from" placeholder="To" v-model="email.recipient" disabled>
-                <input type="text" class="reply-email-to" placeholder="From" v-model="email.sender">
-                <input type="text" class="reply-email-subject" placeholder="Subject" v-model="email.subject">
-            
+            <div class="reply-action-btns">
+                <button @click="replyClose" class="reply-action-btn fas fa-arrow-circle-left fa-lg"></button>
+                <button class="reply-action-btn close-reply fas fa-file-alt fa-lg" @click="replyClose"></button>
+                <button class="reply-action-btn send-email-btn fas fa-paper-plane fa-lg" type="submit"></button>
+            </div>
+            <form class="reply-email-container flex column" @submit.prevent="sendEmail">
+                <span class="reply-form reply-form-from">From: <input type="text" class="compose-email-from" placeholder="From" v-model="email.sender" disabled></span>
+                <span class="reply-form reply-form-to">To: <input type="text" class="compose-email-to" placeholder="To" v-model="email.recipient"></span> 
+                <span class="reply-form reply-form-subject">Subject: <input type="text" class="compose-email-subject" placeholder="Subject" v-model="email.subject"></span>
                 <div class="reply-email-body">
-                    <textarea autofocus cols="43" rows="10" placeholder="Message body" v-model="email.body"></textarea>
-                    <button class="send-reply-btn" type="submit">Send</button>
+                    <textarea  cols="43" rows="10" placeholder="Message body" v-model="email.body"></textarea>
                 </div>
             </form>
         </section>
@@ -19,13 +23,17 @@ export default {
         return {
             email: {
                 recipient: this.emailForReply.sender,
-                sender: this.emailForReply.recipient,
+                sender: '',
                 subject: this.emailForReply.subject,
                 body: this.emailForReply.body,
                 isDraft: false,
               }
         }
     },
+    created() {
+        let user = emailServices.checkLoggedUser();
+        this.email.sender = `${user.userName}@devil.com`;
+      },
     methods: {
         sendEmail() {
             this.email.isSent = true;

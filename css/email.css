@@ -163,6 +163,7 @@ button {
 
 .email-preview {
     height: 100%;
+    width: 100%;
 }
 
 .email-preview-letter {
@@ -239,6 +240,10 @@ button {
 .tab label:hover {
     cursor: pointer;
     color: #52a3c5;
+}
+
+.email-preview-letter-checkbox {
+    display: none;
 }
 
 @media (max-width: 750px) {

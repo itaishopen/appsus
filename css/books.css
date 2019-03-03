@@ -23,7 +23,7 @@
     justify-content: center;
 }
 
-.book-app input {
+.book-filter input {
     padding: 5px;
     margin: 3px 5px 3px 5px;
 }
@@ -444,10 +444,10 @@ button {
     background-color: #7b5d37;
     color: wheat;
 }
-.form-header {
+.review-book .form-header {
     margin: 0 0 10px;
 }
-.books-app form input, .books-app select, .books-app button, .books-app textarea {
+.review-book form input,select,button,textarea {
     margin:0 0 10px;
 }
 

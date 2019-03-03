@@ -13,7 +13,7 @@ export default {
             <img :src="imgSrc" class="note-img">
             <div class="note-controls">
                 <button class="icon-btn" @click="deleteNote" @mousedown.stop=""><i class="fas fa-trash-alt"></i></button>
-                <button class="icon-btn" @click="" @mousedown.stop=""><i class="fas fa-share"></i></button>
+                <button class="icon-btn" @click="" @mousedown.stop=""><i class="fas fa-paper-plane"></i></button>
                 <input type="color" v-model="color" @change="updateColor" style="display: none" ref="colorPicker">
                 <button class="icon-btn" @click="chooseColor" @mousedown.stop=""><i class="fas fa-palette"></i></button>
             </div>

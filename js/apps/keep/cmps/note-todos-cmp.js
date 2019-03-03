@@ -20,7 +20,7 @@ export default {
             <div class="note-controls">
                 <button @click.stop="addTodo" @mousedown.stop="" class="icon-btn"><i class="fas fa-plus"></i></button>
                 <button class="icon-btn" @click="deleteNote" @mousedown.stop=""><i class="fas fa-trash-alt"></i></button>
-                <button class="icon-btn" @click="" @mousedown.stop=""><i class="fas fa-share"></i></button>
+                <button class="icon-btn" @click="" @mousedown.stop=""><i class="fas fa-paper-plane"></i></button>
                 <input type="color" v-model="color" @change="updateColor" style="display: none" ref="colorPicker">
                 <button class="icon-btn" @click="chooseColor" @mousedown.stop=""><i class="fas fa-palette"></i></button>
             </div>

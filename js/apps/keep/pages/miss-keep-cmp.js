@@ -60,8 +60,7 @@ export default {
                     @new-todo="newTodo"
                     @note-txt-changed="noteTxtChanged"
                     @delete-note="deleteNote"
-                    @color-changed="updateColor"
-                    @sendAsEmail='emailNote'>
+                    @color-changed="updateColor">
                 </component>
             </masonry>
         </ul>

@@ -16,10 +16,13 @@ new Vue({
         loggedUser
     },
     mounted() {
-        let userName = userService.checkLoggedUser().userName
+        let user = userService.checkLoggedUser()
+        if (user) {
+        let userName = user.userName
         userService.getUserPreferences(userName)
             .then(preferences => {
                 document.body.style.backgroundImage = `url(${preferences.backgroundSrc})`
             })
+        }
     }
 })

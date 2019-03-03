@@ -170,11 +170,11 @@ export default {
             let selectedNote = this.$refs[noteId][0].$el
             selectedNote.scrollIntoView();
             selectedNote.classList.add('flash')
-            setTimeout(() => selectedNote.classList.remove('flash'), 100)
+            setTimeout(() => selectedNote.classList.remove('flash'), 200)
             setTimeout(() => selectedNote.classList.add('flash'), 400)
-            setTimeout(() => selectedNote.classList.remove('flash'), 500)
+            setTimeout(() => selectedNote.classList.remove('flash'), 600)
             setTimeout(() => selectedNote.classList.add('flash'), 800)
-            setTimeout(() => selectedNote.classList.remove('flash'), 900)
+            setTimeout(() => selectedNote.classList.remove('flash'), 1000)
         });
         eventBus.$on('started-editing', () => this.isEditing = true)
         eventBus.$on('stopped-editing', () => this.isEditing = false)

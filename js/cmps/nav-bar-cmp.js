@@ -1,4 +1,9 @@
+import loggedUser from '../cmps/logged-user-cmp.js'
+
 export default {
+    components: {
+        loggedUser
+    },
     template: `
     <section class="nav-bar" id="nav-bar">
         <div id="mobile-menu-button" class="mobile-menu-button" @click="toggleMenu">
@@ -6,7 +11,8 @@ export default {
             <div class="bar2"></div>
             <div class="bar3"></div>
         </div>
-        <div class="nav flex">
+        <div class="nav flex align-center">
+        <logged-user></logged-user>
             <router-link exact to="/">Home</router-link> <span class="line">|</span></span>
             
                 <router-link exact to="/miss-keep"><span class="nav-link-btn">Miss Keep</span></router-link> <span class="line">|</span>

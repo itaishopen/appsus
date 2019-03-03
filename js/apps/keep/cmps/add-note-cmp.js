@@ -96,9 +96,7 @@ export default {
                 case 'vid': return 'vid embed link'
             }
         },
-        isDark() {
-            console.log(utilService.getBrightness(this.color) < 50);
-            
+        isDark() {            
             return utilService.getBrightness(this.color) < 50;
         }
     },

@@ -3,6 +3,8 @@ export default {
     makeId,
     saveToStorage,
     loadFromStorage,
+    loadFromSessionStorage,
+    saveToSessionStorage,
     saveToStorageSync,
     loadFromStorageSync,
     getBrightness,
@@ -16,6 +18,14 @@ function saveToStorage(key, value) {
  
 function loadFromStorage(key) {
     return Promise.resolve(JSON.parse(localStorage.getItem(key)));
+}
+
+function saveToSessionStorage(key, value) {
+    sessionStorage.setItem(key, JSON.stringify(value));
+}
+ 
+function loadFromSessionStorage(key) {
+    return JSON.parse(sessionStorage.getItem(key));
 }
 
 function getRandomIntInclusive(min, max) {

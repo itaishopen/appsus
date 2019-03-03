@@ -1,5 +1,6 @@
 import routes from './routes.js'
 import navBar from './cmps/nav-bar-cmp.js'
+import loggedUser from './cmps/logged-user-cmp.js'
 // import userMsg from './cmps/user-msg-cmp.js'
 
 Vue.use(VueRouter);
@@ -11,6 +12,7 @@ new Vue({
     el: '#app',
     components: {
         navBar,
+        loggedUser
         // userMsg
-    }
+    },
 })

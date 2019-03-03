@@ -6,10 +6,14 @@ import reviewAdd from './apps/books/pages/review-add-cmp.js'
 import keepApp from './apps/keep/pages/miss-keep-cmp.js'
 import mailApp from './pages/email-page-cmp.js'
 import mailDetails from './apps/email/cmps/email-details-cmp.js'
-
+import loginPage from './pages/login-page-cmp.js'
+import signInPage from './pages/sign-in-page-cmp.js'
 
 export default [
-    { path: '/', component: homePage },
+    { path: '/', redirect: '/login', component: homePage, children: [
+        {path: 'login', component: loginPage},
+        {path: 'signIn', component: signInPage}
+    ]},
     // { path: '/about', component: aboutPage },
     // { path: '/book', component: bookApp },
     // { path: '/book/:bookId', component: bookDetails },
@@ -21,5 +25,5 @@ export default [
     { path: '/book', component: bookApp },
     { path: '/book/:bookId', component: bookDetails },
     { path: '/bookReview/:bookId', component: reviewAdd },
-
+    // { path: '/login', component: loginPage }
 ]

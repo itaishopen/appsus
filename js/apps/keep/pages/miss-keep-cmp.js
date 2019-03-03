@@ -158,11 +158,10 @@ export default {
             keepService.saveNotes(this.notes);
         }
     },
-    mounted() {
-    },
     created() {
+        if (!keepService.checkLoggedUser()) this.$router.push('/')
         keepService.getNotes()
-            .then(notes => this.notes = notes);
+            .then(notes => this.notes = notes, err => console.log(err));
         eventBus.$on('deleteTodo', (todoId, noteId) => keepService.deleteTodo(todoId, noteId).then(notes => this.notes = notes))
         eventBus.$on('toggleIsDone', (todoId, noteId) => keepService.toggleIsDone(todoId, noteId).then(notes => this.notes = notes))
         eventBus.$on('header-changed', (newHeader, noteId) => keepService.updateNoteHeader(noteId, newHeader).then(notes => this.notes = notes))
@@ -175,7 +174,6 @@ export default {
         });
         eventBus.$on('started-editing', () => this.isEditing = true)
         eventBus.$on('stopped-editing', () => this.isEditing = false)
-
         document.querySelector('title').innerHTML = 'Miss keep';
         document.getElementById('favicon').href = 'img/miss-keep.png';
         document.querySelector('.logo-img').src = 'img/miss-keep.png';

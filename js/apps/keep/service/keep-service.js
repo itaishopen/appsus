@@ -13,7 +13,8 @@ export default {
     addTodo,
     togglePin,
     updateColor,
-    saveNotes
+    saveNotes,
+    checkLoggedUser
 }
 
 var dummyNotes = [{ id: utilService.makeId(), type: 'txt', isPinned: false, color: '#493750', header: 'Sample Text Note', content: 'Sample Text' },
@@ -44,12 +45,16 @@ function createNote(type, color, header, content) {
 }
 
 function getNotes() {
+    let loggedUser = checkLoggedUser();
+    if (!loggedUser) return Promise.reject('not logged in');
     return _loadNotes()
+        .then(notes => notes[loggedUser.userName]);
 }
 
 function addNote(note) {
     return _loadNotes()
         .then(notes => {
+            notes = notes[checkLoggedUser().userName]
             notes.push(note);
             saveNotes(notes)
             return notes;
@@ -59,6 +64,7 @@ function addNote(note) {
 function deleteNote(noteId) {
     return _loadNotes()
         .then(notes => {
+            notes = notes[checkLoggedUser().userName]
             let noteIdx = notes.findIndex(note => note.id === noteId);
             notes.splice(noteIdx, 1);
             saveNotes(notes);
@@ -69,6 +75,7 @@ function deleteNote(noteId) {
 function addTodo(todoTxt, noteId) {
     return _loadNotes()
         .then(notes => {
+            notes = notes[checkLoggedUser().userName]
             let noteIdx = notes.findIndex(note => note.id === noteId);
             notes[noteIdx].content.push({ id: utilService.makeId(), todoTxt, isDone: false })
             saveNotes(notes);
@@ -79,6 +86,7 @@ function addTodo(todoTxt, noteId) {
 function deleteTodo(todoId, noteId) {
     return _loadNotes()
         .then(notes => {
+            notes = notes[checkLoggedUser().userName]
             let noteIdx = notes.findIndex(note => note.id === noteId);
             let todoIdx = notes[noteIdx].content.findIndex(todo => todo.id === todoId);
             notes[noteIdx].content.splice(todoIdx, 1);
@@ -90,6 +98,7 @@ function deleteTodo(todoId, noteId) {
 function toggleIsDone(todoId, noteId) {
     return _loadNotes()
         .then(notes => {
+            notes = notes[checkLoggedUser().userName]
             let noteIdx = notes.findIndex(note => note.id === noteId);
             let todoIdx = notes[noteIdx].content.findIndex(todo => todo.id === todoId);
             notes[noteIdx].content[todoIdx].isDone = !notes[noteIdx].content[todoIdx].isDone;
@@ -101,6 +110,7 @@ function toggleIsDone(todoId, noteId) {
 function updateNoteContent(noteId, content) {
     return _loadNotes()
         .then(notes => {
+            notes = notes[checkLoggedUser().userName]
             let noteIdx = notes.findIndex(note => note.id === noteId);
             notes[noteIdx].content = content
             saveNotes(notes)
@@ -111,6 +121,7 @@ function updateNoteContent(noteId, content) {
 function updateNoteHeader(noteId, header) {
     return _loadNotes()
         .then(notes => {
+            notes = notes[checkLoggedUser().userName]
             let noteIdx = notes.findIndex(note => note.id === noteId);
             notes[noteIdx].header = header;
             saveNotes(notes);
@@ -121,6 +132,7 @@ function updateNoteHeader(noteId, header) {
 function updateColor(noteId, color) {
     return _loadNotes()
     .then(notes => {
+        notes = notes[checkLoggedUser().userName]
         let noteIdx = notes.findIndex(note => note.id === noteId);
         notes[noteIdx].color = color;
         saveNotes(notes);
@@ -128,40 +140,54 @@ function updateColor(noteId, color) {
     })
 }
 
-function sendEmail(noteId) {
-    return _loadNotes()
-    .then(notes => {
-        let noteIdx = notes.findIndex(note => note.id === noteId);
-        let email = {
-            recipient: '',
-            sender: 'awesome@devil.com',
-            subject: notes[noteIdx].header,
-            body: notes[noteIdx].content,
-        }
-        console.log(email);
+// function sendEmail(noteId) {
+//     return _loadNotes()
+//     .then(notes => {
+//         notes = notes[utilService.loadFromSessionStorage('loggedUser').userName]
+//         let noteIdx = notes.findIndex(note => note.id === noteId);
+//         let email = {
+//             recipient: '',
+//             sender: 'awesome@devil.com',
+//             subject: notes[noteIdx].header,
+//             body: notes[noteIdx].content,
+//         }
+//         console.log(email);
         
-    })
-}
+//     })
+// }
 
 function togglePin(noteId) {
     return _loadNotes()
         .then(notes => {
+            notes = notes[checkLoggedUser().userName]
             let noteIdx = notes.findIndex(note => note.id === noteId);
             notes[noteIdx].isPinned = !notes[noteIdx].isPinned;
             // console.log(notes);
-            
             saveNotes(notes);
             return notes;
         })
 }
 
 function _createNotes() {
-    utilService.saveToStorageSync('notes', utilService.loadFromStorageSync('notes') || dummyNotes)
+    let loggedUser = checkLoggedUser();
+    if (!loggedUser) return;
+    let notes = utilService.loadFromStorageSync('notes');
+    if (!notes) notes = {[loggedUser.userName]: null};
+    if (!notes[loggedUser.userName]) {
+        console.log('dummy notes for', loggedUser.userName);
+        
+        notes[loggedUser.userName] = dummyNotes;
+    }
+    utilService.saveToStorageSync('notes', notes);
 }
 
-function saveNotes(notes) {
-    return utilService.saveToStorage('notes', notes)
-        .then(() => console.log('saved notes'))
+function saveNotes(userNotes) {
+    return utilService.loadFromStorage('notes')
+        .then(allNotes => {
+            allNotes[checkLoggedUser().userName] = userNotes;
+            return utilService.saveToStorage('notes', allNotes)
+                .then(() => console.log('saved notes'))
+        })   
 }
 
 function _loadNotes() {
@@ -173,4 +199,8 @@ function _createTodos(todoList) {
     todoList = todoList.filter(todo => todo);
     // console.log(todoList);
     return todoList.map(todo => ({ id: utilService.makeId(), todoTxt: todo, isDone: false }))
+}
+
+function checkLoggedUser() {
+    return utilService.loadFromSessionStorage('loggedUser')
 }

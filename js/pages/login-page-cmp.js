@@ -9,7 +9,7 @@ export default {
                 <label for="userName"> User Name: </label>
                     <input type="text" name="userName" v-model="userName" required>
                 <label for="password"> Password: </label>
-                    <input type="text" name="password" v-model="password" required>
+                    <input type="password" name="password" v-model="password" required>
                 <button type="submit">Log In</button>
             </form>
         </section>

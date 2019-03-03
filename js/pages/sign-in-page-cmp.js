@@ -12,6 +12,8 @@ export default {
                     <input type="text" name="password" v-model="password" required>
                 <label for="confirmPassword"> Confirm Password:</label>
                     <input type="text" name="confirmPassword" v-model="confirmPassword" required>
+                <label for="fullName"> Full Name: </label>
+                    <input type="text" name="confirmPassword" v-model="fullName" required>
                 <button type="submit">Sign In</button>
             </form>
         </section>
@@ -20,7 +22,8 @@ export default {
         return {
             userName: '',
             password: '',
-            confirmPassword: ''
+            confirmPassword: '',
+            fullName: ''
         }
     },
     methods: {
@@ -29,7 +32,12 @@ export default {
                 console.log('password doesn\'t match');
                 return;
             }
-            userService.signIn(this.userName, this.password)
+            this.userName = this.userName.trim();
+            if (this.userName.indexOf(' ') !== -1) {
+                console.log('User Name Can\'t Contain Spaces');
+                return;
+            }
+            userService.signIn(this.userName, this.password, this.fullName)
                 .then(res => {
                     console.log(res);
                     if (res === 'Signed in Succesfully') this.$router.push('/');

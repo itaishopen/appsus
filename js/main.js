@@ -1,6 +1,7 @@
 import routes from './routes.js'
 import navBar from './cmps/nav-bar-cmp.js'
 import loggedUser from './cmps/logged-user-cmp.js'
+import userService from './services/user-service.js'
 // import userMsg from './cmps/user-msg-cmp.js'
 
 Vue.use(VueRouter);
@@ -13,6 +14,12 @@ new Vue({
     components: {
         navBar,
         loggedUser
-        // userMsg
     },
+    mounted() {
+        let userName = userService.checkLoggedUser().userName
+        userService.getUserPreferences(userName)
+            .then(preferences => {
+                document.body.style.backgroundImage = `url(${preferences.backgroundSrc})`
+            })
+    }
 })

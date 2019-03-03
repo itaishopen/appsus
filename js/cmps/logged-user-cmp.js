@@ -13,14 +13,11 @@ export default {
     },
     template: `
     <section class="logged-user">
-        <div class="user-name" @click="toggleMenu">
-            {{loggedUserForView}}
-        </div>
+        <img class="user-avatar" :src="userAvatarSrc" @click="toggleMenu">
         <user-menu
             v-if="showUserMenu"
             :loggedUser="loggedUser"
             @logOut="logOut"
-            @changeUser="changeUser"
             @login="login"
             ></user-menu>
     </section>
@@ -32,8 +29,9 @@ export default {
         }
     },
     computed: {
-        loggedUserForView() {            
-            return this.loggedUser ? this.loggedUser.userName : 'Guest'
+        userAvatarSrc() {
+            if (!this.loggedUser) return '../../img/placeholder_avatar.png';
+            return this.loggedUser.preferences.avatarSrc || '../../img/placeholder_avatar.png';
         }
     },
     methods: {
@@ -41,6 +39,7 @@ export default {
             this.loggedUser = utilService.loadFromSessionStorage('loggedUser');
         },
         toggleMenu() {
+            if (!this.loggedUser) return;
             this.showUserMenu = !this.showUserMenu;
         },
         logOut() {
@@ -48,11 +47,8 @@ export default {
             this.renderUser();
             this.$router.push('/')
             this.showUserMenu = false;
+            document.body.style.backgroundImage = '';
             eventBus.$emit('userChanged');
-        },
-        changeUser() {
-            this.$router.push('/login');
-            this.showUserMenu = false;
         },
         login() {
             this.$router.push('/login');

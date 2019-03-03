@@ -174,6 +174,8 @@ export default {
         });
         eventBus.$on('started-editing', () => this.isEditing = true)
         eventBus.$on('stopped-editing', () => this.isEditing = false)
+    },
+    mounted() {
         document.querySelector('title').innerHTML = 'Miss keep';
         document.getElementById('favicon').href = 'img/miss-keep.png';
         document.querySelector('.logo-img').src = 'img/miss-keep.png';

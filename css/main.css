@@ -133,14 +133,11 @@ header .wrapper {
     color: rgb(240, 98, 98);
 }
 
-.logged-user {
-    background-color: #3470d0;
+.user-avatar {
     width: 90px;
     height: 90px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
+    clip-path: circle();
+    object-fit: cover;
 }
 
 .user-name {
@@ -151,8 +148,43 @@ header .wrapper {
     display: none;
 }
 
-.user-menu li {
-    cursor: pointer;
+.user-menu {
+    position: absolute;
+    z-index: 2;
+    top: 150px;
+    right: 30px;
+    width: 200px;
+    background-color: rgb(133, 157, 201);
+}
+
+.user-preferences form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 30px;
+}
+
+.user-preferences form>* {
+    margin-bottom: 10px;
+}
+
+.user-preferences form button {
+    justify-self: center;
+}
+
+.background-picker {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    /* grid-auto-rows: minmax(); */
+    grid-auto-rows: min-content;
+    gap: 20px;
+    width: 100%;
+}
+
+.background-preview {
+    object-fit: cover;
+    width: 100%;
+    height: 15vw;
 }
 
 @media (max-width: 750px) {

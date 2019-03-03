@@ -8,8 +8,8 @@ export default {
 }
 
 var dummyUsers = [
-    {userName: 'Yanai Avnet', password: 'Yanai1', preferences: null},
-    {userName: 'Itai Shopen', password: 'Itai1', preferences: null}
+    {userName: 'Yanai_Avnet', password: 'Yanai1', preferences: null},
+    {userName: 'Itai_Shopen', password: 'Itai1', preferences: null}
 ]
 
 _createUsers();

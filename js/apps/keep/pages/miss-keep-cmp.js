@@ -171,6 +171,10 @@ export default {
             selectedNote.scrollIntoView();
             selectedNote.classList.add('flash')
             setTimeout(() => selectedNote.classList.remove('flash'), 100)
+            setTimeout(() => selectedNote.classList.add('flash'), 400)
+            setTimeout(() => selectedNote.classList.remove('flash'), 500)
+            setTimeout(() => selectedNote.classList.add('flash'), 800)
+            setTimeout(() => selectedNote.classList.remove('flash'), 900)
         });
         eventBus.$on('started-editing', () => this.isEditing = true)
         eventBus.$on('stopped-editing', () => this.isEditing = false)

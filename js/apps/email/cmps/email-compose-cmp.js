@@ -14,7 +14,7 @@ export default {
         <span class="compose-form compose-form-from">From: <input type="text" class="compose-email-from" placeholder="From" v-model="email.sender" disabled></span>
         <span class="compose-form compose-form-subject">Subject: <input type="text" class="compose-email-subject" placeholder="Subject" v-model="email.subject"></span>
         <div class="compose-email-body">
-            <textarea  cols="43" rows="10" placeholder="Message body" v-model="email.body"></textarea>
+            <textarea  cols="60" rows="10" placeholder="Message body" v-model="email.body"></textarea>
         </div>
       </form>
     </section>

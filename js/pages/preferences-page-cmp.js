@@ -32,7 +32,6 @@ export default {
     },
     methods: {
         backgroundSelected(backgroundSrc) {
-            console.log(backgroundSrc);
             document.body.style.backgroundImage = `url(${backgroundSrc})`
             document.body.style.backgroundSize = `cover`
             this.backgroundSrc = backgroundSrc;

@@ -17,9 +17,7 @@ export default {
        deleteTodo() {           
            eventBus.$emit('deleteTodo', this.todo.id, this.noteId)
         },
-        toggleIsDone(){
-            console.log(this.todo);
-            
+        toggleIsDone(){            
             eventBus.$emit('toggleIsDone', this.todo.id, this.noteId)
         }
     },

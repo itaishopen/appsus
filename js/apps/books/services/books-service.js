@@ -25,7 +25,6 @@ function init() {
     return utilService.loadFromStorage(BOOKS_KEY).then(books => {
         if (!books || books.length === 0) {
             books = _createBooks();
-            console.log(books);
             utilService.saveToStorage(BOOKS_KEY, books)
             return books
         } else {
@@ -117,7 +116,6 @@ function addBook(googleBook) {
         utilService.saveToStorage(BOOKS_KEY, gBooks).then()
         return Promise.resolve(book)
     } catch(error){
-        console.log(error)
     }
 }
 

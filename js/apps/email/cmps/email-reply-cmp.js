@@ -14,7 +14,7 @@ export default {
                 <span class="reply-form reply-form-to">To: <input type="text" class="compose-email-to" placeholder="To" v-model="email.recipient"></span> 
                 <span class="reply-form reply-form-subject">Subject: <input type="text" class="compose-email-subject" placeholder="Subject" v-model="email.subject"></span>
                 <div class="reply-email-body">
-                    <textarea  cols="43" rows="10" placeholder="Message body" v-model="email.body"></textarea>
+                    <textarea  cols="60" rows="10" placeholder="Message body" v-model="email.body"></textarea>
                 </div>
             </form>
         </section>

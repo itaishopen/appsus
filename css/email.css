@@ -354,8 +354,7 @@ button {
     padding: 5px;
     width: 400px;
     border-bottom: 1px solid transparent;
-    overflow: auto
-    
+    word-wrap: break-word;
 }
 
 .compose-email-body {
@@ -363,16 +362,12 @@ button {
     padding: 10px;
 }
 
-.compose-action-btns {
-    /* padding: 10px; */
-}
-
 .compose-email-container {
     width: 500px
 }
 
 .compose-action-btn {
-    margin: 10px;
+    margin: 10px 10px 0 10px;
     width: 50px;
     height: 50px;
     border: none;
@@ -395,10 +390,11 @@ button {
 }
 .reply-form input {
     border: none;
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: transparent;
     padding: 5px;
-    width: 100%;
-    border-bottom: 1px solid transparent
+    width: 400px;
+    border-bottom: 1px solid transparent;
+    word-wrap: break-word;
 }
 
 .reply-email-body {
@@ -406,11 +402,8 @@ button {
     padding: 10px;
 }
 
-.reply-action-btns {
-    padding: 10px;
-}
 .reply-action-btn {
-    margin: 10px;
+    margin: 10px 10px 0 10px;
     width: 50px;
     height: 50px;
     border: none;

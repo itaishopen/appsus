@@ -146,7 +146,6 @@ function togglePin(noteId) {
             notes = notes[checkLoggedUser().userName]
             let noteIdx = notes.findIndex(note => note.id === noteId);
             notes[noteIdx].isPinned = !notes[noteIdx].isPinned;
-            // console.log(notes);
             saveNotes(notes);
             return notes;
         })
@@ -157,9 +156,7 @@ function _createNotes() {
     if (!loggedUser) return;
     let notes = utilService.loadFromStorageSync('notes');
     if (!notes) notes = {[loggedUser.userName]: null};
-    if (!notes[loggedUser.userName]) {
-        console.log('dummy notes for', loggedUser.userName);
-        
+    if (!notes[loggedUser.userName]) {        
         notes[loggedUser.userName] = dummyNotes;
     }
     utilService.saveToStorageSync('notes', notes);
@@ -170,7 +167,7 @@ function saveNotes(userNotes) {
         .then(allNotes => {
             allNotes[checkLoggedUser().userName] = userNotes;
             return utilService.saveToStorage('notes', allNotes)
-                .then(() => console.log('saved notes'))
+                .then()
         })   
 }
 

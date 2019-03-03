@@ -78,7 +78,6 @@ export default {
                     body: note.content,
                 }
                 this.isReply = true;
-                console.log(this.emailForReply, note);
             })
 
         }

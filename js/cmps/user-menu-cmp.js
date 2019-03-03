@@ -15,7 +15,6 @@ export default {
     props: ['loggedUser'],
     methods: {
         logOut() {
-            console.log('logging out');
             this.$emit('logOut');
         },
         login() {

@@ -34,7 +34,6 @@ export default {
             else {
                 bookService.getBooksData(this.searchInput)
                     .then(res => this.booksList = res.data.items)
-                    .catch(err => console.log(err))
             }
         },
         addBook(book) {
@@ -43,11 +42,10 @@ export default {
                     .then(() => {
                         let txt = 'To book';
                         let URL = `http://127.0.0.1:5500/index.html#/book/${book.id}`;
-                        eventBus.$emit(EVENT_FEEDBACK,{txt: `The book was added to your list `,link: `/book/${book.id}`},'success')
+                        // eventBus.$emit(EVENT_FEEDBACK,{txt: `The book was added to your list `,link: `/book/${book.id}`},'success')
                         this.$emit('renderBooks');
                     })
             } catch (err) {
-                console.log('err in add', err)
             }
 
         }

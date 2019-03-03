@@ -25,13 +25,10 @@ export default {
             userService.logOut();
             userService.login(this.userName, this.password)
                 .then(res => {
-                    console.log(res);
                     if (res === 'Logged Succesfully') {
-                        console.log(this.userName);
                         userService.getUserPreferences(this.userName)
                             .then(preferences => {
                                 let backgroundSrc = preferences.backgroundSrc
-                                console.log(backgroundSrc);
                                 if (backgroundSrc) document.body.style.backgroundImage = 'url(' + backgroundSrc + ')'
                             })
                         

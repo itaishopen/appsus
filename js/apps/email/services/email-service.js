@@ -220,15 +220,9 @@ function sendAnEmail(emailData) {
             });
         } else {
             let newEmail = createAnEmail(emailData);
-            // newEmail.isSent = emailData.isSent;
             emails[loggedUser.userName].push(newEmail)
             let senderMail = createAnEmail(emailData)
-            console.log(senderMail);
             let recipientUserName = senderMail.recipient.split('@')[0]
-            // let mailSender = senderMail.sender
-            // let mailRecipient = senderMail.recipient
-            // senderMail.sender = mailRecipient;
-            // senderMail.recipient = mailSender
             senderMail.isSent = false;
             if(emails[recipientUserName]) emails[recipientUserName].push(senderMail);
             utilService.saveToStorage(EMAIL_KEY, emails).then()

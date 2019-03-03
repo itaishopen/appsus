@@ -1,5 +1,5 @@
 import homePage from './pages/home-page-cmp.js'
-// import aboutPage from './pages/about-page-cmp.js'
+import aboutPage from './pages/about-page-cmp.js'
 import bookApp from './pages/book-app-cmp.js'
 import bookDetails from './apps/books/pages/book-details-cmp.js'
 import reviewAdd from './apps/books/pages/review-add-cmp.js'
@@ -16,7 +16,7 @@ export default [
         {path: 'signIn', component: signInPage}
     ]},
     {path: '/preferences', component: preferences},
-    // { path: '/about', component: aboutPage },
+    { path: '/about', component: aboutPage },
     // { path: '/book', component: bookApp },
     // { path: '/book/:bookId', component: bookDetails },
     // { path: '/bookReview/:bookId', component: reviewAdd },

@@ -21,7 +21,10 @@ export default {
                 <router-link exact to="/email"><span class="nav-link-btn">Mr Email</span></router-link><span class="line">|</span>
            
            
-                <router-link exact to="/book"><span class="nav-link-btn">Books Gallery</span></router-link>
+                <router-link exact to="/book"><span class="nav-link-btn">Books Gallery</span></router-link><span class="line">|</span>
+
+
+                <router-link exact to="/about"><span class="nav-link-btn">About</span></router-link>
          
         </div>
     </section>

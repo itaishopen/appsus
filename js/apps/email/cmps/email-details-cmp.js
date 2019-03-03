@@ -19,7 +19,7 @@ export default {
         <div class="email-actions-container flex align-center">
           <div class="subject-sentAt" v-if="email.sentAt">Sent at: {{email.sentAt.timeToShow}}</div>
           <div class="details-action-btns flex">
-            <button v-if="!email.isDraft && !email.isSent" class="email-reply-btn details-action-btn" @click="isReplying = true"><i class="fas fa-reply"></i></button>
+            <button v-if="!email.isDraft && !email.isSent" class="email-reply-btn details-action-btn" @click="replyToEmail(email.id)"><i class="fas fa-reply"></i></button>
             <router-link to="/email" for="toolbar-delete-btn" ><button class="toolbar-delete-btn details-action-btn fas fa-trash-alt" @click="deleteEmail"></button></router-link>
             <router-link to="/email" for="toolbar-mark-as-unread-btn"><button class="toolbar-mark-as-unread-btn details-action-btn"  @click="markAsUnread"><i class="fas fa-envelope"></i></button></router-link>
           </div>
@@ -28,14 +28,9 @@ export default {
 
       <div class="details-body-container"><p class="details-body-txt">{{email.body}}</p></div>
 
-      <email-reply v-if="isReplying" :emailForReply="email" @sendEmail="sendEmail" @replyClose="sendEmail"></email-reply>
+      <!-- <email-reply v-if="isReplying" :emailForReply="email" @sendEmail="sendEmail" @replyClose="sendEmail"></email-reply> -->
     </section>
     `,
-  data() {
-    return {
-      isReplying: false,
-    }
-  },
   created() {
       
   },
@@ -55,14 +50,9 @@ export default {
       emailServices.sendAnEmail(this.email)
         .then()
     },
-    sendEmail(emailData) {
-      emailServices.sendAnEmail(emailData)
-      .then(() => {
-        this.email = emailData;
-        this.isReplying = false;
-          // eventBus.$emit(EVENT_FEEDBACK, { txt: 'Your email was sent do you want to view it?', link: `/email/${emailData.id}` }, 'success');
-        })
-    }
+    replyToEmail(emailId) {
+      this.$emit('replyToEmail', emailId);
+  },
   },
   
   components: {

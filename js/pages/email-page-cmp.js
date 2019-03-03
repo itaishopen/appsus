@@ -7,10 +7,10 @@ import emailSort from '../apps/email/cmps/email-sort-cmp.js'
 import emailCompose from '../apps/email/cmps/email-compose-cmp.js'
 import emailReply from '../apps/email/cmps/email-reply-cmp.js'
 import emailDetails from '../apps/email/cmps/email-details-cmp.js'
+import keepService from '../apps/keep/service/keep-service.js'
 import { eventBus, EVENT_FEEDBACK } from '../services/eventbus-service.js'
 
 export default {
-    props: ['note'],
     template: `
         <section class="email-app-container flex column">
             <div class="email-actions-toolbar flex align-center justify-center">
@@ -24,8 +24,8 @@ export default {
             <div class="filter-sort-container flex column">
                 <div class="upper-control flex">
                 <button class="compose-email-btn" @click="composeOpen"><i class="fas fa-plus gradient-color"></i><span class="compose-email-txt">Compose</span></button>
-                    <email-sort @sort="sort"></email-sort>
-                    <button v-if="filter === 'trash' || filter === 'draft'" class="delete-all" @click="deleteAll"><i class="fas fa-dumpster fa-2x"></i></button>
+                    <email-sort v-if="checkedEmailsNum === 0" @sort="sort"></email-sort>
+                    
                 </div>
                 <div class="main-container flex">
                     <email-filter :unreadEmails="unreadEmails" @setFilter="setFilter"></email-filter>
@@ -41,6 +41,8 @@ export default {
         return {
             emails: [],
             unreadEmails: 0,
+            checkedEmails: [],
+            checkedEmailsNum: 0,
             filter: 'inbox',
             isCompose: false,
             isReply: false,
@@ -59,21 +61,24 @@ export default {
             .then(emails => {
                 this.emails = emails;
                 this.unreadEmails = this.checkEmailStatus();
+                this.checkedEmails = this.emails.filter(email => email.isCheck);
+                this.checkedEmailsNum = this.checkedEmails.length;
                 eventBus.$emit(EVENT_FEEDBACK, { txt: 'Welcome to your inbox!', link: '' }, 'welcome')
             });
-        
-
-    },
-    mounted: function () {
-        if (this.note) {
-            this.emailForReply = {
-                recipient: '',
-                sender: 'awesome@devil.com',
-                subject: this.note.header,
-                body: this.note.content,
-            }
+        let noteId = this.$route.params.noteId
+        if (noteId) {
+            keepService.getNotes().then(notes => {
+                let note = notes.filter(note => note.id === noteId)[0]
+                this.emailForReply = {
+                    recipient: '',
+                    sender: 'awesome@devil.com',
+                    subject: note.header,
+                    body: note.content,
+                }
+                this.isReply = true;
+                console.log(this.emailForReply, note);
+            })
             
-            this.isReply = true;
         }
         console.log(this.$route.params.noteId);
         document.querySelector('title').innerHTML = 'Mr Email';
@@ -93,6 +98,8 @@ export default {
                     this.isShow = false;
                     this.emails = emails;
                     this.unreadEmails = this.checkEmailStatus();
+                    this.checkedEmails = this.emails.filter(email => email.isCheck);
+                    this.checkedEmailsNum = this.checkedEmails.length;
                 })
         },
         openEmail(emailId) {
@@ -112,6 +119,8 @@ export default {
                             .then(emails => {
                                 this.emails = emails;
                                 this.unreadEmails = this.checkEmailStatus();
+                                this.checkedEmails = this.emails.filter(email => email.isCheck);
+                                this.checkedEmailsNum = this.checkedEmails.length;
                             })
                     })
             })
@@ -122,6 +131,8 @@ export default {
                     emailServices.query(this.filter)
                         .then(emails => {
                             this.emails = emails;
+                            this.checkedEmails = this.emails.filter(email => email.isCheck);
+                            this.checkedEmailsNum = this.checkedEmails.length;
                             this.unreadEmails = this.checkEmailStatus();
                         })
                 })
@@ -135,6 +146,8 @@ export default {
                             .then(emails => {
                                 this.emails = emails;
                                 this.unreadEmails = this.checkEmailStatus();
+                                this.checkedEmails = this.emails.filter(email => email.isCheck);
+                                this.checkedEmailsNum = this.checkedEmails.length;
                             })
                     })
             })
@@ -148,6 +161,8 @@ export default {
                             .then(emails => {
                                 this.emails = emails;
                                 this.unreadEmails = this.checkEmailStatus();
+                                this.checkedEmails = this.emails.filter(email => email.isCheck);
+                                this.checkedEmailsNum = this.checkedEmails.length;
                             })
                     })
             })
@@ -161,14 +176,6 @@ export default {
                     this.emails = emails;
                 });
         },
-        // showEmails() {
-        //     this.isCompose = false;
-        //     this.isReply = false;
-        //     emailServices.query(this.filter)
-        //         .then(emails => {
-        //             this.emails = emails;
-        //         });
-        // },
         checkEmailStatus() {
             return this.emails.filter(email => !email.isRead && !email.isSent && !email.isDel).length;
         },
@@ -178,6 +185,8 @@ export default {
                     emailServices.query(this.filter).then(emails => {
                         this.emails = emails;
                         this.unreadEmails = this.checkEmailStatus();
+                        this.checkedEmails = this.emails.filter(email => email.isCheck);
+                        this.checkedEmailsNum = this.checkedEmails.length;
                     })
                 })
         },
@@ -187,6 +196,8 @@ export default {
                     emailServices.query(this.filter).then(emails => {
                         this.emails = emails;
                         this.unreadEmails = this.checkEmailStatus();
+                        this.checkedEmails = this.emails.filter(email => email.isCheck);
+                        this.checkedEmailsNum = this.checkedEmails.length;
                     })
                 })
         },
@@ -208,6 +219,9 @@ export default {
         },
         composeOpen() {
             this.isCompose = true;
+            this.isReply = false;
+            this.isShow = false;
+
         },
         composeClose() {
             this.isCompose = false;
@@ -218,10 +232,11 @@ export default {
                     email.subject = 'Re: ' + email.subject;
                     this.emailForReply = email;
                     this.isReply = true;
+                    this.isShow = false;
+                    this.isCompose = false;
                 })
         },
         sendDraft(emailId) {
-            console.log(emailId)
             emailServices.getEmailById(emailId)
                 .then(email => {
                     let emailSender = email.sender

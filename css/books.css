@@ -375,11 +375,6 @@ button {
 }
 
 @media (max-width:470px) {
-    .nav {
-        padding: 15px;
-        font-size: 1.2em;
-        z-index: 2;
-    }
     .book-details-container {
         flex-direction: column;
         align-items: center;

@@ -79,6 +79,9 @@ function createPreferences(fullName, avatarSrc, backgroundSrc) {
 }
 
 function setUserPreferences(userName, preferences) {
+    let loggedUser = utilService.loadFromSessionStorage('loggedUser');
+    loggedUser.preferences = preferences
+    utilService.saveToSessionStorage('loggedUser', loggedUser);
     return _loadUsers()
         .then(users => {
             let userIdx = users.findIndex(user => user.userName === userName);

@@ -14,7 +14,8 @@ export default {
     togglePin,
     updateColor,
     saveNotes,
-    checkLoggedUser
+    checkLoggedUser,
+    createNotes
 }
 
 var dummyNotes = [{ id: utilService.makeId(), type: 'txt', isPinned: false, color: '#493750', header: 'Sample Text Note', content: 'Sample Text' },
@@ -27,8 +28,6 @@ var dummyNotes = [{ id: utilService.makeId(), type: 'txt', isPinned: false, colo
                   { id: utilService.makeId(), type: 'txt', isPinned: false, color: '#599959', header: 'Sample Text Note', content: 'Sample Text' },
                   { id: utilService.makeId(), type: 'img', isPinned: false, color: '#f999f9', header: 'Sample Image Note', content: 'https://upload.wikimedia.org/wikipedia/commons/7/73/Pale_Blue_Dot.png' },
                   { id: utilService.makeId(), type: 'vid', isPinned: false, color: '#98263a', header: 'Sample Video Note', content: 'https://www.youtube.com/embed/xuCn8ux2gbs' }]
-
-_createNotes();
 
 function createNote(type, color, header, content) {
     if(!header) header = 'New Note'
@@ -151,11 +150,12 @@ function togglePin(noteId) {
         })
 }
 
-function _createNotes() {
+function createNotes() {
     let loggedUser = checkLoggedUser();
     if (!loggedUser) return;
     let notes = utilService.loadFromStorageSync('notes');
     if (!notes) notes = {[loggedUser.userName]: null};
+    
     if (!notes[loggedUser.userName]) {        
         notes[loggedUser.userName] = dummyNotes;
     }

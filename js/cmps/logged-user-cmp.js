@@ -36,8 +36,8 @@ export default {
         }
     },
     methods: {
-        renderUser() {
-            this.loggedUser = utilService.loadFromSessionStorage('loggedUser');
+        renderUser() {            
+            this.loggedUser = userService.checkLoggedUser();            
         },
         toggleMenu() {
             if (!this.loggedUser) return;
@@ -59,5 +59,6 @@ export default {
     created() {
         this.renderUser();
         eventBus.$on('userChanged', () => this.renderUser());
+        eventBus.$on('avatarChanged', () => this.renderUser());
     }
 }

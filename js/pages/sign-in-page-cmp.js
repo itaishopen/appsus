@@ -41,7 +41,8 @@ export default {
                 .then(res => {
                     console.log(res);
                     if (res === 'Signed in Succesfully') this.$router.push('/');
-                    eventBus.$emit('user-changed');
+                    eventBus.$emit('userChanged');
+                    this.$emit('userSigned');
                 })
         }
     }

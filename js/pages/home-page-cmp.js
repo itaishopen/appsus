@@ -10,8 +10,10 @@ export default {
             <h1 class="logo-txt">AppSus</h1>
         </div>
         <div class="log-sign-area"  v-if="!loggedUser">
+        <div class="flex space-between">
             <router-link to="/login">Log In</router-link><router-link to="/signIn">Sign In</router-link>
-            <router-view></router-view>
+        </div>
+            <router-view @userSigned="updateLoggedUser"></router-view>
         </div>
     </section>
     `,

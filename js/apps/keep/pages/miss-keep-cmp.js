@@ -159,6 +159,7 @@ export default {
         }
     },
     created() {
+        keepService.createNotes();
         if (!keepService.checkLoggedUser()) this.$router.push('/')
         keepService.getNotes()
             .then(notes => this.notes = notes, err => console.log(err));

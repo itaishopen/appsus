@@ -1,5 +1,6 @@
 import backgroundPicker from '../cmps/background-picker-cmp.js'
 import userService from '../services/user-service.js'
+import { eventBus } from '../services/eventbus-service.js';
 
 export default {
     components: {
@@ -39,10 +40,15 @@ export default {
         submitPreferences() {
             let preferences = userService.createPreferences(this.fullName, this.avatarSrc, this.backgroundSrc);
             userService.setUserPreferences(this.user.userName, preferences);
+            eventBus.$emit('avatarChanged');
         }
     },
     created() {
         this.user = userService.checkLoggedUser();
+        if (!this.user) {
+            this.$router.push('/')
+            return;
+        } 
         userService.getUserPreferences(this.user.userName)
             .then(preferences => {
                 if (preferences) {

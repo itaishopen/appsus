@@ -58,8 +58,14 @@ export default {
     }
   },
   mounted() {
-    this.$options.interval = setInterval(console.log(`I'm an interval`));
-  },
+    document.querySelector('title').innerHTML = 'About us';
+    document.getElementById('favicon').href = 'img/final-horse-circle.png';
+    document.querySelector('.logo-img').src = 'img/final-horse-circle.png';
+    if (document.body.classList.contains('open')) {
+        document.querySelector(".mobile-menu-button").classList.toggle("change");
+        document.body.classList.toggle('open');
+    }
+},
   beforeDestroy() {
     clearInterval(this.$options.interval);
   },

@@ -25,7 +25,16 @@ export default {
     },
     created() {
 		bookService.init().then(books => this.books = books);
-	},
+    },
+    mounted() {
+        document.querySelector('title').innerHTML = 'Miss books';
+        document.getElementById('favicon').href = 'img/book-Icon.png';
+        document.querySelector('.logo-img').src = 'img/final-horse-circle.png';
+        if (document.body.classList.contains('open')) {
+            document.querySelector(".mobile-menu-button").classList.toggle("change");
+            document.body.classList.toggle('open');
+        }
+    },
     methods: {
         onSelectBook(book) {
             this.selectedBook = book

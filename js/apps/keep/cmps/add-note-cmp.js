@@ -10,7 +10,7 @@ export default {
             <div class="note-txt" @keydown="isEmpty=false" @keyup="updateContent" ref="mainTxt" :class="{empty: isEmpty}" :data-type="selected"
                  contenteditable></div>
             <img class="note-img-preview" :src="imgUrl" v-show="showImgPrev">
-            <input type="file" v-if="selected === 'img'" style="display: none" @input="getImgUrl" ref="filePicker">
+            <input type="file" style="display: none" @input="getImgUrl" ref="filePicker">
             <input type="color" v-model="color" style="display: none" ref="colorPicker">
             <div class="add-controls">
                 <button class="icon-btn" @click="selected = 'txt'"><i class="fas fa-font"></i></button>

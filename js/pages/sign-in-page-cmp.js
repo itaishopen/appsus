@@ -40,7 +40,8 @@ export default {
             userService.signIn(this.userName, this.password, this.fullName)
                 .then(res => {
                     if (res === 'Signed in Succesfully') this.$router.push('/');
-                    eventBus.$emit('user-changed');
+                    eventBus.$emit('userChanged');
+                    this.$emit('userSigned');
                 })
         }
     }

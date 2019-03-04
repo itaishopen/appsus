@@ -8,7 +8,9 @@ export default {
     saveToStorageSync,
     loadFromStorageSync,
     getBrightness,
-    getDistance
+    getDistance,
+    makeLorem,
+
 }
 
 function saveToStorage(key, value) {
@@ -44,6 +46,31 @@ function makeId() {
     }
 
     return txt;
+}
+
+function makeLorem(length) {
+    var randStr = '';
+    while (randStr.length < length) {
+        var wordLength = getRandomIntInclusive(3, 8);
+        var word = createWord(wordLength);
+        if (Math.random() > 0.9) word += ',';
+        randStr += word + ' ';
+    }
+    randStr = randStr.substring(0, length);
+    randStr = randStr[0].toUpperCase() + randStr.substr(1)
+    return randStr;
+}
+
+function createWord(length) {
+    var word = '';
+    while (word.length < length) word += getRandChar();
+    return word;
+}
+
+function getRandChar() {
+    var LETTERS = 'abcdefghijklmnopqrstuvwxyz';
+    var randIndex = parseInt(Math.random() * LETTERS.length)
+    return LETTERS.charAt(randIndex);
 }
 
 function saveToStorageSync(key, value) {

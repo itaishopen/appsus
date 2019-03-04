@@ -31,8 +31,8 @@ export default {
     },
     computed: {
         userAvatarSrc() {
-            if (!this.loggedUser) return '../../img/placeholder_avatar.png';
-            return this.loggedUser.preferences.avatarSrc || '../../img/placeholder_avatar.png';
+            if (!this.loggedUser) return 'img/placeholder_avatar.png';
+            return this.loggedUser.preferences.avatarSrc || 'img/placeholder_avatar.png';
         }
     },
     methods: {

@@ -265,6 +265,12 @@ header .logo-img {
 
 @media (max-width: 750px) {
 
+    .log-sign-area {
+        font-size: 1em;
+        width: 270px;
+        margin: 0 auto 20px;
+    }
+
     .background-picker {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
@@ -289,15 +295,15 @@ header .logo-img {
         height: 50px;
         width: 50px;
     }
+
+    .logo {
+        grid-template-columns: 50px 1fr;
+        gap: 10px;
+    }
     
     header .wrapper {
         padding: 5px 10px;
         height: 80px;
-    }
-
-    .logo {
-        grid-template-columns: 90px 1fr;
-        gap: 10px;
     }
 
     .logged-user {

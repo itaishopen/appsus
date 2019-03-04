@@ -201,11 +201,13 @@ export default {
                     })
                 })
         },
-        searchInEmails(searchParam, searchLoc) {
-            if (searchLoc) {
-                emailServices.onSearch(searchParam, 'all')
+        searchInEmails(searchParam, searchLoc) {            
+            if (searchLoc === 'all') {
+                emailServices.onSearch(searchParam, searchLoc)
                     .then(emails => this.emails = emails)
-            } else {
+            } 
+            if(searchLoc === 'current') {
+                console.log(this.filter)
                 emailServices.onSearch(searchParam)
                     .then(emails => this.emails = emails)
             }

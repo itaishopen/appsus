@@ -56,7 +56,7 @@ function checkLoggedUser() {
 
 function _saveUsers(users) {
     return utilService.saveToStorage('users', users)
-        .then(() => console.log('saved users'));
+        .then();
 }
 
 function _loadUsers() {
@@ -67,9 +67,7 @@ function _loadUsers() {
 function getUserPreferences(userName) {
     return _loadUsers()
         .then(users => {
-            userName = userName.toLowerCase();
-            console.log(users.find(user => user.userName.toLowerCase() === userName));
-            
+            userName = userName.toLowerCase();            
             return users.find(user => user.userName === userName).preferences;
         })
 }

@@ -13,18 +13,20 @@ button {
 }
 
 .action-multipal {
+    width: 50px;
+    height: 50px;
     border: transparent;
+    border-radius: 25px;
+    background: rgba(255, 255, 255, 0.5);
 }
 
 .action-btn {
     justify-items: center;
-    /* width: 50px;
-    height: 50px; */
 }
 
 .email-actions-btns {
     display: flex;
-    width: 100%;
+    width: 80%;
     height: 56px;
     justify-content: center;
 }
@@ -65,6 +67,7 @@ button {
     border: none;
     border-bottom: 1px solid transparent;
     background: rgba(255, 255, 255, 0.5);
+    border-radius: 10px;
     padding: 10px;
     margin-right: calc(100% - 50vw);
 }
@@ -154,7 +157,7 @@ button {
 }
 
 .email-filter .tab input[type=radio]:checked~label {
-    background: rgba(128, 128, 128, 0.5);
+    background: rgba(128, 128, 128, 0.7);
     border-bottom-right-radius: 25px;
     border-top-right-radius: 25px;
 }
@@ -530,5 +533,25 @@ button {
     }
     .search-checkbox label {
         background: none;
+    }
+    .compose-form input {
+        width: 100%;
+    }
+    .compose-email-container {
+        width: 100%;
+        margin: 10px 5px 0 5px;
+    }
+    .reply-form input {
+        width: 100%;
+    }
+    .reply-email-container {
+        width: 100%;
+        margin: 10px 5px 0 5px;
+    }
+    .email-reply {
+        margin: 10px 5px 0 5px;
+    }
+    .email-compose {
+        margin: 10px 5px 0 5px;
     }
 }

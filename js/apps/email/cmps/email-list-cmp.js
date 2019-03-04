@@ -9,14 +9,14 @@ export default {
                 <email-preview :email="email" @emailCheck="emailCheck" @openEmail="openEmail"></email-preview>
                     
                 <div class="button-container space-evenly">
-                    <button v-if="!email.isStar" class="preview-btn preview-star-empty-btn far fa-star fa-lg" @click="starEmail(email.id)"></button>
-                    <button v-if="email.isStar" class="preview-btn preview-star-full-btn fas fa-star fa-lg" @click="starEmail(email.id)"></button>
-                    <button class="preview-btn preview-delete-btn fas fa-trash-alt fa-lg" @click="deleteEmail(email.id)"></button>
-                    <button v-if="!email.isDraft && !email.isSent" class="preview-btn preview-reply-btn fas fa-reply fa-lg" @click="replyToEmail(email.id)"></button>
-                    <button v-if="email.isDraft" class="preview-btn preview-draft-btn fas fa-paper-plane fa-lg" @click="sendDraft(email.id)"></button>
-                    <button v-if="email.isRead" class="preview-btn preview-unread-btn" @click="markAsUnread(email.id)"><i class="fas fa-envelope fa-lg"></i></button>
-                    <button v-if="!email.isRead" class="preview-btn preview-read-btn" @click="markAsRead(email.id)"><i class="fas fa-envelope-open fa-lg"></i></button>
-                    <button v-if="email.isDel" class="preview-btn preview-restorn-btn fas fa-trash-restore-alt fa-lg" @click="restoreEmail(email.id)"></button>
+                    <button v-if="!email.isStar" class="preview-btn preview-star-empty-btn far fa-star fa-lg" @click="starEmail(email.id)" title="star email"></button>
+                    <button v-if="email.isStar" class="preview-btn preview-star-full-btn fas fa-star fa-lg" @click="starEmail(email.id)" title="unstar email"></button>
+                    <button class="preview-btn preview-delete-btn fas fa-trash-alt fa-lg" @click="deleteEmail(email.id)" title="delete email"></button>
+                    <button v-if="!email.isDraft && !email.isSent" class="preview-btn preview-reply-btn fas fa-reply fa-lg" @click="replyToEmail(email.id)" title="reply to email"></button>
+                    <button v-if="email.isDraft" class="preview-btn preview-draft-btn fas fa-paper-plane fa-lg" @click="sendDraft(email.id)" title="send draft"></button>
+                    <button v-if="email.isRead" class="preview-btn preview-unread-btn" @click="markAsUnread(email.id)"  title="mark as read"><i class="fas fa-envelope fa-lg"></i></button>
+                    <button v-if="!email.isRead" class="preview-btn preview-read-btn" @click="markAsRead(email.id)" title="mark as unread mail"><i class="fas fa-envelope-open fa-lg"></i></button>
+                    <button v-if="email.isDel" class="preview-btn preview-restorn-btn fas fa-trash-restore-alt fa-lg" @click="restoreEmail(email.id)" title="restore mail"></button>
                 </div>
             </div>
         </section>

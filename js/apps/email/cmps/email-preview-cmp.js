@@ -4,7 +4,7 @@ export default {
       <div class="email-preview flex space-between">
         <div class="email-preview-letter flex align-center justify-center" :style="{ background: starColor }" >
             <input type="checkbox" id="letter-checkbox" class="email-preview-letter-checkbox">
-            <label for="letter-checkbox" @click="emailCheck(email.id)">
+            <label for="letter-checkbox" @click="emailCheck(email.id)" title="chose mail">
                 <span v-if="!email.isCheck" class="first-letter">{{firstLetter}}</span>
                 <span v-if="email.isCheck" class="first-letter"><i class="fas fa-check"></i></span>
             </label>

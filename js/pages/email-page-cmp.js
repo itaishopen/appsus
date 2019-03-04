@@ -31,7 +31,7 @@ export default {
                 <div class="main-container flex">
                     <email-filter :unreadEmails="unreadEmails" @setFilter="setFilter"></email-filter>
                     <email-list v-if="!isReply && !isCompose && !isShow" :emails="emails" @deleteEmail="deleteMail" @restoreEmail="restoreEmail" @replyToEmail="replyToEmail" @changeEmail="changeEmail" @sendDraft="sendDraft" @openEmail="openEmail"></email-list>
-                    <email-details v-if="isShow" :email="emailToShow" @backBtn="backBtn"></email-details>
+                    <email-details v-if="isShow" :email="emailToShow" @backBtn="backBtn" @replyToEmail="replyToEmail"></email-details>
                     <email-reply v-if="isReply && !isCompose && !isShow" @replyClose="replyClose" @sendEmail="replyClose" :emailForReply="emailForReply"></email-reply>
                     <email-compose v-if="isCompose && !isReply && !isShow" @composeClose="composeClose" @backBtn="backBtn"></email-compose>
                 </div>
@@ -81,6 +81,19 @@ export default {
             })
 
         }
+        document.querySelector('title').innerHTML = 'Mr Email';
+        document.getElementById('favicon').href = 'img/mr-email.png';
+        document.querySelector('.logo-img').src = 'img/mr-email.png';
+        if (document.body.classList.contains('show')) {
+            document.getElementById("mobile-email-filter-button").classList.toggle("change-filter");
+            document.body.classList.toggle('show');
+        }
+        if (document.body.classList.contains('open')) {
+            document.querySelector(".mobile-menu-button").classList.toggle("change");
+            document.body.classList.toggle('open');
+        }
+    },
+    mounted() {
         document.querySelector('title').innerHTML = 'Mr Email';
         document.getElementById('favicon').href = 'img/mr-email.png';
         document.querySelector('.logo-img').src = 'img/mr-email.png';

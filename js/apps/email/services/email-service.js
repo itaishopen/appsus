@@ -18,6 +18,7 @@ export default {
     unCheckAll,
     starAll,
     checkLoggedUser,
+    unreadEmails
 }
 
 const EMAIL_KEY = 'emailapp'
@@ -58,6 +59,12 @@ function query(filter = 'inbox') {
                     return emails[loggedUser.userName];
             }
         })
+}
+
+function unreadEmails() {
+    let loggedUser = checkLoggedUser();
+    if (!loggedUser) return Promise.resolve();
+    return utilService.loadFromStorage(EMAIL_KEY).then(emails => emails[loggedUser.userName].filter(email => !email.isSent && !email.isDel && !email.isDraft && !email.isRead).length) 
 }
 
 function onSearch(searchParam, searchLoc = gFilter) {

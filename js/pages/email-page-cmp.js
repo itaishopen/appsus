@@ -62,7 +62,7 @@ export default {
         emailServices.query(this.filter)
             .then(emails => {
                 this.emails = emails;
-                this.unreadEmails = this.checkEmailStatus();
+                this.checkEmailStatus();
                 this.checkedEmails = this.emails.filter(email => email.isCheck);
                 this.checkedEmailsNum = this.checkedEmails.length;
                 eventBus.$emit(EVENT_FEEDBACK, { txt: 'Welcome to your inbox!', link: '' }, 'welcome')
@@ -114,7 +114,7 @@ export default {
                     this.isReply = false;
                     this.isShow = false;
                     this.emails = emails;
-                    this.unreadEmails = this.checkEmailStatus();
+                    this.checkEmailStatus();
                     this.checkedEmails = this.emails.filter(email => email.isCheck);
                     this.checkedEmailsNum = this.checkedEmails.length;
                 })
@@ -131,7 +131,7 @@ export default {
                                 this.isCompose = false;
                                 this.isReply = false;
                                 this.emails = emails;
-                                this.unreadEmails = this.checkEmailStatus();
+                                this.checkEmailStatus();
                                 this.checkedEmails = this.emails.filter(email => email.isCheck);
                                 this.checkedEmailsNum = this.checkedEmails.length;
                             })
@@ -159,7 +159,7 @@ export default {
                         emailServices.query(this.filter)
                             .then(emails => {
                                 this.emails = emails;
-                                this.unreadEmails = this.checkEmailStatus();
+                                this.checkEmailStatus();
                                 this.checkedEmails = this.emails.filter(email => email.isCheck);
                                 this.checkedEmailsNum = this.checkedEmails.length;
                             })
@@ -174,17 +174,18 @@ export default {
             emailServices.query(this.filter)
                 .then(emails => {
                     this.emails = emails;
+                    this.checkEmailStatus();
                 });
         },
         checkEmailStatus() {
-            return this.emails.filter(email => !email.isRead && !email.isSent && !email.isDel).length;
+            return emailServices.unreadEmails().then(num => this.unreadEmails = num);
         },
         deleteMail(emailId) {
             emailServices.deleteAnEmail(emailId)
                 .then(() => {
                     emailServices.query(this.filter).then(emails => {
                         this.emails = emails;
-                        this.unreadEmails = this.checkEmailStatus();
+                        this.checkEmailStatus();
                         this.checkedEmails = this.emails.filter(email => email.isCheck);
                         this.checkedEmailsNum = this.checkedEmails.length;
                     })
@@ -195,7 +196,7 @@ export default {
                 .then(() => {
                     emailServices.query(this.filter).then(emails => {
                         this.emails = emails;
-                        this.unreadEmails = this.checkEmailStatus();
+                        this.checkEmailStatus();
                         this.checkedEmails = this.emails.filter(email => email.isCheck);
                         this.checkedEmailsNum = this.checkedEmails.length;
                     })
@@ -204,12 +205,17 @@ export default {
         searchInEmails(searchParam, searchLoc) {            
             if (searchLoc === 'all') {
                 emailServices.onSearch(searchParam, searchLoc)
-                    .then(emails => this.emails = emails)
+                    .then(emails => {
+                            this.emails = emails
+                            this.checkEmailStatus();
+                        })
             } 
             if(searchLoc === 'current') {
-                console.log(this.filter)
                 emailServices.onSearch(searchParam)
-                    .then(emails => this.emails = emails)
+                    .then(emails => {
+                        this.emails = emails
+                        this.checkEmailStatus();
+                    })
             }
         },
         sort(sortParam) {
@@ -217,6 +223,7 @@ export default {
             emailServices.onSort(this.sortParam)
                 .then(emails => {
                     this.emails = emails;
+                    this.checkEmailStatus();
                 })
         },
         composeOpen() {
@@ -254,7 +261,6 @@ export default {
                 .then(() => {
                     this.emailForReply = {};
                     this.isReply = false;
-                    // eventBus.$emit(EVENT_FEEDBACK, { txt: 'Your email was sent do you want to view it?', link: `/email/${emailData.id}` }, 'success');
                 })
         },
         deleteAll() {

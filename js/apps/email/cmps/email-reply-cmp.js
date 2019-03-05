@@ -7,7 +7,7 @@ export default {
             <div class="reply-action-btns">
                 <button @click="replyClose" class="reply-action-btn fas fa-arrow-circle-left fa-lg" title="back"></button>
                 <button class="reply-action-btn close-reply fas fa-file-alt fa-lg" @click="replyClose" title="save as draft"></button>
-                <button class="reply-action-btn send-email-btn fas fa-paper-plane fa-lg" type="submit" title="send"></button>
+                <button class="reply-action-btn send-email-btn fas fa-paper-plane fa-lg" type="submit" title="send" @click="sendEmail"></button>
             </div>
             <form class="reply-email-container flex column" @submit.prevent="sendEmail">
                 <span class="reply-form reply-form-from">From: <input type="text" class="compose-email-from" placeholder="From" v-model="email.sender" disabled></span>

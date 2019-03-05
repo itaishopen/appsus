@@ -7,7 +7,7 @@ export default {
       <div class="compose-action-btns">
         <button @click="backBtn" class="compose-action-btn fas fa-arrow-circle-left fa-lg" title="back"></button>
         <button class="compose-action-btn close-compose fas fa-file-alt fa-lg" @click="composeClose" title="save as draft"></button>
-        <button class="compose-action-btn send-email-btn fas fa-paper-plane fa-lg" type="submit" title="send"></button>
+        <button class="compose-action-btn send-email-btn fas fa-paper-plane fa-lg" type="submit" title="send" @click="sendEmail"></button>
       </div>
       <form class="compose-email-container flex column" @submit.prevent="sendEmail">
         <span class="compose-form compose-form-to">To: <input type="text" class="compose-email-to" placeholder="To" v-model="email.recipient"></span> 
